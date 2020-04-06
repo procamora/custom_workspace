@@ -133,7 +133,7 @@ echo -e "${GREEN}Installing Hack Nerd Font${NC}"
 sudo mkdir -p /usr/local/share/fonts
 #sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -O /usr/local/share/fonts/Hack.zip
 sudo cp resources/Hack.zip /usr/local/share/fonts/
-sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/
+sudo unzip -o /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/
 sudo rm /usr/local/share/fonts/Hack.zip
 
 
@@ -143,7 +143,7 @@ MY_FONT="Hack Nerd Font"
 # if exists modifiy, else create file
 ls /etc/vconsole.conf > /dev/null 2>&1 && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
 
-! ls /etc/vconsole.conf > /dev/null 2>&1 && sudo cp vconsole.conf /etc/
+! ls /etc/vconsole.conf > /dev/null 2>&1 && sudo cp resources/vconsole.conf /etc/
 
 
 
@@ -274,7 +274,7 @@ cd $MY_PATH
 
 
 
-
+kill -9 -1
 
 exit 2
 
