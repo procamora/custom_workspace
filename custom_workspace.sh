@@ -143,8 +143,7 @@ MY_FONT="Hack Nerd Font"
 # if exists modifiy, else create file
 ls /etc/vconsole.conf > /dev/null 2>&1 && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
 
-! ls /etc/vconsole.conf > /dev/null 2>&1 && sudo echo -e 'KEYMAP="us"
-FONT="Hack Nerd Font"' > /etc/vconsole.conf
+! ls /etc/vconsole.conf > /dev/null 2>&1 && sudo cp vconsole.conf /etc/
 
 
 
