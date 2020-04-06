@@ -1,4 +1,4 @@
-#!bin/sh
+#!/bin/sh
 
 MY_PATH=$(pwd)
 MY_USER=$USER
@@ -112,7 +112,8 @@ wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png
 
 # Set custom fonts
 sudo mkdir -p /usr/local/share/fonts
-sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -O /usr/local/share/fonts/Hack.zip
+#sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -O /usr/local/share/fonts/Hack.zip
+sudo cp resources/Hack.zip -O /usr/local/share/fonts/
 sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/
 sudo rm /usr/local/share/fonts/Hack.zip
 
@@ -135,7 +136,8 @@ FONT="Hack Nerd Font"' > /etc/vconsole.conf
 
 
 polybar_debian(){
-    sudo wget -O /opt/polybar-3.4.2.tar https://github.com/polybar/polybar/releases/download/3.4.2/polybar-3.4.2.tar
+    #sudo wget -O /opt/polybar-3.4.2.tar https://github.com/polybar/polybar/releases/download/3.4.2/polybar-3.4.2.tar
+    sudo cp resources/polybar-3.4.2.tar /opt/
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/ 
     sudo rm /opt/polybar-3.4.2.tar
     mkdir /opt/polybar/build
