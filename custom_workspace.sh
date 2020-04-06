@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ex
 
@@ -19,7 +19,7 @@ echo $MY_USER
 ################### basic utils #####################
 #####################################################
 
-echo -e "${GREEN}Installing basic utilities{NC}"
+echo -e "${GREEN}Installing basic utilities${NC}"
 
 INSTALL="unzip wget git gcc make cmake vim"
 
@@ -41,7 +41,7 @@ apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTAL
 # feh -> configurar fondo de pantalla
 # rofi -> lanzador de programas en forma de lista interactica
 
-echo -e "${GREEN}Installing bspwm, sxhkd, compton and feh{NC}"
+echo -e "${GREEN}Installing bspwm, sxhkd, compton and feh${NC}"
 
 
 INSTALL="bspwm compton feh konsole rofi"
@@ -127,12 +127,12 @@ wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png
 #####################################################
 # https://github.com/ryanoasis/nerd-fonts/
 
-echo -e "${GREEN}Installing Hack Nerd Font{NC}"
+echo -e "${GREEN}Installing Hack Nerd Font${NC}"
 
 # Set custom fonts
 sudo mkdir -p /usr/local/share/fonts
 #sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -O /usr/local/share/fonts/Hack.zip
-sudo cp resources/Hack.zip -O /usr/local/share/fonts/
+sudo cp resources/Hack.zip /usr/local/share/fonts/
 sudo unzip /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/
 sudo rm /usr/local/share/fonts/Hack.zip
 
@@ -153,7 +153,7 @@ FONT="Hack Nerd Font"' > /etc/vconsole.conf
 #####################################################
 # https://github.com/polybar/polybar
 
-echo -e "${GREEN}Installing polybar{NC}"
+echo -e "${GREEN}Installing polybar${NC}"
 
 
 polybar_debian(){
@@ -286,7 +286,7 @@ exit 2
 
 
 #####################################################
-####################### zsh ########################
+######################## zsh ########################
 #####################################################
 
 
@@ -381,6 +381,12 @@ chown procamora:root /usr/share/zsh-syntax-highlighting/ -R
 [ -f ~/.fzf.sh ] && source ~/.fzf.sh
 
 
+
+
+
+#####################################################
+######################## vim ########################
+#####################################################
 
 
 
