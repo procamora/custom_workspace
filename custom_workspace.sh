@@ -1,11 +1,25 @@
 #!/bin/sh
 
+set -ex
+
+trap 'exit 130' INT #Exit if trap Ctrl+C
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+
 MY_PATH=$(pwd)
 MY_USER=$USER
+
+echo $MY_PATH
+echo $MY_USER
 
 #####################################################
 ################### basic utils #####################
 #####################################################
+
+echo -e "${GREEN}Installing basic utilities{NC}"
 
 INSTALL="unzip wget git gcc make cmake vim"
 
@@ -26,6 +40,9 @@ apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTAL
 # compton -> gestion de transparencias
 # feh -> configurar fondo de pantalla
 # rofi -> lanzador de programas en forma de lista interactica
+
+echo -e "${GREEN}Installing bspwm, sxhkd, compton and feh{NC}"
+
 
 INSTALL="bspwm compton feh konsole rofi"
 
@@ -110,6 +127,8 @@ wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png
 #####################################################
 # https://github.com/ryanoasis/nerd-fonts/
 
+echo -e "${GREEN}Installing Hack Nerd Font{NC}"
+
 # Set custom fonts
 sudo mkdir -p /usr/local/share/fonts
 #sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -O /usr/local/share/fonts/Hack.zip
@@ -133,6 +152,8 @@ FONT="Hack Nerd Font"' > /etc/vconsole.conf
 #################### polybar ########################
 #####################################################
 # https://github.com/polybar/polybar
+
+echo -e "${GREEN}Installing polybar{NC}"
 
 
 polybar_debian(){
