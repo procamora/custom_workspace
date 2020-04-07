@@ -24,7 +24,7 @@ echo -e "${GREEN}Installing basic utilities${NC}"
 INSTALL="unzip wget git gcc make cmake vim"
 
 dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -S -y $INSTALL
+pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL
 apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
 
 
@@ -49,7 +49,7 @@ INSTALL="bspwm compton feh konsole rofi"
 dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
  xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
  xcb-util-wm xcb-util-keysyms
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -y $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms
+pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms
 apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
  libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev
 
@@ -151,6 +151,7 @@ ls /etc/vconsole.conf > /dev/null 2>&1 && sudo sed -i.back -re "s/FONT=\".*\"/FO
 #################### polybar ########################
 #####################################################
 # https://github.com/polybar/polybar
+# https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
 
 echo -e "${GREEN}Installing polybar${NC}"
 
@@ -262,7 +263,7 @@ chmod u+x ~/.config/polybar/bin/status_htb.sh
 #####################################################
 
 dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -y ImageMagick i3lock
+pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock
 apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock
 
 sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
@@ -288,11 +289,18 @@ exit 2
 ######################## zsh ########################
 #####################################################
 
-
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
+# https://github.com/romkatv/powerlevel10k#oh-my-zsh
 
 # Ejecutar con usuario sin privilegios pero que tenga permiso de sudo
 
-INSTALL="scrub lsd bat ripgrep fzf zsh-autosuggestions zsh-autosuggestions docker-zsh-completion zsh-syntax-highlighting.noarch"
+INSTALL="scrub lsd bat ripgrep fzf zsh-autosuggestions zsh-autosuggestions docker-zsh-completion \
+ zsh-syntax-highlighting"
+
+dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL
+zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL
+pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL
+apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL
 
 
 os_fedora(){
@@ -313,13 +321,22 @@ os_debian(){
 
 
 
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-INSTALL="scrub lsd bat ripgrep fzf zsh-autosuggestions zsh-autosuggestions docker-zsh-completion \
- zsh-syntax-highlighting"
 
-dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -y $INSTALL
-apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
+
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+
+
+sed -i.back -re "s/ZSH_THEME=\".*\"/ZSH_THEME=\"powerlevel10k/powerlevel10k\"/g" ~/.zshrc
+
+
+
+
+
+
+
+
 
 
 
@@ -335,12 +352,24 @@ echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
 
 
+cp $MY_PATH/zsh/zshrc ~/.zshrc
+cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 
-y y y 3 1 2 1 2 2 1 2 
-2 many icons
-2 fluent
-n
-1 off
+
+
+
+
+
+
+
+
+
+
+#y y y 3 1 2 1 2 2 1 2 
+#2 many icons
+#2 fluent
+#n
+#1 off
 
 
 .zshrc

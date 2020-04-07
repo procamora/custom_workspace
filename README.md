@@ -1,6 +1,14 @@
 # custom_workspace
 
 
+
+Ubuntu 19.04
+Debian 10
+Fedora 31
+
+
+
+
 ```bash
 git clone https://github.com/procamora/custom_workspace.git
 
@@ -15,7 +23,7 @@ chmod u+x custom_workspace.sh
 
 
 
-
+https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
 
 
 ```bash
