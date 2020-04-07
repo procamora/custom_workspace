@@ -119,17 +119,18 @@ export PATH=/home/procamora/.local/bin:/home/procamora/bin:/home/procamora/.carg
 # User specific aliases and functions
 alias ls="lsd -lh --group-dirs=first"
 alias la="lsd -lha --group-dirs=first"
+alias catn='/usr/bin/cat'
 alias cat='bat --paging=never'              # cat 
 alias catl='bat'                            # cat + less
 alias catd='bat -A'
-alias catn='cat'
+alias grepn='/usr/bin/grep'
 alias grep='/usr/local/bin/batgrep --color -C 0'
 alias less='/usr/local/bin/prettybat'
 #alias ls="ls -lhGQ --color=auto"
 alias rm="echo Use trash, or the full path i.e. /bin/rm"
 alias which="alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde"
 
-! ssh-add -l > /dev/null && eval "$(ssh-agent -s)" && ssh-add ~/.ssh/services
+! ssh-add -l > /dev/null && eval "$(ssh-agent -s)" && test -f ~/.ssh/services && ssh-add ~/.ssh/services
 
 # Functions
 function mkt(){

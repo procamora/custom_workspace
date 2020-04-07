@@ -11,6 +11,8 @@ NC='\033[0m' # No Color
 
 MY_PATH=$(pwd)
 MY_USER=$USER
+OS_NAME=$(cat /etc/os-release | grep NAME | cut -d \" -f2 | cut -d " " -f1 | head -n1)
+OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
 
 echo $MY_PATH
 echo $MY_USER
@@ -275,9 +277,8 @@ cd $MY_PATH
 
 
 
-kill -9 -1
+#kill -9 -1
 
-exit 2
 
 
 
@@ -294,61 +295,87 @@ exit 2
 
 # Ejecutar con usuario sin privilegios pero que tenga permiso de sudo
 
-INSTALL="scrub lsd bat ripgrep fzf zsh-autosuggestions zsh-autosuggestions docker-zsh-completion \
- zsh-syntax-highlighting"
-
-dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL
-zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL
-pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL
-apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL
+INSTALL="scrub bat ripgrep fzf"
 
 
-os_fedora(){
-    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/Fedora_30/shells:zsh-users:zsh-autosuggestions.repo
-    sudo sudo dnf install -y $INSTALL
-    sudo dnf install -y libxcb xcb-util xcb-util-wm xcb-util-keysyms # bspwm
+
+zsh_fedora(){
+    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
+    repositories=( $LIST_REPOS )
+
+    for r in "${repositories[@]}"; do
+        sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
+    done
+
+    sudo sudo dnf install -y $INSTALL lsd
 }
 
 
-os_debian(){
-    sudo echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/Debian_9.0/ /' > /etc/apt/sources.list.d/shells:zsh-users:zsh-autosuggestions.list
-    wget -nv https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/Debian_9.0/Release.key -O Release.key
-    sudo apt-key add - < Release.key
-    sudo apt update && sudo apt install -y $INSTALL
-    sudo apt install -y libxcb-xinerama0-dev libxcb-icccm4-dev libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev
+zsh_debian(){
+    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
+    repositories=( $LIST_REPOS )
+
+    for r in "${repositories[@]}"; do
+        REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/Debian_$OS_ID/ /"
+        sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
+        wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Debian_$OS_ID/Release.key -O Release.key
+        sudo apt-key add - < Release.key
+        rm Release.key
+    done
+
+    sudo apt update && sudo apt install -y $LIST_REPOS
+    sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
+}
+
+zsh_ubuntu(){
+    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
+    repositories=( $LIST_REPOS )
+
+    for r in "${repositories[@]}"; do
+        REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/xUbuntu_$OS_ID/ /"
+        sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
+        wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/xUbuntu_$OS_ID/Release.key -O Release.key
+        sudo apt-key add - < Release.key
+        rm Release.key
+    done
+
+    sudo apt update && sudo apt install -y $LIST_REPOS
+    sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
 }
 
 
 
 
+test $OS_NAME = "Ubuntu" && zsh_ubuntu
+test $OS_NAME = "Debian" && zsh_debian
+
+dnf --version > /dev/null 2>&1 && os_fedora
+zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd
+pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd
+
+
+# Download and configuration oh my zsh
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 
-
+# Download theme oh my zsh
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 
 
-sed -i.back -re "s/ZSH_THEME=\".*\"/ZSH_THEME=\"powerlevel10k/powerlevel10k\"/g" ~/.zshrc
+#sed -i.back -re "s/ZSH_THEME=\".*\"/ZSH_THEME=\"powerlevel10k/powerlevel10k\"/g" ~/.zshrc
 
 
 
 
 
 
-
-
-
-
-
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-
-WHOAMI=$(whoami) # my user non root
-sudo chsh -s $(which zsh) $WHOAMI
+#WHOAMI=$(whoami) # my user non root
+sudo chsh -s $(which zsh) $MY_USER
 sudo chsh -s $(which zsh) root
 
 
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+#git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+#echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
 
 
@@ -372,11 +399,11 @@ cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 #1 off
 
 
-.zshrc
-~/.p10k.zsh
+#.zshrc
+#~/.p10k.zsh
 
 
-
+# Create link to user root (insegure but comfortable)
 sudo ln -s -f /home/procamora/.zshrc /root/.zshrc
 
 
@@ -398,15 +425,15 @@ rm -rf bat-extras.zip Users/
 
 
 
-
-chown procamora:root /usr/share/zsh-autosuggestions/ -R
-chown procamora:root /usr/share/zsh-syntax-highlighting/ -R
-
+sudo chmod 755 /usr/share/zsh-* -R
+#sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
 
 
 
 
-[ -f ~/.fzf.sh ] && source ~/.fzf.sh
+
+#[ -f ~/.fzf.sh ] && source ~/.fzf.sh
+#test -f ~/.fzf.sh && source ~/.fzf.sh
 
 
 
