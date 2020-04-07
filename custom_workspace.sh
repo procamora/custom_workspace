@@ -294,6 +294,7 @@ cd $MY_PATH
 #USERS="root $MY_USER"
 
 # Clonamos repositorio
+test -d /opt/vim_runtime && sudo rm -rf /opt/vim_runtime
 sudo git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
 
 # Dar permiso a los ficheros para los usuarios no root
@@ -392,7 +393,7 @@ pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd
 #wget https://github.com/eth-p/bat-extras/releases/download/v20200401/bat-extras-20200401.zip -O bat-extras.zip
 #unzip bat-extras.zip
 
-unzip -o resources/bat-extras.zip -d resources/
+unzip -o resources/bat-extras-20200401.zip -d resources/
 
 sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
 sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
@@ -406,10 +407,6 @@ rm -rf resources/bat-extras
 
 
 
-
-
-
-
 # If exsits remove back files and dir
 test -f ~/.zshrc && rm -r ~/.zshrc
 test -f ~/.p10k.zsh && rm -f ~/.p10k.zsh
@@ -420,11 +417,8 @@ sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 
 
 # Download theme oh my zsh
+ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-
-
-#sed -i.back -re "s/ZSH_THEME=\".*\"/ZSH_THEME=\"powerlevel10k/powerlevel10k\"/g" ~/.zshrc
-
 
 
 
@@ -438,10 +432,19 @@ sudo chsh -s $(which zsh) root
 #git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 #echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
+#sed -i.back -re "s/ZSH_THEME=\".*\"/ZSH_THEME=\"powerlevel10k/powerlevel10k\"/g" ~/.zshrc
 
 
 cp $MY_PATH/zsh/zshrc ~/.zshrc
 cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
+
+
+# Create link to user root (insegure but comfortable)
+sudo ln -s -f /home/procamora/.zshrc /root/.zshrc
+
+
+sudo chmod 755 /usr/share/zsh-* -R
+#sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
 
 
 
@@ -464,8 +467,6 @@ cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 #~/.p10k.zsh
 
 
-# Create link to user root (insegure but comfortable)
-sudo ln -s -f /home/procamora/.zshrc /root/.zshrc
 
 
 
@@ -473,12 +474,6 @@ sudo ln -s -f /home/procamora/.zshrc /root/.zshrc
 
 
 
-
-
-
-
-sudo chmod 755 /usr/share/zsh-* -R
-#sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
 
 
 
