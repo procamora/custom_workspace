@@ -163,7 +163,7 @@ polybar_debian(){
     sudo cp resources/polybar-3.4.2.tar /opt/
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/ 
     sudo rm /opt/polybar-3.4.2.tar
-    mkdir /opt/polybar/build
+    mkdir -p /opt/polybar/build
     cd /opt/polybar/build
     cmake ..
     make -j$(nproc)
@@ -268,6 +268,7 @@ dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock
 pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock
 apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock
 
+test -d /opt/i3lock-fancy/ && sudo rm -rf /opt/i3lock-fancy/
 sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
 cd /opt/i3lock-fancy
 sudo make install
@@ -284,6 +285,34 @@ cd $MY_PATH
 
 
 
+#####################################################
+######################## vim ########################
+#####################################################
+
+
+
+#USERS="root $MY_USER"
+
+# Clonamos repositorio
+sudo git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
+
+# Dar permiso a los ficheros para los usuarios no root
+sudo chmod 755 /opt/vim_runtime/ -R
+
+# Instalamos para los usuarios seleccionados
+# to install for all users with home directories
+#sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime $USERS
+sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
+
+test -f $MY_USER/.vimrc && sudo chown $MY_USER:$MY_USER $MY_USER/.vimrc -R
+
+
+
+
+
+
+
+
 
 
 #####################################################
@@ -294,6 +323,7 @@ cd $MY_PATH
 # https://github.com/romkatv/powerlevel10k#oh-my-zsh
 
 # Ejecutar con usuario sin privilegios pero que tenga permiso de sudo
+
 
 INSTALL="scrub bat ripgrep fzf"
 
@@ -353,6 +383,37 @@ dnf --version > /dev/null 2>&1 && os_fedora
 zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd
 pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd
 
+
+
+
+
+
+
+#wget https://github.com/eth-p/bat-extras/releases/download/v20200401/bat-extras-20200401.zip -O bat-extras.zip
+#unzip bat-extras.zip
+
+unzip -o resources/bat-extras.zip -d resources/
+
+sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
+sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
+rm -rf resources/bat-extras
+
+
+
+
+#[ -f ~/.fzf.sh ] && source ~/.fzf.sh
+#test -f ~/.fzf.sh && source ~/.fzf.sh
+
+
+
+
+
+
+
+# If exsits remove back files and dir
+test -f ~/.zshrc && rm -r ~/.zshrc
+test -f ~/.p10k.zsh && rm -f ~/.p10k.zsh
+test -d ~/.oh-my-zsh && rm -rf ~/.oh-my-zsh
 
 # Download and configuration oh my zsh
 sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -415,35 +476,9 @@ sudo ln -s -f /home/procamora/.zshrc /root/.zshrc
 
 
 
-wget https://github.com/eth-p/bat-extras/releases/download/v20200401/bat-extras-20200401.zip -O bat-extras.zip
-unzip bat-extras.zip
-
-
-sudo mv Users/Ethan/Projects/github.com/bat-extras/bin/batgrep /usr/local/bin/
-sudo mv Users/Ethan/Projects/github.com/bat-extras/bin/prettybat /usr/local/bin/
-rm -rf bat-extras.zip Users/
-
-
 
 sudo chmod 755 /usr/share/zsh-* -R
 #sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
-
-
-
-
-
-#[ -f ~/.fzf.sh ] && source ~/.fzf.sh
-#test -f ~/.fzf.sh && source ~/.fzf.sh
-
-
-
-
-
-#####################################################
-######################## vim ########################
-#####################################################
-
-
 
 
 
