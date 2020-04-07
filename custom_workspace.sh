@@ -26,9 +26,9 @@ setup_utils() {
 
     INSTALL="unzip wget git gcc make cmake vim"
 
-    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools
+    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools >> dnf.log
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL
-    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL > /dev/null
+    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL >> apt.log
 }
 
 
@@ -52,10 +52,10 @@ setup_bspwm() {
 
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
      xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
-     xcb-util-wm xcb-util-keysyms
+     xcb-util-wm xcb-util-keysyms >> dnf.log
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms
     apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
-     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev > /dev/null
+     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev >> apt.log
 
 
     #git clone https://github.com/baskerville/bspwm.git
@@ -177,7 +177,7 @@ setup_polybar() {
     echo -e "${GREEN}Installing polybar${NC}"
 
     dnf --version > /dev/null 2>&1 && sudo dnf install -y gcc-c++ clang git cmake @development-tools python3-sphinx \
-     cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar
+     cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar >> dnf.log
 
     # FIXME FALTA POR PONER LAS LIBRERIAS PARA PACMAN
     #pacman --version > /dev/null 2>&1 && sudo 
@@ -185,7 +185,7 @@ setup_polybar() {
     apt --version > /dev/null 2>&1 && sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
      libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python-xcbgen \
      xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
-     build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb > /dev/null \
+     build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb >> apt.log \
      && polybar_debian
 
     #sudo wget -O /opt/polybar-3.4.2.tar https://github.com/polybar/polybar/releases/download/3.4.2/polybar-3.4.2.tar
@@ -261,9 +261,9 @@ setup_polybar() {
     #################### i3-lock ########################
     #####################################################
 
-    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock > /dev/null
+    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock >> dnf.log
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock
-    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock > /dev/null
+    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock >> apt.log
 
     test -d /opt/i3lock-fancy/ && sudo rm -rf /opt/i3lock-fancy/
     sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
@@ -317,7 +317,7 @@ zsh_fedora() {
         sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     done
 
-    sudo sudo dnf install -y $INSTALL lsd
+    sudo sudo dnf install -y $INSTALL lsd >> dnf.log
 }
 
 
@@ -334,7 +334,7 @@ zsh_debian() {
         rm Release.key
     done
 
-    sudo apt update && sudo apt install -y $LIST_REPOS $INSTALL > /dev/null
+    sudo apt update && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
 }
 
@@ -352,7 +352,7 @@ zsh_ubuntu() {
         rm Release.key
     done
 
-    sudo apt update && sudo apt install -y $LIST_REPOS $INSTALL > /dev/null
+    sudo apt update && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
 }
 
@@ -445,6 +445,9 @@ setup_zsh() {
 
 
 main() {
+    test -f dnf.log && rm -r dnf.log
+    test -f apt.log && rm -f apt.log
+
     setup_utils
     setup_bspwm
     setup_fonts
