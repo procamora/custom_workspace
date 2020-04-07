@@ -28,7 +28,8 @@ setup_utils() {
 
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools >> dnf.log
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL
-    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL >> apt.log
+    apt --version > /dev/null 2>&1 && sudo apt update >> apt.log && sudo apt install -y $INSTALL >> apt.log
+    echo -e "${GREEN}Finishing Installing  basic utilities${NC}"
 }
 
 
@@ -123,6 +124,7 @@ setup_bspwm() {
     wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png
 
     #cd ~
+    echo -e "${GREEN}Finishing Installing bspwm, sxhkd, compton and feh${NC}"
 }
 
 
@@ -147,8 +149,10 @@ setup_fonts() {
 
     # TODO check that it works correctly
     # if exists modifiy, else create file
-    ls /etc/vconsole.conf > /dev/null 2>&1 && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
-    ! ls /etc/vconsole.conf > /dev/null 2>&1 && sudo cp resources/vconsole.conf /etc/
+    test -f /etc/vconsole.conf && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
+    ! test -f /etc/vconsole.conf && sudo cp resources/vconsole.conf /etc/
+
+    echo -e "${GREEN}Finishing Installing Hack Nerd Font${NC}"
 }
 
 
@@ -255,12 +259,15 @@ setup_polybar() {
 
     chmod u+x ~/.config/polybar/bin/status_htb.sh
 
-
+    echo -e "${GREEN}Finishing Installing polybar${NC}"
+}
 
     #####################################################
     #################### i3-lock ########################
     #####################################################
 
+setup_i3lock() {
+    echo -e "${GREEN}Finish Installing i3lock${NC}"
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock >> dnf.log
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock
     apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock >> apt.log
@@ -271,6 +278,7 @@ setup_polybar() {
     sudo make install
 
     cd $MY_PATH
+    echo -e "${GREEN}Finishing Installing i3lock${NC}"
 }
 
 
@@ -280,6 +288,7 @@ setup_polybar() {
 #####################################################
 
 setup_vim() {
+    echo -e "${GREEN}Installing vim${NC}"
     #USERS="root $MY_USER"
 
     # Clonamos repositorio
@@ -295,6 +304,7 @@ setup_vim() {
     sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
 
     test -f $MY_USER/.vimrc && sudo chown $MY_USER:$MY_USER $MY_USER/.vimrc -R
+    echo -e "${GREEN}Finishing Installing vim${NC}"
 }
 
 
@@ -334,7 +344,7 @@ zsh_debian() {
         rm Release.key
     done
 
-    sudo apt update && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
+    sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
 }
 
@@ -352,12 +362,13 @@ zsh_ubuntu() {
         rm Release.key
     done
 
-    sudo apt update && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
+    sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
 }
 
 
 setup_zsh() {
+    echo -e "${GREEN}Installing zsh${NC}"
     INSTALL="scrub bat ripgrep fzf"
 
 
@@ -424,6 +435,7 @@ setup_zsh() {
 
     sudo chmod 755 /usr/share/zsh-* -R
     #sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
+    echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
 
 
@@ -436,12 +448,6 @@ setup_zsh() {
 #1 off
 
 
-#.zshrc
-#~/.p10k.zsh
-
-
-
-
 
 
 main() {
@@ -452,10 +458,12 @@ main() {
     setup_bspwm
     setup_fonts
     setup_polybar
+    setup_i3lock
     setup_vim
     setup_zsh
 
     #kill -9 -1
+    echo -e "${GREEN}Finishing Installing custom_workspace${NC}"
 }
 
 
