@@ -3,11 +3,11 @@
 custom_workspace is a script to install and configure a complete workspace in a fully automated way. The utilities to be installed and configured are the following:
 
 - [bspwm][bspwm]: It is a mosaic type window manager that works with shortcuts and that will be put as a desktop environment.
-- sxhkd][sxhkd]: This is a shortcuts manager that we will use to control bspwm.
+- [sxhkd][sxhkd]: This is a shortcuts manager that we will use to control bspwm.
 - [compton][compton]: This is the transparency manager that we will use to put transparencies to the windows.
 - [feh][feh]: This is a lightweight, configurable and versatile image viewer that allows us to set up wallpapers.
 - [rofi][rofi]: it is a program launcher in the form of an interactive list.
-- [Hack Nerd Font] [nerd]: These are the fonts we're going to use for the zsh Powerlevel10k theme.
+- [Hack Nerd Font][nerd]: These are the fonts we're going to use for the zsh Powerlevel10k theme.
 - [polybar][polybar]: It's a highly configurable taskbar builder.
 - [i3-lock][i3lock]: It's a simple screen locker.
 - vim: Is the default text editor, it will put an advanced configuration with a series of plugins using the [amix][vimrc] configuration.
@@ -75,6 +75,7 @@ Running the script again regenerates the default settings. You can also leave so
 
 ## Compatibility
 
+This script has been tested on the following Operating Systems
 
 ### Tested Operating Systems
 
