@@ -267,6 +267,7 @@ setup_zsh() {
 
     test $OS_NAME = "Ubuntu" && zsh_ubuntu "$INSTALL"
     test $OS_NAME = "Debian" && zsh_debian "$INSTALL"
+    test $OS_NAME = "Raspbian" && sudo apt install -y "$INSTALL"
 
     dnf --version > /dev/null 2>&1 && zsh_fedora "$INSTALL"
     zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
@@ -299,8 +300,10 @@ setup_zsh() {
 
     # Create link to user root (insegure but comfortable)
     sudo ln -s -f ~/.zshrc /root/.zshrc
+    sudo ln -s -f ~/.p10k.zsh /root/.p10k.zsh
+    sudo ln -s ~/.oh-my-zsh/ /root/.oh-my-zsh/
 
-    sudo chmod 755 /usr/share/zsh-* -R
+    #sudo chmod 755 /usr/share/zsh-* -R
 
     echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
@@ -315,6 +318,16 @@ setup_konsole() {
     cp konsole/config_konsolerc ~/.config/konsolerc  
 }
 
+
+setup_tmux() {
+
+    #test -d ~/.oh-my-zsh && rm -rf ~/.oh-my-zsh
+    cd
+git clone https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+cp .tmux/.tmux.conf.local .
+
+}
 
 
 main() {

@@ -1,0 +1,136 @@
+Última comprobación de caducidad de metadatos hecha hace 0:26:45, el mié 08 abr 2020 23:31:40 CEST.
+El paquete unzip-6.0-43.fc30.x86_64 ya está instalado.
+El paquete wget-1.20.3-1.fc30.x86_64 ya está instalado.
+El paquete git-2.21.1-1.fc30.x86_64 ya está instalado.
+El paquete gcc-9.3.1-1.fc30.x86_64 ya está instalado.
+El paquete make-1:4.2.1-14.fc30.x86_64 ya está instalado.
+El paquete cmake-3.17.0-1.fc30.x86_64 ya está instalado.
+El paquete vim-enhanced-2:8.2.348-1.fc30.x86_64 ya está instalado.
+Dependencias resueltas.
+================================================================================
+ Paquete                 Arquitectura Versión               Repositorio    Tam.
+================================================================================
+Instalando los paquetes del grupo/módulo:
+ diffstat                x86_64       1.62-2.fc30           fedora         38 k
+ doxygen                 x86_64       1:1.8.15-6.fc30       fedora        4.3 M
+ patchutils              x86_64       0.3.4-13.fc30         fedora        106 k
+ subversion              x86_64       1.12.2-3.fc30         updates       1.1 M
+ systemtap               x86_64       4.2-1.fc30            updates       7.3 k
+Instalando dependencias:
+ dyninst                 x86_64       10.1.0-4.fc30         updates       4.0 M
+ systemtap-client        x86_64       4.2-1.fc30            updates       3.7 M
+ systemtap-devel         x86_64       4.2-1.fc30            updates       2.3 M
+ systemtap-runtime       x86_64       4.2-1.fc30            updates       496 k
+Instalando grupos:
+ Development Tools                                                             
+
+Resumen de la transacción
+================================================================================
+Instalar  9 Paquetes
+
+Tamaño total de la descarga: 16 M
+Tamaño instalado: 67 M
+Descargando paquetes:
+(1/9): systemtap-4.2-1.fc30.x86_64.rpm           49 kB/s | 7.3 kB     00:00    
+(2/9): subversion-1.12.2-3.fc30.x86_64.rpm      2.6 MB/s | 1.1 MB     00:00    
+(3/9): dyninst-10.1.0-4.fc30.x86_64.rpm         6.2 MB/s | 4.0 MB     00:00    
+(4/9): systemtap-client-4.2-1.fc30.x86_64.rpm   6.7 MB/s | 3.7 MB     00:00    
+(5/9): systemtap-devel-4.2-1.fc30.x86_64.rpm    8.4 MB/s | 2.3 MB     00:00    
+(6/9): systemtap-runtime-4.2-1.fc30.x86_64.rpm  3.3 MB/s | 496 kB     00:00    
+(7/9): diffstat-1.62-2.fc30.x86_64.rpm           79 kB/s |  38 kB     00:00    
+(8/9): patchutils-0.3.4-13.fc30.x86_64.rpm      266 kB/s | 106 kB     00:00    
+(9/9): doxygen-1.8.15-6.fc30.x86_64.rpm         2.0 MB/s | 4.3 MB     00:02    
+--------------------------------------------------------------------------------
+Total                                           4.0 MB/s |  16 MB     00:04     
+Ejecutando verificación de operación
+Verificación de operación exitosa.
+Ejecutando prueba de operaciones
+Prueba de operación exitosa.
+Ejecutando operación
+  Preparando          :                                                     1/1 
+  Instalando          : systemtap-devel-4.2-1.fc30.x86_64                   1/9 
+  Instalando          : dyninst-10.1.0-4.fc30.x86_64                        2/9 
+  Ejecutando scriptlet: dyninst-10.1.0-4.fc30.x86_64                        2/9 
+  Ejecutando scriptlet: systemtap-runtime-4.2-1.fc30.x86_64                 3/9 
+  Instalando          : systemtap-runtime-4.2-1.fc30.x86_64                 3/9 
+  Instalando          : systemtap-client-4.2-1.fc30.x86_64                  4/9 
+  Instalando          : systemtap-4.2-1.fc30.x86_64                         5/9 
+  Ejecutando scriptlet: systemtap-4.2-1.fc30.x86_64                         5/9 
+  Instalando          : patchutils-0.3.4-13.fc30.x86_64                     6/9 
+  Instalando          : doxygen-1:1.8.15-6.fc30.x86_64                      7/9 
+  Instalando          : diffstat-1.62-2.fc30.x86_64                         8/9 
+  Instalando          : subversion-1.12.2-3.fc30.x86_64                     9/9 
+  Ejecutando scriptlet: subversion-1.12.2-3.fc30.x86_64                     9/9 
+  Verificando         : dyninst-10.1.0-4.fc30.x86_64                        1/9 
+  Verificando         : subversion-1.12.2-3.fc30.x86_64                     2/9 
+  Verificando         : systemtap-4.2-1.fc30.x86_64                         3/9 
+  Verificando         : systemtap-client-4.2-1.fc30.x86_64                  4/9 
+  Verificando         : systemtap-devel-4.2-1.fc30.x86_64                   5/9 
+  Verificando         : systemtap-runtime-4.2-1.fc30.x86_64                 6/9 
+  Verificando         : diffstat-1.62-2.fc30.x86_64                         7/9 
+  Verificando         : doxygen-1:1.8.15-6.fc30.x86_64                      8/9 
+  Verificando         : patchutils-0.3.4-13.fc30.x86_64                     9/9 
+
+Instalado:
+  diffstat-1.62-2.fc30.x86_64             doxygen-1:1.8.15-6.fc30.x86_64       
+  dyninst-10.1.0-4.fc30.x86_64            patchutils-0.3.4-13.fc30.x86_64      
+  subversion-1.12.2-3.fc30.x86_64         systemtap-4.2-1.fc30.x86_64          
+  systemtap-client-4.2-1.fc30.x86_64      systemtap-devel-4.2-1.fc30.x86_64    
+  systemtap-runtime-4.2-1.fc30.x86_64    
+
+¡Listo!
+antigen (Fedora_30)                             3.1 kB/s | 1.6 kB     00:00    
+zsh-autosuggestions (Fedora_30)                  20 kB/s | 1.7 kB     00:00    
+zsh-completions (Fedora_30)                     5.1 kB/s | 2.8 kB     00:00    
+zsh-history-substring-search (Fedora_30)        2.8 kB/s | 1.7 kB     00:00    
+zsh-syntax-highlighting (Fedora_30)             3.3 kB/s | 2.0 kB     00:00    
+El paquete zsh-5.7.1-6.fc30.x86_64 ya está instalado.
+El paquete scrub-2.5.2-14.fc30.x86_64 ya está instalado.
+El paquete ripgrep-11.0.2-1.module_f30+5278+9aaf7487.x86_64 ya está instalado.
+El paquete fzf-0.20.0-2.fc30.x86_64 ya está instalado.
+El paquete zsh-autosuggestions-0.5.0-1.1.x86_64 ya está instalado.
+El paquete zsh-syntax-highlighting-0.6.0-4.fc30.noarch ya está instalado.
+El paquete lsd-0.16.0-1.module_f30+5275+ee6bec93.x86_64 ya está instalado.
+El paquete bat-0.11.0-3.module_f30+5045+5668d494.x86_64 ya está instalado.
+Dependencias resueltas.
+=======================================================================================================
+ Paquete                        Arq.    Versión    Repositorio                                   Tamaño
+=======================================================================================================
+Instalando:
+ antigen                        x86_64  2.2.3-1.1  shells_zsh-users_antigen                        25 k
+ zsh-completions                x86_64  0.31.0-1.1 shells_zsh-users_zsh-completions               218 k
+ zsh-history-substring-search   x86_64  1.0.1-3.1  shells_zsh-users_zsh-history-substring-search   14 k
+
+Resumen de la transacción
+=======================================================================================================
+Instalar  3 Paquetes
+
+Tamaño total de la descarga: 256 k
+Tamaño instalado: 1.1 M
+Descargando paquetes:
+(1/3): zsh-history-substring-search-1.0.1-3.1.x  31 kB/s |  14 kB     00:00    
+(2/3): zsh-completions-0.31.0-1.1.x86_64.rpm    390 kB/s | 218 kB     00:00    
+(3/3): antigen-2.2.3-1.1.x86_64.rpm              43 kB/s |  25 kB     00:00    
+--------------------------------------------------------------------------------
+Total                                           449 kB/s | 256 kB     00:00     
+zsh-completions (Fedora_30)                      10 kB/s | 1.1 kB     00:00    
+La llave ha sido importada exitosamente
+Ejecutando verificación de operación
+Verificación de operación exitosa.
+Ejecutando prueba de operaciones
+Prueba de operación exitosa.
+Ejecutando operación
+  Preparando          :                                                     1/1 
+  Instalando          : zsh-history-substring-search-1.0.1-3.1.x86_64       1/3 
+  Instalando          : zsh-completions-0.31.0-1.1.x86_64                   2/3 
+  Instalando          : antigen-2.2.3-1.1.x86_64                            3/3 
+  Verificando         : antigen-2.2.3-1.1.x86_64                            1/3 
+  Verificando         : zsh-completions-0.31.0-1.1.x86_64                   2/3 
+  Verificando         : zsh-history-substring-search-1.0.1-3.1.x86_64       3/3 
+
+Instalado:
+  antigen-2.2.3-1.1.x86_64                                                      
+  zsh-completions-0.31.0-1.1.x86_64                                             
+  zsh-history-substring-search-1.0.1-3.1.x86_64                                 
+
+¡Listo!
