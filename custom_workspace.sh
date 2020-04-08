@@ -297,19 +297,22 @@ setup_zsh() {
     cp $MY_PATH/zsh/zshrc ~/.zshrc
     cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 
-    # set default profile konsole
-    mkdir -p ~/.local/share/konsole/
-    mkdir -p ~/.config/
-    cp konsole/zsh.profile ~/.local/share/konsole/
-    cp konsole/config_konsolerc ~/.config/konsolerc
-
     # Create link to user root (insegure but comfortable)
     sudo ln -s -f ~/.zshrc /root/.zshrc
 
     sudo chmod 755 /usr/share/zsh-* -R
-    #sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
 
     echo -e "${GREEN}Finishing Installing zsh${NC}"
+}
+
+
+
+setup_konsole() {
+    # set default profile konsole
+    mkdir -p ~/.local/share/konsole/
+    mkdir -p ~/.config/
+    cp konsole/zsh.profile ~/.local/share/konsole/
+    cp konsole/config_konsolerc ~/.config/konsolerc  
 }
 
 
@@ -320,9 +323,9 @@ main() {
 
     test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
     test "$1" = "vim" && setup_utils && setup_vim
-    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh
-    test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
-    test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
+    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh && setup_konsole
+    test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole
+    test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole
 
 
     test "$1" = "_utils" && setup_utils
@@ -332,6 +335,7 @@ main() {
     test "$1" = "_i3lock" && setup_i3lock
     test "$1" = "_vim" && setup_vim
     test "$1" = "_zsh" && setup_zsh
+    test "$1" = "_konsole" && setup_konsole
 
 
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
