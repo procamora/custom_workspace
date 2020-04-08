@@ -217,7 +217,7 @@ zsh_fedora() {
         sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     done
 
-    sudo sudo dnf install -y $INSTALL lsd >> dnf.log
+    sudo sudo dnf install -y $INSTALL lsd bat >> dnf.log
 }
 
 
@@ -236,6 +236,7 @@ zsh_debian() {
 
     sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
+    sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
 }
 
 
@@ -254,20 +255,21 @@ zsh_ubuntu() {
 
     sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
+    sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
 }
 
 
 setup_zsh() {
     echo -e "${GREEN}Installing zsh${NC}"
-    INSTALL="scrub bat ripgrep fzf"
+    INSTALL="scrub ripgrep fzf"
 
 
     test $OS_NAME = "Ubuntu" && zsh_ubuntu $INSTALL
     test $OS_NAME = "Debian" && zsh_debian $INSTALL
 
-    dnf --version > /dev/null 2>&1 && os_fedora
-    zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd && zsh_fedora $INSTALL
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd
+    dnf --version > /dev/null 2>&1 && zsh_fedora
+    zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
     unzip -o resources/bat-extras-20200401.zip -d resources/
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
@@ -308,17 +310,18 @@ main() {
     test -f dnf.log && rm -r dnf.log
     test -f apt.log && rm -f apt.log
 
-    setup_utils
-    setup_bspwm
-    setup_fonts
-    setup_polybar
-    setup_i3lock
-    setup_vim
-    setup_zsh
+    test $1 = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
+    test $1 = "vim" && setup_utils && setup_vim
+    test $1 = "zsh" && setup_utils && setup_fonts && setup_zsh
+    test $1 = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
+    test $1 = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
 
-    #kill -9 -1
+    # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
+
     echo -e "${GREEN}Finishing Installing custom_workspace${NC}"
     echo -e "${GREEN}Set the Hack Nerd Font font on your console${NC}"
+    
+    #kill -9 -1
 }
 
 
