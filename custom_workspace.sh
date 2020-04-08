@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+#set -ex
 
 trap 'exit 130' INT #Exit if trap Ctrl+C
 
@@ -14,8 +14,6 @@ MY_USER=$USER
 OS_NAME=$(cat /etc/os-release | grep NAME | cut -d \" -f2 | cut -d " " -f1 | head -n1)
 OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
 
-echo $MY_PATH
-echo $MY_USER
 
 #####################################################
 ################### basic utils #####################
@@ -120,7 +118,7 @@ polybar_debian(){
     cmake ..
     make -j$(nproc)
     sudo make install
-    cd -
+    cd $Y_PATH
 }
 
 
@@ -152,6 +150,9 @@ setup_polybar() {
 
     cp $MY_PATH/polybar/bin/status_htb.sh ~/.config/polybar/bin/
     chmod u+x ~/.config/polybar/bin/status_htb.sh
+
+    # plugins
+    git clone https://github.com/polybar/polybar-scripts.git ~/.config/polybar/bin/scripts/
 
     echo -e "${GREEN}Finishing Installing polybar${NC}"
 }
@@ -264,10 +265,10 @@ setup_zsh() {
     INSTALL="zsh scrub ripgrep fzf"
 
 
-    test $OS_NAME = "Ubuntu" && zsh_ubuntu $INSTALL
-    test $OS_NAME = "Debian" && zsh_debian $INSTALL
+    test $OS_NAME = "Ubuntu" && zsh_ubuntu "$INSTALL"
+    test $OS_NAME = "Debian" && zsh_debian "$INSTALL"
 
-    dnf --version > /dev/null 2>&1 && zsh_fedora $INSTALL
+    dnf --version > /dev/null 2>&1 && zsh_fedora "$INSTALL"
     zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
@@ -296,17 +297,17 @@ setup_zsh() {
     cp $MY_PATH/zsh/zshrc ~/.zshrc
     cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 
-    # Create link to user root (insegure but comfortable)
-    sudo ln -s -f ~/.zshrc /root/.zshrc
-
-    sudo chmod 755 /usr/share/zsh-* -R
-    #sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
-
     # set default profile konsole
     mkdir -p ~/.local/share/konsole/
     mkdir -p ~/.config/
     cp konsole/zsh.profile ~/.local/share/konsole/
     cp konsole/config_konsolerc ~/.config/konsolerc
+
+    # Create link to user root (insegure but comfortable)
+    sudo ln -s -f ~/.zshrc /root/.zshrc
+
+    sudo chmod 755 /usr/share/zsh-* -R
+    #sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
 
     echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
@@ -322,6 +323,16 @@ main() {
     test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh
     test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
     test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
+
+
+    test "$1" = "_utils" && setup_utils
+    test "$1" = "_bspwm" && setup_bspwm
+    test "$1" = "_fonts" && setup_fonts
+    test "$1" = "_polybar" && setup_polybar
+    test "$1" = "_i3lock" && setup_i3lock
+    test "$1" = "_vim" && setup_vim
+    test "$1" = "_zsh" && setup_zsh
+
 
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
 

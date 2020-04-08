@@ -1,90 +1,151 @@
 # custom_workspace
 
+custom_workspace is a script to install and configure a complete workspace in a fully automated way. The utilities to be installed and configured are the following:
+
+- [bspwm][bspwm]: It is a mosaic type window manager that works with shortcuts and that will be put as a desktop environment.
+- sxhkd][sxhkd]: This is a shortcuts manager that we will use to control bspwm.
+- [compton][compton]: This is the transparency manager that we will use to put transparencies to the windows.
+- [feh][feh]: This is a lightweight, configurable and versatile image viewer that allows us to set up wallpapers.
+- [rofi][rofi]: it is a program launcher in the form of an interactive list.
+- [Hack Nerd Font] [nerd]: These are the fonts we're going to use for the zsh Powerlevel10k theme.
+- [polybar][polybar]: It's a highly configurable taskbar builder.
+- [i3-lock][i3lock]: It's a simple screen locker.
+- vim: Is the default text editor, it will put an advanced configuration with a series of plugins using the [amix][vimrc] configuration.
+- zsh: It will put this shell by default, using the configuration of [_Oh My Zsh_][ohmyzsh] and the theme [Powerlevel10k][powerlevel10k].
 
 
-Ubuntu 19.04
-Debian 10
-Fedora 31
+
+[bspwm]: https://github.com/baskerville/bspwm
+[sxhkd]: https://github.com/baskerville/sxhkd
+[compton]: https://github.com/chjj/compton
+[feh]: https://github.com/derf/feh
+[rofi]: https://github.com/davatorium/rofi
+[nerd]: https://github.com/ryanoasis/nerd-fonts
+[polybar]: https://github.com/polybar/polybar
+[i3lock]: https://github.com/i3/i3lock
+[vimrc]: https://github.com/amix/vimrc
+[ohmyzsh]: https://github.com/ohmyzsh/ohmyzsh
+[powerlevel10k]: https://github.com/romkatv/powerlevel10k
 
 
 
-Requisitos
-dolphin
-konsole
+## Getting Started
 
 
+### Basic Installation
+
+
+To install the workspace it is necessary to download the project and run the script, which takes care of downloading and configuring all the tools:
 
 
 
 ```bash
 git clone https://github.com/procamora/custom_workspace.git
-
-
 cd custom_workspace/
-
 chmod u+x custom_workspace.sh
-
-./custom_workspace.sh
-
-
-# Important: when the zsh prompt is exited it is necessary to execute the exit command in order for the script to continue executing
+./custom_workspace.sh all
 ```
 
 
+> Important: when the zsh prompt is exited it is necessary to execute the exit command in order for the script to continue executing
 
 
-https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
+
+
+
+Running the script again regenerates the default settings. You can also leave some parts as default:
+
 
 
 ```bash
 
-INSTALL="unzip wget git gcc make cmake vim"
+./custom_workspace.sh all		# all
+./custom_workspace.sh bspwm		# bspqm + polybar + i3lock
+./custom_workspace.sh vim		# vim
+./custom_workspace.sh zsh		# zsh
+./custom_workspace.sh _polybar	# polybar
 
-dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -S -y $INSTALL
-apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
-
-
-
-
-
-INSTALL="bspwm compton feh konsole rofi"
-
-dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
- xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
- xcb-util-wm xcb-util-keysyms
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -y $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms
-apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
- libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev
-
-
-
-
-dnf --version > /dev/null 2>&1 && sudo dnf install -y gcc-c++ clang git cmake @development-tools python3-sphinx \
- cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar
-
-# FIXME FALTA POR PONER LAS LIBRERIAS PARA PACMAN
-#pacman --version > /dev/null 2>&1 && sudo 
-
-apt --version > /dev/null 2>&1 && sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
- libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python-xcbgen \
- xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
- build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb
-
-
-
-dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock
-pacman --version > /dev/null 2>&1 && sudo sudo pacman -y ImageMagick i3lock
-apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock
 
 ```
 
 
 
 
-Modo debug
 
-descomentar set -ex
 
+## Compatibility
+
+
+### Tested Operating Systems
+
+- [x] Fedora (31)
+- [x] Ubuntu (19.04)
+- [x] Debian (10)
+
+### Pending Operating Systems
+
+- [ ] Arch
+- [ ] OpenSUSE
+
+
+
+
+
+## Program requirements
+
+- Dolphin
+- Konsole
+
+
+
+
+
+
+
+## Customization
+
+
+The configuration files and/or directories of the different programs are as follows:
+
+- bspwm: _~/.config/bspwm/_
+- sxhkd: _~/.config/sxhkd/_
+- compton: _~/.config/compton/_
+- polybar: _~/.config/polybar/_
+- i3-lock: __
+- vim: __
+- zsh: _~/.zshrc_ y _~/.p10k.zsh_
+
+
+
+
+
+
+## Debug mode
+
+
+
+We can activate the uncommented debeg mode the third line (_set -ex_) of the script custom_workspace.sh or executing it with the command bash -x
+
+```bash
+bash -x  custom_workspace.sh
+```
+
+
+
+The output of the package download commands is redirected to a log file, we can see them with the command:
+
+
+```bash
 tail -f dnf.log
 tail -f apt.log
+```
+
+
+
+
+
+The basic configuration used has been taken from the s4vitar video: [Cómo configurar un buen entorno de trabajo en Linux][s4vitar].
+
+
+[s4vitar]: https://www.youtube.com/watch?v=MF4qRSedmEs
+
