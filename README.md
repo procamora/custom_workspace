@@ -8,6 +8,13 @@ Fedora 31
 
 
 
+Requisitos
+dolphin
+konsole
+
+
+
+
 
 ```bash
 git clone https://github.com/procamora/custom_workspace.git
@@ -18,6 +25,9 @@ cd custom_workspace/
 chmod u+x custom_workspace.sh
 
 ./custom_workspace.sh
+
+
+# Important: when the zsh prompt is exited it is necessary to execute the exit command in order for the script to continue executing
 ```
 
 
@@ -70,3 +80,11 @@ apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock
 ```
 
 
+
+
+Modo debug
+
+descomentar set -ex
+
+tail -f dnf.log
+tail -f apt.log

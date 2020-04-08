@@ -261,13 +261,13 @@ zsh_ubuntu() {
 
 setup_zsh() {
     echo -e "${GREEN}Installing zsh${NC}"
-    INSTALL="scrub ripgrep fzf"
+    INSTALL="zsh scrub ripgrep fzf"
 
 
     test $OS_NAME = "Ubuntu" && zsh_ubuntu $INSTALL
     test $OS_NAME = "Debian" && zsh_debian $INSTALL
 
-    dnf --version > /dev/null 2>&1 && zsh_fedora
+    dnf --version > /dev/null 2>&1 && zsh_fedora $INSTALL
     zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
@@ -310,17 +310,17 @@ main() {
     test -f dnf.log && rm -r dnf.log
     test -f apt.log && rm -f apt.log
 
-    test $1 = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
-    test $1 = "vim" && setup_utils && setup_vim
-    test $1 = "zsh" && setup_utils && setup_fonts && setup_zsh
-    test $1 = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
-    test $1 = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
+    test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
+    test "$1" = "vim" && setup_utils && setup_vim
+    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh
+    test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
+    test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh
 
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
 
     echo -e "${GREEN}Finishing Installing custom_workspace${NC}"
     echo -e "${GREEN}Set the Hack Nerd Font font on your console${NC}"
-    
+
     #kill -9 -1
 }
 
