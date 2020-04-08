@@ -1,0 +1,21 @@
+[Desktop Entry]
+DefaultProfile=zsh.profile
+
+[Favorite Profiles]
+Favorites=zsh.profile
+
+[KFileDialog Settings]
+detailViewIconSize=0
+
+[MainWindow]
+Height 1080=612
+Height 1920=362
+Height 768=709
+State=AAAA/wAAAAD9AAAAAAAAA/AAAAJHAAAABAAAAAQAAAAIAAAACPwAAAAA
+ToolBarsMovable=Disabled
+Width 1080=1080
+Width 1366=1366
+Width 1920=1008
+
+[TabBar]
+NewTabButton=true

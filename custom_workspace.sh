@@ -217,7 +217,7 @@ zsh_fedora() {
         sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     done
 
-    sudo sudo dnf install -y $INSTALL lsd bat >> dnf.log
+    sudo sudo dnf install -y $INSTALL $LIST_REPOS lsd bat >> dnf.log
 }
 
 
@@ -297,10 +297,17 @@ setup_zsh() {
     cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 
     # Create link to user root (insegure but comfortable)
-    sudo ln -s -f /home/procamora/.zshrc /root/.zshrc
+    sudo ln -s -f ~/.zshrc /root/.zshrc
 
     sudo chmod 755 /usr/share/zsh-* -R
     #sudo chown $MY_USER:root /usr/share/zsh-autosuggestions/ -R
+
+    # set default profile konsole
+    mkdir -p ~/.local/share/konsole/
+    mkdir -p ~/.config/
+    cp konsole/zsh.profile ~/.local/share/konsole/
+    cp konsole/config_konsolerc ~/.config/konsolerc
+
     echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
 
