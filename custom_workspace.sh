@@ -63,7 +63,7 @@ setup_bspwm() {
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
-    exec bspwm" >> ~/.xinitrc 
+exec bspwm" >> ~/.xinitrc 
 
     cp $MY_PATH/bspwm/scripts/resize ~/.config/bspwm/scripts/
     chmod u+x  ~/.config/bspwm/scripts/resize

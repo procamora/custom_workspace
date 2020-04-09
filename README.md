@@ -145,6 +145,13 @@ The configuration files and/or directories of the different programs are as foll
 - zsh: _~/.zshrc_ y _~/.p10k.zsh_
 
 
+### Backgroud
+
+Replace image 
+
+```bash
+~/.config/wallpaper.png
+```
 
 
 
