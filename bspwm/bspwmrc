@@ -6,6 +6,7 @@ compton --config ~/.config/compton/compton.conf &   # Transparency Management
 wmname LG3D &                                       # Fix problem Burp Suite proportion full screen
 feh --bg-fill ~/.config/wallpaper.png &             # Set wallpaper brackground
 ~/.config/polybar/launch.sh &                       # Launch polybar
+konsole &                                           # Open console always
 
 bspc config pointer_modifier mod1                   # Set key super to key windows (metawin)
 bspc monitor -d I II III IV V VI VII VIII IX X

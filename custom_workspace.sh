@@ -2,12 +2,20 @@
 
 #set -ex
 
-trap 'exit 130' INT #Exit if trap Ctrl+C
+#trap 'exit 130' INT #Exit if trap Ctrl+C
+trap ctrl_c INT
+
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+function ctrl_c(){
+    echo -e "\n${RED}Exiting...${NC}"
+    exit 0
+}
+
+export DEBIAN_FRONTEND=noninteractive
 
 MY_PATH=$(pwd)
 MY_USER=$USER
@@ -19,14 +27,13 @@ OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
 ################### basic utils #####################
 #####################################################
 
-setup_utils() {
-    echo -e "${GREEN}Installing basic utilities${NC}"
-
+function setup_utils() {
     INSTALL="unzip wget git gcc make cmake vim"
+    echo -e "${GREEN}Installing basic utilities $INSTALL ${NC}"
 
-    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools >> dnf.log
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL
-    apt --version > /dev/null 2>&1 && sudo apt update >> apt.log && sudo apt install -y $INSTALL >> apt.log
+    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL @development-tools >> dnf.log 2>&1
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt update >> apt.log && sudo apt install -y $INSTALL >> apt.log 2>&1
     echo -e "${GREEN}Finishing Installing  basic utilities${NC}"
 }
 
@@ -44,17 +51,16 @@ setup_utils() {
 # feh -> configurar fondo de pantalla
 # rofi -> lanzador de programas en forma de lista interactica
 
-setup_bspwm() {
-    echo -e "${GREEN}Installing bspwm, sxhkd, compton and feh${NC}"
-
-    INSTALL="bspwm compton feh konsole rofi ksysguard dolphin dolphin-plugins"
+function setup_bspwm() {
+    INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins"
+    echo -e "${GREEN}Installing $INSTALL ${NC}"
 
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
      xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
-     xcb-util-wm xcb-util-keysyms >> dnf.log
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms
+     xcb-util-wm xcb-util-keysyms >> dnf.log 2>&1
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms >> pacman.log 2>&1
     apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
-     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev >> apt.log
+     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev >> apt.log 2>&1
 
 
     mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton}
@@ -63,7 +69,7 @@ setup_bspwm() {
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
-exec bspwm" >> ~/.xinitrc 
+exec bspwm" >> ~/.xinitrc
 
     cp $MY_PATH/bspwm/scripts/resize ~/.config/bspwm/scripts/
     chmod u+x  ~/.config/bspwm/scripts/resize
@@ -84,7 +90,7 @@ exec bspwm" >> ~/.xinitrc
 #####################################################
 # https://github.com/ryanoasis/nerd-fonts/
 
-setup_fonts() {
+function setup_fonts() {
     echo -e "${GREEN}Installing Hack Nerd Font${NC}"
 
     MY_FONT="Hack Nerd Font"
@@ -109,7 +115,7 @@ setup_fonts() {
 # https://github.com/polybar/polybar
 # https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
 
-polybar_debian(){
+function polybar_debian(){
     sudo cp resources/polybar-3.4.2.tar /opt/
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/ 
     sudo /bin/rm /opt/polybar-3.4.2.tar
@@ -122,11 +128,11 @@ polybar_debian(){
 }
 
 
-setup_polybar() { 
-    echo -e "${GREEN}Installing polybar${NC}"
+function setup_polybar() { 
+    echo -e "${GREEN}Installing polybar and dependencies${NC}"
 
     dnf --version > /dev/null 2>&1 && sudo dnf install -y gcc-c++ clang git cmake @development-tools python3-sphinx \
-     cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar >> dnf.log
+     cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar >> dnf.log 2>&1
 
     # FIXME FALTA POR PONER LAS LIBRERIAS PARA PACMAN
     #pacman --version > /dev/null 2>&1 && sudo 
@@ -134,7 +140,7 @@ setup_polybar() {
     apt --version > /dev/null 2>&1 && sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
      libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python-xcbgen \
      xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
-     build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb >> apt.log \
+     build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb >> apt.log 2>&1 \
      && polybar_debian
 
 
@@ -161,11 +167,11 @@ setup_polybar() {
     #################### i3-lock ########################
     #####################################################
 
-setup_i3lock() {
-    echo -e "${GREEN}Finish Installing i3lock${NC}"
-    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock >> dnf.log
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock
-    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock >> apt.log
+function setup_i3lock() {
+    echo -e "${GREEN}Finish Installing i3lock and ImageMagick ${NC}"
+    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock >> dnf.log 2>&1
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock >> pacman.log 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock >> apt.log 2>&1
 
     test -d /opt/i3lock-fancy/ && sudo /bin/rm -rf /opt/i3lock-fancy/
     sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
@@ -182,8 +188,8 @@ setup_i3lock() {
 ######################## vim ########################
 #####################################################
 
-setup_vim() {
-    echo -e "${GREEN}Installing vim${NC}"
+function setup_vim() {
+    echo -e "${GREEN}Installing vim and plugins ${NC}"
     #USERS="root $MY_USER"
     # Clonamos repositorio
     test -d /opt/vim_runtime && sudo /bin/rm -rf /opt/vim_runtime
@@ -209,7 +215,7 @@ setup_vim() {
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
 # https://github.com/romkatv/powerlevel10k#oh-my-zsh
 
-zsh_fedora() {
+function zsh_fedora() {
     INSTALL=$1
     #LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
     #repositories=( $LIST_REPOS )
@@ -221,7 +227,7 @@ zsh_fedora() {
 }
 
 
-zsh_debian() {
+function zsh_debian() {
     INSTALL=$1
     #LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
     #repositories=( $LIST_REPOS )
@@ -239,7 +245,7 @@ zsh_debian() {
 }
 
 
-zsh_raspbian() {
+function zsh_raspbian() {
     INSTALL=$1
     sudo apt install -y $INSTALL >> apt.log
     sudo cp $MY_PATH/resources/lsd-0.17.0-arm /usr/local/bin/lsd
@@ -247,7 +253,7 @@ zsh_raspbian() {
 }
 
 
-zsh_ubuntu() {
+function zsh_ubuntu() {
     INSTALL=$1
     sudo apt install -y $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
@@ -255,10 +261,9 @@ zsh_ubuntu() {
 }
 
 
-setup_zsh() {
-    echo -e "${GREEN}Installing zsh${NC}"
+function setup_zsh() {
     INSTALL="zsh scrub ripgrep fzf"
-
+    echo -e "${GREEN}Installing zsh $INSTALL lsd bat${NC}"
 
     test $OS_NAME = "Ubuntu" && zsh_ubuntu "$INSTALL"
     test $OS_NAME = "Debian" && zsh_debian "$INSTALL"
@@ -310,7 +315,7 @@ setup_zsh() {
 
 
 
-setup_konsole() {
+function setup_konsole() {
     # set default profile konsole
     mkdir -p ~/.local/share/konsole/
     mkdir -p ~/.config/
@@ -319,7 +324,7 @@ setup_konsole() {
 }
 
 
-setup_tmux() {
+function setup_tmux() {
 
     #test -d ~/.oh-my-zsh && rm -rf ~/.oh-my-zsh
     cd
@@ -330,7 +335,7 @@ setup_tmux() {
 }
 
 
-main() {
+function main() {
     test -f dnf.log && /bin/rm -r dnf.log
     test -f apt.log && /bin/rm -f apt.log
 

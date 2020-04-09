@@ -132,7 +132,7 @@ alias less='/usr/local/bin/prettybat'
 alias rm="echo Use trash, or the full path i.e. /bin/rm"
 alias which="alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde"
 
-! ssh-add -l > /dev/null && eval "$(ssh-agent -s)" && test -f ~/.ssh/services && ssh-add ~/.ssh/services
+! ssh-add -l > /dev/null && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services
 
 # Functions
 function mkt(){
@@ -161,23 +161,23 @@ function man() {
 
 # fzf improvement
 function fzf-lovely(){
-  if [ "$1" = "h" ]; then
-    fzf -m --reverse --preview-window down:20 --preview '[[ $(file --mime {}) =~ binary ]] &&
-      echo {} is a binary file ||
-      (bat --style=numbers --color=always {} ||
-      highlight -O ansi -l {} ||
-      coderay {} ||
-      rougify {} ||
-      cat {}) 2> /dev/null | head -500'
-  else
-    fzf -m --preview '[[ $(file --mime {}) =~ binary ]] &&
-      echo {} is a binary file ||
-      (bat --style=numbers --color=always {} ||
-      highlight -O ansi -l {} ||
-      coderay {} ||
-      rougify {} ||
-      cat {}) 2> /dev/null | head -500'
-  fi
+    if [ "$1" = "h" ]; then
+        fzf -m --reverse --preview-window down:20 --preview '[[ $(file --mime {}) =~ binary ]] &&
+            echo {} is a binary file ||
+            (bat --style=numbers --color=always {} ||
+            highlight -O ansi -l {} ||
+            coderay {} ||
+            rougify {} ||
+            cat {}) 2> /dev/null | head -500'
+    else
+        fzf -m --preview '[[ $(file --mime {}) =~ binary ]] &&
+            echo {} is a binary file ||
+            (bat --style=numbers --color=always {} ||
+            highlight -O ansi -l {} ||
+            coderay {} ||
+            rougify {} ||
+            cat {}) 2> /dev/null | head -500'
+    fi
 }
 
 
