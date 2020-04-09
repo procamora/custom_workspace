@@ -211,74 +211,47 @@ setup_vim() {
 
 zsh_fedora() {
     INSTALL=$1
-    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
-    repositories=( $LIST_REPOS )
+    #LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
+    #repositories=( $LIST_REPOS )
 
-    for r in "${repositories[@]}"; do
-        sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
-    done
-
-    sudo sudo dnf install -y $INSTALL $LIST_REPOS lsd bat >> dnf.log
-    sudo chmod 755 /usr/share/zsh-* -R
+    #for r in "${repositories[@]}"; do
+    #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
+    #done
+    sudo sudo dnf install -y $INSTALL lsd bat >> dnf.log
 }
 
 
 zsh_debian() {
     INSTALL=$1
-    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
-    repositories=( $LIST_REPOS )
+    #LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
+    #repositories=( $LIST_REPOS )
 
-    for r in "${repositories[@]}"; do
-        REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/Debian_$OS_ID/ /"
-        sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
-        wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Debian_$OS_ID/Release.key -O Release.key
-        sudo apt-key add - < Release.key
-        /bin/rm Release.key
-    done
-
-    sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
+    #for r in "${repositories[@]}"; do
+    #    REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/Debian_$OS_ID/ /"
+    #    sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
+    #    wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Debian_$OS_ID/Release.key -O Release.key
+    #    sudo apt-key add - < Release.key
+    #    /bin/rm Release.key
+    #done
+    sudo apt install -y $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
     sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
-    sudo chmod 755 /usr/share/zsh-* -R
 }
+
 
 zsh_raspbian() {
     INSTALL=$1
-    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
-    repositories=( $LIST_REPOS )
-
-    for r in "${repositories[@]}"; do
-        REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/Raspbian_$OS_ID/ /"
-        sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
-        wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Raspbian_$OS_ID/Release.key -O Release.key
-        sudo apt-key add - < Release.key
-        /bin/rm Release.key
-    done
-
-    sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
+    sudo apt install -y $INSTALL >> apt.log
     sudo cp $MY_PATH/resources/lsd-0.17.0-arm /usr/local/bin/lsd
     sudo cp $MY_PATH/resources/bat-0.13.0-arm /usr/local/bin/bat
-    sudo chmod 755 /usr/share/zsh-* -R
 }
 
 
 zsh_ubuntu() {
     INSTALL=$1
-    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
-    repositories=( $LIST_REPOS )
-
-    for r in "${repositories[@]}"; do
-        REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/xUbuntu_$OS_ID/ /"
-        sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
-        wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/xUbuntu_$OS_ID/Release.key -O Release.key
-        sudo apt-key add - < Release.key
-        /bin/rm Release.key
-    done
-
-    sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
+    sudo apt install -y $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
     sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
-    sudo chmod 755 /usr/share/zsh-* -R
 }
 
 
@@ -319,6 +292,13 @@ setup_zsh() {
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
     cp $MY_PATH/zsh/zshrc ~/.zshrc
     cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
+
+    # plugins zsh
+    git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-completions.git $ZSH_CUSTOM/plugins/zsh-completions
+    git clone https://github.com/zsh-users/zsh-history-substring-search.git $ZSH_CUSTOM/plugins/zsh-history-substring-search
+    git clone https://github.com/zsh-users/zsh-docker.git $ZSH_CUSTOM/plugins/zsh-docker
 
     # Create link to user root (insegure but comfortable)
     sudo ln -s -f ~/.zshrc /root/.zshrc
