@@ -39,11 +39,14 @@ custom_workspace is a script to install and configure a complete workspace in a 
 
 ### Requirements
 
-Execute the script with a user with permissions to execute the sudo command.
+Execute the script with a user with permissions to execute the sudo command and execute the script from __bash__ to avoid problems when installing or reinstalling zsh
 
-Recommendation: execute the script from a console other than konsole, so that the profile with the specific configuration of konsole can be applied correctly.
 
-If it is done from konsole, later it can be executed from another console so that the profile is applied in the following way:
+
+#### Recommendation:
+
+- Execute the script from a console other than konsole, so that the profile with the specific configuration of konsole can be applied correctly.
+- If it is done from konsole, later it can be executed from another console so that the profile is applied in the following way:
 
 
 ```bash
