@@ -35,9 +35,9 @@
     dir                     # current directory
     vcs                     # git status
     status                  # Status command execution (color red false)
-    command_execution_time  # Show time execution command
+    #command_execution_time  # Show time execution command
     context                 # 
-    # prompt_char           # prompt symbol
+    prompt_char           # prompt symbol
   )
 
   # The list of segments shown on the right. Fill it with less important segments.
@@ -46,7 +46,7 @@
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     #status                  # exit code of the last command
-    #command_execution_time  # duration of the last command
+    command_execution_time  # duration of the last command
     #background_jobs         # presence of background jobs
     #direnv                  # direnv status (https://direnv.net/)
     #asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
@@ -854,7 +854,7 @@
   # Context format when in SSH without privileges: user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE=''
   # Default context format (no privileges, no SSH): user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n@%m'
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE=''
 
   # Don't show context unless running with privileges or in SSH.
   # Tip: Remove the next line to always show context.

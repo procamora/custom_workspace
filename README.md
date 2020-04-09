@@ -28,6 +28,11 @@ custom_workspace is a script to install and configure a complete workspace in a 
 [powerlevel10k]: https://github.com/romkatv/powerlevel10k
 
 
+![][screnshot]
+
+[screnshot]: 
+
+
 
 ## Getting Started
 
@@ -82,6 +87,7 @@ This script has been tested on the following Operating Systems
 - [x] Fedora (31)
 - [x] Ubuntu (19.04)
 - [x] Debian (10)
+- [x] Raspbian 10
 
 ### Pending Operating Systems
 
@@ -96,9 +102,15 @@ This script has been tested on the following Operating Systems
 
 - Dolphin
 - Konsole
+- ksysguard
+- [bat][bat]: alias to cat
+- [lsd][lsd]: alias to ls
 
 
 
+
+[bat]: https://github.com/sharkdp/bat/releases
+[lsd]: https://github.com/Peltoche/lsd/releases
 
 
 
@@ -113,7 +125,7 @@ The configuration files and/or directories of the different programs are as foll
 - compton: _~/.config/compton/_
 - polybar: _~/.config/polybar/_
 - i3-lock: __
-- vim: __
+- vim: _/opt/vim_runtime/_
 - zsh: _~/.zshrc_ y _~/.p10k.zsh_
 
 

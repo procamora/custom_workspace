@@ -47,7 +47,7 @@ setup_utils() {
 setup_bspwm() {
     echo -e "${GREEN}Installing bspwm, sxhkd, compton and feh${NC}"
 
-    INSTALL="bspwm compton feh konsole rofi"
+    INSTALL="bspwm compton feh konsole rofi ksysguard dolphin dolphin-plugins"
 
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
      xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
@@ -93,7 +93,7 @@ setup_fonts() {
     sudo mkdir -p /usr/local/share/fonts
     sudo cp resources/Hack.zip /usr/local/share/fonts/
     sudo unzip -o /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/
-    sudo rm /usr/local/share/fonts/Hack.zip
+    sudo /bin/rm /usr/local/share/fonts/Hack.zip
 
     test -f /etc/vconsole.conf && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
     ! test -f /etc/vconsole.conf && sudo cp resources/vconsole.conf /etc/
@@ -112,7 +112,7 @@ setup_fonts() {
 polybar_debian(){
     sudo cp resources/polybar-3.4.2.tar /opt/
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/ 
-    sudo rm /opt/polybar-3.4.2.tar
+    sudo /bin/rm /opt/polybar-3.4.2.tar
     mkdir -p /opt/polybar/build
     cd /opt/polybar/build
     cmake ..
@@ -167,7 +167,7 @@ setup_i3lock() {
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock
     apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock >> apt.log
 
-    test -d /opt/i3lock-fancy/ && sudo rm -rf /opt/i3lock-fancy/
+    test -d /opt/i3lock-fancy/ && sudo /bin/rm -rf /opt/i3lock-fancy/
     sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
     cd /opt/i3lock-fancy
     sudo make install
@@ -186,7 +186,7 @@ setup_vim() {
     echo -e "${GREEN}Installing vim${NC}"
     #USERS="root $MY_USER"
     # Clonamos repositorio
-    test -d /opt/vim_runtime && sudo rm -rf /opt/vim_runtime
+    test -d /opt/vim_runtime && sudo /bin/rm -rf /opt/vim_runtime
     sudo git clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
 
     # Dar permiso a los ficheros para los usuarios no root
@@ -219,6 +219,7 @@ zsh_fedora() {
     done
 
     sudo sudo dnf install -y $INSTALL $LIST_REPOS lsd bat >> dnf.log
+    sudo chmod 755 /usr/share/zsh-* -R
 }
 
 
@@ -232,12 +233,32 @@ zsh_debian() {
         sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
         wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Debian_$OS_ID/Release.key -O Release.key
         sudo apt-key add - < Release.key
-        rm Release.key
+        /bin/rm Release.key
     done
 
     sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
     sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
+    sudo chmod 755 /usr/share/zsh-* -R
+}
+
+zsh_raspbian() {
+    INSTALL=$1
+    LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
+    repositories=( $LIST_REPOS )
+
+    for r in "${repositories[@]}"; do
+        REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/Raspbian_$OS_ID/ /"
+        sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
+        wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Raspbian_$OS_ID/Release.key -O Release.key
+        sudo apt-key add - < Release.key
+        /bin/rm Release.key
+    done
+
+    sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
+    sudo cp $MY_PATH/resources/lsd-0.17.0-arm /usr/local/bin/lsd
+    sudo cp $MY_PATH/resources/bat-0.13.0-arm /usr/local/bin/bat
+    sudo chmod 755 /usr/share/zsh-* -R
 }
 
 
@@ -251,12 +272,13 @@ zsh_ubuntu() {
         sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
         wget -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/xUbuntu_$OS_ID/Release.key -O Release.key
         sudo apt-key add - < Release.key
-        rm Release.key
+        /bin/rm Release.key
     done
 
     sudo apt update >> apt.log && sudo apt install -y $LIST_REPOS $INSTALL >> apt.log
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
     sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
+    sudo chmod 755 /usr/share/zsh-* -R
 }
 
 
@@ -267,24 +289,24 @@ setup_zsh() {
 
     test $OS_NAME = "Ubuntu" && zsh_ubuntu "$INSTALL"
     test $OS_NAME = "Debian" && zsh_debian "$INSTALL"
-    test $OS_NAME = "Raspbian" && sudo apt install -y "$INSTALL"
-
+    test $OS_NAME = "Raspbian" && zsh_raspbian "$INSTALL"
     dnf --version > /dev/null 2>&1 && zsh_fedora "$INSTALL"
+
     zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
     unzip -o resources/bat-extras-20200401.zip -d resources/
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
     sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
-    rm -rf resources/bat-extras
+    /bin/rm -rf resources/bat-extras
 
     #[ -f ~/.fzf.sh ] && source ~/.fzf.sh
-    #test -f ~/.fzf.sh && source ~/.fzf.sh
+    test -f ~/.fzf.sh && source ~/.fzf.sh
 
     # If exsits remove back files and dir
-    test -f ~/.zshrc && rm -r ~/.zshrc
-    test -f ~/.p10k.zsh && rm -f ~/.p10k.zsh
-    test -d ~/.oh-my-zsh && rm -rf ~/.oh-my-zsh
+    test -f ~/.zshrc && /bin/rm -r ~/.zshrc
+    test -f ~/.p10k.zsh && /bin/rm -f ~/.p10k.zsh
+    test -d ~/.oh-my-zsh && /bin/rm -rf ~/.oh-my-zsh
 
     # Download and configuration oh my zsh
     sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -302,8 +324,6 @@ setup_zsh() {
     sudo ln -s -f ~/.zshrc /root/.zshrc
     sudo ln -s -f ~/.p10k.zsh /root/.p10k.zsh
     sudo ln -s ~/.oh-my-zsh/ /root/.oh-my-zsh/
-
-    #sudo chmod 755 /usr/share/zsh-* -R
 
     echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
@@ -323,16 +343,16 @@ setup_tmux() {
 
     #test -d ~/.oh-my-zsh && rm -rf ~/.oh-my-zsh
     cd
-git clone https://github.com/gpakosz/.tmux.git
-ln -s -f .tmux/.tmux.conf
-cp .tmux/.tmux.conf.local .
+    git clone https://github.com/gpakosz/.tmux.git
+    ln -s -f .tmux/.tmux.conf
+    cp .tmux/.tmux.conf.local .
 
 }
 
 
 main() {
-    test -f dnf.log && rm -r dnf.log
-    test -f apt.log && rm -f apt.log
+    test -f dnf.log && /bin/rm -r dnf.log
+    test -f apt.log && /bin/rm -f apt.log
 
     test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
     test "$1" = "vim" && setup_utils && setup_vim
