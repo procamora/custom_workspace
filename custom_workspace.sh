@@ -303,7 +303,7 @@ setup_zsh() {
     # Create link to user root (insegure but comfortable)
     sudo ln -s -f ~/.zshrc /root/.zshrc
     sudo ln -s -f ~/.p10k.zsh /root/.p10k.zsh
-    sudo ln -s ~/.oh-my-zsh/ /root/.oh-my-zsh/
+    sudo ln -s ~/.oh-my-zsh/ /root/
 
     echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
