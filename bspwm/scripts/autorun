@@ -3,9 +3,21 @@
 # keyboard Internation English
 setxkbmap eu
 
+# Key NumLock activate by default
+numlockx
+
+
+# if exits touchpad, enable tap to click
+id_touchpad=$(xinput | /bin/grep -i "TouchPad" | xargs | cut -d "=" -f2 | cut -d " " -f1)
+if [ "$?" -eq "0" ]; then
+    id_tap=$(xinput list-props 12 | /bin/grep -i "Tapping Enabled (" | xargs | cut -d "(" -f2 | cut -d ")" -f1)
+    xinput set-prop $id_touchpad $id_tap 1
+fi
+
 PROGRAMS=( konsole firefox Telegram)
 
 for prog in "${PROGRAMS[@]}"; do
+    # killall -q $prog
     ! (ps aux | /bin/grep "$prog" | /bin/grep -v "grep" > /dev/null) && $prog &
     sleep 0.5
 done

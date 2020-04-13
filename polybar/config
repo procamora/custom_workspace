@@ -80,9 +80,9 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pizelsize=15;2
 
-modules-left = bspwm eth wlan 
+modules-left = bspwm eth wlan
 modules-center = xwindow 
-modules-right = temperature wifi xkeyboard htb ethernet internet memory cpu alsa date powermenu
+modules-right = battery temperature wifi xkeyboard htb ethernet internet memory cpu alsa date powermenu
 #modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
 
 
@@ -260,7 +260,7 @@ bar-used-foreground-3 = #ed5456
 ; TODO
 [module/wlan]
 type = internal/network
-interface = wlp0s20u14
+interface = wlp2s0
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
@@ -296,16 +296,14 @@ format-disconnected =
 type = internal/date
 interval = 5
 
-date = %d-%m-%Y ⏽
-date-alt = "%a %d-%m-%Y"
+date = 
+date-alt = "%a %d-%m-%Y ⏽"
 
 time = %H:%M
 time-alt = %H:%M:%S
 
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-#format-underline = #0a6cf5
-
 label = %date% %time%
 
 
@@ -368,72 +366,42 @@ bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
 
-; TODO
 [module/battery]
 type = internal/battery
-battery = BAT0
-adapter = AC
-full-at = 98
+;Use $ ls -1 /sys/class/power_supply/
+battery = ${env:LAPTOP_BATTERY:BAT0}
+adapter = ${env:LAPTOP_ADAPTER:ADP1}
+full-at = 99
+poll-interval = 5
+time-format = %H:%M
 
+format-charging-prefix =  
+format-charging-prefix-foreground = ${colors.yellow}
 format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
+format-discharging = <ramp-capacity> <label-discharging>
+format-full = <ramp-capacity> <label-full>
 
-format-discharging = <animation-discharging> <label-discharging>
-format-discharging-underline = ${self.format-charging-underline}
+;label-charging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
+;label-discharging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
+;label-full = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
 
-format-full-prefix = " "
-format-full-prefix-foreground = ${colors.foreground-alt}
-format-full-underline = ${self.format-charging-underline}
+ramp-capacity-0 =   
+ramp-capacity-1 =   
+ramp-capacity-2 =   
+ramp-capacity-3 =   
+ramp-capacity-4 =   
+ramp-capacity-0-foreground = ${colors.alert}
+ramp-capacity-1-foreground = ${colors.yellow}
+ramp-capacity-foreground   = ${colors.blue}
 
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-foreground = ${colors.foreground-alt}
-
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-foreground = ${colors.foreground-alt}
+bar-capacity-width = 10
+animation-charging-0 = " " 
+animation-charging-1 = " "
+animation-charging-2 = " "
+animation-charging-3 = " "
+animation-charging-4 = " "
 animation-charging-framerate = 750
-
-animation-discharging-0 = 
-animation-discharging-1 = 
-animation-discharging-2 = 
-animation-discharging-foreground = ${colors.foreground-alt}
-animation-discharging-framerate = 750
-;;;;;;;;;;;;;;;;;;;;;;;
-; type = internal/battery
-; ;Use $ ls -1 /sys/class/power_supply/
-; battery = ${env:LAPTOP_BATTERY:BAT1}
-; adapter = ${env:LAPTOP_ADAPTER:ACAD}
-; full-at = 99
-; poll-interval = 5
-; time-format = %H:%M
-;
-; format-charging    = <animation-charging> <label-charging>
-; format-discharging = <ramp-capacity> <label-discharging>
-; format-full        = <ramp-capacity> <label-full>
-;
-; label-charging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
-; label-discharging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
-; label-full = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
-;
-; ramp-capacity-0 = 
-; ramp-capacity-1 = 
-; ramp-capacity-2 = 
-; ramp-capacity-3 = 
-; ramp-capacity-4 = 
-; ramp-capacity-0-foreground = ${colors.urgent}
-; ramp-capacity-1-foreground = ${colors.moderate}
-; ramp-capacity-foreground   = ${colors.blue}
-;
-; bar-capacity-width = 10
-; animation-charging-0 = " "
-; animation-charging-1 = " "
-; animation-charging-2 = " "
-; animation-charging-3 = " "
-; animation-charging-4 = " "
-; animation-charging-framerate = 750
+animation-charging-foreground = ${colors.primary}
 
 
 [module/temperature]
@@ -471,10 +439,10 @@ label-separator = "⏽"
 label-separator-foreground = ${colors.foreground-alt}
 
 menu-0-0 = "reboot" 
-menu-0-0-exec = sudo reboot
+menu-0-0-exec = reboot
 menu-0-0-foreground = ${colors.primary}
 menu-0-1 = "power off"
-menu-0-1-exec = sudo poweroff
+menu-0-1-exec = poweroff
 menu-0-1-foreground = ${colors.primary}
 
 

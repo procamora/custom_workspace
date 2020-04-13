@@ -52,7 +52,7 @@ function setup_utils() {
 # rofi -> lanzador de programas en forma de lista interactica
 
 function setup_bspwm() {
-    INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins"
+    INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins numlockx"
     echo -e "${GREEN}Installing $INSTALL ${NC}"
 
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
@@ -64,8 +64,8 @@ function setup_bspwm() {
 
 
     mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton}
-    cp $MY_PATH/bspwm/bspwmrc ~/.config/bspwm/
-    cp $MY_PATH/sxhkd/sxhkdrc ~/.config/sxhkd/
+    cp -r $MY_PATH/bspwm/* ~/.config/bspwm/
+    cp -r $MY_PATH/sxhkd/* ~/.config/sxhkd/
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
@@ -151,11 +151,8 @@ function setup_polybar() {
 
     cp $MY_PATH/polybar/config ~/.config/polybar/
 
-    cp $MY_PATH/polybar/bin/status_ethernet.sh ~/.config/polybar/bin/
-    chmod u+x ~/.config/polybar/bin/status_ethernet.sh
-
-    cp $MY_PATH/polybar/bin/status_htb.sh ~/.config/polybar/bin/
-    chmod u+x ~/.config/polybar/bin/status_htb.sh
+    cp $MY_PATH/polybar/bin/* ~/.config/polybar/bin/
+    chmod u+x ~/.config/polybar/bin/*.sh
 
     # plugins
     git clone https://github.com/polybar/polybar-scripts.git ~/.config/polybar/bin/scripts/
