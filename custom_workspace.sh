@@ -78,7 +78,7 @@ exec bspwm" >> ~/.xinitrc
     cp $MY_PATH/compton/compton.conf ~/.config/compton/
 
     # set wallpaper
-    wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png
+    wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png > wget.log
 
     echo -e "${GREEN}Finishing Installing bspwm, sxhkd, compton and feh${NC}"
 }
@@ -325,13 +325,22 @@ function setup_konsole() {
 
 
 function setup_tmux() {
+    INSTALL="tmux"
+    echo -e "${GREEN}Installing terminal $INSTALL ${NC}"
 
-    #test -d ~/.oh-my-zsh && rm -rf ~/.oh-my-zsh
-    cd
-    git clone https://github.com/gpakosz/.tmux.git
-    ln -s -f .tmux/.tmux.conf
-    cp .tmux/.tmux.conf.local .
+    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL >> dnf.log 2>&1
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL >> apt.log 2>&1
 
+    test -d ~/.tmux && /bin/rm -rf ~/.tmux
+    test -f ~/.tmux.conf && /bin/rm -f ~/.tmux.conf
+    test -L ~/.tmux.conf && unlink ~/.tmux.conf
+    test -f ~/.tmux.conf.local && /bin/rm -f ~/.tmux.conf.local
+
+    git clone https://github.com/gpakosz/.tmux.git ~/.tmux
+    ln -s -f ~/.tmux/.tmux.conf ~/.tmux.conf
+    cp ~/.tmux/.tmux.conf.local ~/.tmux.conf.local
+    echo -e "${GREEN}Finishing Installing $INSTALL ${NC}"
 }
 
 
@@ -339,11 +348,11 @@ function main() {
     test -f dnf.log && /bin/rm -r dnf.log
     test -f apt.log && /bin/rm -f apt.log
 
-    test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
+    test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_tmux
     test "$1" = "vim" && setup_utils && setup_vim
-    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh && setup_konsole
-    test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole
-    test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole
+    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh && setup_konsole 
+    test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole && setup_tmux
+    test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole && setup_tmux
 
 
     test "$1" = "_utils" && setup_utils
@@ -354,6 +363,7 @@ function main() {
     test "$1" = "_vim" && setup_vim
     test "$1" = "_zsh" && setup_zsh
     test "$1" = "_konsole" && setup_konsole
+    test "$1" = "_tmux" && setup_tmux
 
 
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS

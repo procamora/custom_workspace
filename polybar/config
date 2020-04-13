@@ -15,17 +15,41 @@
 ;   The README contains a lot of information
 ;
 ;==========================================================
+[programs]
+network = nm-connection-editor
+system = ksysguard
+
 
 [colors]
 ;background = ${xrdb:color0:#222}
-background = #aa2F343D
+; background transparent and hidden in fullscreen
+background = #AA2F343F
+;background-alt gray
 background-alt = #444
 ;foreground = ${xrdb:color7:#222}
+;foregroud white
 foreground = #dfdfdf
+; foreground-alt gray
 foreground-alt = #555
+; primary  orange
 primary = #ffb52a
-secondary = #e60053
-alert = #bd2c40
+; secondary green
+secondary = #1BBF3E
+; alert red
+alert = #BD2C40
+
+red = #ff0000
+green = #5ac18e
+yellow = #ffff00
+orange = #ff7f50
+; har hardd 
+blue = #3399ff
+; soft
+blue2 = #7fe5f0
+purple = #800080
+gray = #696969
+white = #ffffff
+black = #000000
 
 [bar/example]
 ;monitor = ${env:MONITOR:HDMI-1}
@@ -56,9 +80,9 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pizelsize=15;2
 
-modules-left = bspwm
+modules-left = bspwm eth wlan 
 modules-center = xwindow 
-modules-right = htb eth wlan ethernet alsa memory battery date powermenu
+modules-right = temperature wifi xkeyboard htb ethernet internet memory cpu alsa date powermenu
 #modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
 
 
@@ -66,7 +90,7 @@ tray-position = right
 tray-padding = 2
 ;tray-background = #0063ff
 
-;wm-restack = bspwm
+wm-restack = bspwm
 ;wm-restack = i3
 
 ;override-redirect = true
@@ -80,26 +104,30 @@ tray-padding = 2
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+
 [module/xwindow]
 type = internal/xwindow
 label = %title:0:30:...%
 
+
 [module/xkeyboard]
 type = internal/xkeyboard
+; not show num lock
 blacklist-0 = num lock
 
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
 
 label-layout = %layout%
-label-layout-underline = ${colors.secondary}
+label-layout-foreground = ${colors.foreground}
 
 label-indicator-padding = 2
 label-indicator-margin = 1
-label-indicator-background = ${colors.secondary}
-label-indicator-underline = ${colors.secondary}
+label-indicator-foreground = ${colors.foreground}
+label-indicator-background = ${colors.foreground-alt}
 
+
+; TODO
 [module/filesystem]
 type = internal/fs
 interval = 25
@@ -110,12 +138,12 @@ label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.foreground-alt}
 
+
 [module/bspwm]
 type = internal/bspwm
 
 label-focused = 
-label-focused-background = ${colors.background-alt}
-#label-focused-underline= ${colors.primary}
+label-focused-background = ${colors.foreground-alt}
 label-focused-padding = 2
 
 label-occupied = 
@@ -132,66 +160,24 @@ label-empty-padding = 2
 ; Separator in between workspaces
 ; label-separator = |
 
-[module/i3]
-type = internal/i3
-format = <label-state> <label-mode>
-index-sort = true
-wrapping-scroll = false
 
-; Only show workspaces on the same output as the bar
-;pin-workspaces = true
-
-label-mode-padding = 2
-label-mode-foreground = #000
-label-mode-background = ${colors.primary}
-
-; focused = Active workspace on focused monitor
-label-focused = %index%
-label-focused-background = ${colors.background-alt}
-label-focused-underline= ${colors.primary}
-label-focused-padding = 2
-
-; unfocused = Inactive workspace on any monitor
-label-unfocused = %index%
-label-unfocused-padding = 2
-
-; visible = Active workspace on unfocused monitor
-label-visible = %index%
-label-visible-background = ${self.label-focused-background}
-label-visible-underline = ${self.label-focused-underline}
-label-visible-padding = ${self.label-focused-padding}
-
-; urgent = Workspace with urgency hint set
-label-urgent = %index%
-label-urgent-background = ${colors.alert}
-label-urgent-padding = 2
-
-; Separator in between workspaces
-; label-separator = |
-
-
-[module/mpd]
-type = internal/mpd
-format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
-
-icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-
-label-song-maxlen = 25
-label-song-ellipsis = true
-
+; TODO
 [module/xbacklight]
 type = internal/xbacklight
 
 format = <label> <bar>
-label = BL
+label =  %percentage%%
 
-bar-width = 10
+; Only applies if <ramp> is used
+ramp-0 = 🌕
+ramp-1 = 🌔
+ramp-2 = 🌓
+ramp-3 = 🌒
+ramp-4 = 🌑
+
+bar-width = 1
 bar-indicator = |
-bar-indicator-foreground = #fff
+bar-indicator-foreground = #ff
 bar-indicator-font = 2
 bar-fill = ─
 bar-fill-font = 2
@@ -200,42 +186,86 @@ bar-empty = ─
 bar-empty-font = 2
 bar-empty-foreground = ${colors.foreground-alt}
 
+
+; TODO
 [module/backlight-acpi]
 inherit = module/xbacklight
 type = internal/backlight
 card = intel_backlight
 
+
 [module/cpu]
 type = internal/cpu
-interval = 2
-format-prefix = " "
+interval = 5
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #f90000
-label = %percentage:2%%
+
+format = <label> <ramp-coreload>
+label = %percentage%%
+click-left = ${programs.system}
+
+; Spacing between individual per-core ramps
+ramp-coreload-spacing = 1
+ramp-coreload-0 = ▁
+ramp-coreload-0-foreground = ${colors.blue2}
+
+ramp-coreload-1 = ▂
+ramp-coreload-1-foreground = ${colors.blue2}
+
+ramp-coreload-2 = ▃
+ramp-coreload-2-foreground = ${colors.yellow}
+
+ramp-coreload-3 = ▄
+ramp-coreload-3-foreground = ${colors.orange}
+
+ramp-coreload-4 = ▅
+ramp-coreload-4-foreground = ${colors.orange}
+
+ramp-coreload-5 = ▆
+ramp-coreload-5-foreground = ${colors.alert}
+
+ramp-coreload-6 = ▇
+ramp-coreload-6-foreground = ${colors.alert}
+
+ramp-coreload-7 = █
+ramp-coreload-7-foreground = ${colors.alert}
+
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #4bffdc
 label = %percentage_used%%
 
+
+[module/memory2]
+type = internal/memory
+interval = 2
+format-prefix = " "
+;format-underline = #4bffdc
+;label = %percentage%%
+label = %gb_used%/%gb_total%
+;label-foreground = #ed5456
+label-foreground = #999999
+
+;bar-used-width = 10
+bar-used-gradient = true
+bar-used-foreground-0 = #0088CC
+bar-used-foreground-1 = #2f8419
+bar-used-foreground-2 = #f5a70a
+bar-used-foreground-3 = #ed5456
+
+
+; TODO
 [module/wlan]
 type = internal/network
-interface = 
+interface = wlp0s20u14
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #9f78e1
-label-connected = %essid%
-
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-
+label-connected = " %signal% [  %downspeed%  ] [  %upspeed%  ]"
+format-disconnected = 
 ramp-signal-0 = 
 ramp-signal-1 = 
 ramp-signal-2 = 
@@ -243,13 +273,15 @@ ramp-signal-3 = 
 ramp-signal-4 = 
 ramp-signal-foreground = ${colors.foreground-alt}
 
+
+; TODO
 [module/eth]
 type = internal/network
-interface = 
+interface = enp4s0
 interval = 3.0
 
 format-connected-underline = #55aa55
-format-connected-prefix = " "
+format-connected-prefix = "- "
 format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 
@@ -259,22 +291,25 @@ format-disconnected =
 ;label-disconnected = %ifname% disconnected
 ;label-disconnected-foreground = ${colors.foreground-alt}
 
+
 [module/date]
 type = internal/date
 interval = 5
 
-date =
-date-alt = " %Y-%m-%d"
+date = %d-%m-%Y ⏽
+date-alt = "%a %d-%m-%Y"
 
 time = %H:%M
 time-alt = %H:%M:%S
 
-format-prefix = 
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #0a6cf5
+#format-underline = #0a6cf5
 
 label = %date% %time%
 
+
+; TODO
 [module/pulseaudio]
 type = internal/pulseaudio
 
@@ -302,16 +337,18 @@ bar-volume-empty = ─
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
+
+; TODO
 [module/alsa]
 type = internal/alsa
 
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL
+label-volume = 墳
 label-volume-foreground = ${root.foreground}
 
-format-muted-prefix = " "
-format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
+format-muted-prefix =
+format-muted-foreground = ${colors.red}
+label-muted = "  婢  "
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #55aa55
@@ -330,6 +367,8 @@ bar-volume-empty = ─
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
+
+; TODO
 [module/battery]
 type = internal/battery
 battery = BAT0
@@ -362,55 +401,84 @@ animation-discharging-1 = 
 animation-discharging-2 = 
 animation-discharging-foreground = ${colors.foreground-alt}
 animation-discharging-framerate = 750
+;;;;;;;;;;;;;;;;;;;;;;;
+; type = internal/battery
+; ;Use $ ls -1 /sys/class/power_supply/
+; battery = ${env:LAPTOP_BATTERY:BAT1}
+; adapter = ${env:LAPTOP_ADAPTER:ACAD}
+; full-at = 99
+; poll-interval = 5
+; time-format = %H:%M
+;
+; format-charging    = <animation-charging> <label-charging>
+; format-discharging = <ramp-capacity> <label-discharging>
+; format-full        = <ramp-capacity> <label-full>
+;
+; label-charging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
+; label-discharging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
+; label-full = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
+;
+; ramp-capacity-0 = 
+; ramp-capacity-1 = 
+; ramp-capacity-2 = 
+; ramp-capacity-3 = 
+; ramp-capacity-4 = 
+; ramp-capacity-0-foreground = ${colors.urgent}
+; ramp-capacity-1-foreground = ${colors.moderate}
+; ramp-capacity-foreground   = ${colors.blue}
+;
+; bar-capacity-width = 10
+; animation-charging-0 = " "
+; animation-charging-1 = " "
+; animation-charging-2 = " "
+; animation-charging-3 = " "
+; animation-charging-4 = " "
+; animation-charging-framerate = 750
+
 
 [module/temperature]
 type = internal/temperature
-thermal-zone = 0
+interval = 3
+thermaml-zone = 0
 warn-temperature = 60
-
 format = <ramp> <label>
-format-underline = #f50a4d
-format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
-
+format-padding = 1
 label = %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.secondary}
 
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
+ramp-0 = ""
+ramp-1 = ""
+ramp-2 = ""
+ramp-0-foreground = ${colors.blue}
+ramp-1-foreground = ${colors.blue}
+ramp-2-foreground = ${colors.orange}
+
+format-warn = <label-warn>
+label-warn =  %temperature-c%
+label-warn-padding = 1
+label-warn-foreground = ${colors.alert}
+
 
 [module/powermenu]
 type = custom/menu
-
 expand-right = true
-
 format-spacing = 1
 
-label-open = 
-label-open-foreground = ${colors.secondary}
-label-close =  cancel
+label-open = "⏻"
+label-open-foreground = ${colors.foreground}
+label-close = "cancel"
 label-close-foreground = ${colors.secondary}
-label-separator = |
+label-separator = "⏽"
 label-separator-foreground = ${colors.foreground-alt}
 
-menu-0-0 = reboot
-menu-0-0-exec = menu-open-1
-menu-0-1 = power off
-menu-0-1-exec = menu-open-2
+menu-0-0 = "reboot" 
+menu-0-0-exec = sudo reboot
+menu-0-0-foreground = ${colors.primary}
+menu-0-1 = "power off"
+menu-0-1-exec = sudo poweroff
+menu-0-1-foreground = ${colors.primary}
 
-menu-1-0 = cancel
-menu-1-0-exec = menu-open-0
-menu-1-1 = reboot
-menu-1-1-exec = sudo reboot
 
-menu-2-0 = power off
-menu-2-0-exec = sudo poweroff
-menu-2-1 = cancel
-menu-2-1-exec = menu-open-0
-
+; TODO
 [settings]
 screenchange-reload = true
 ;compositing-background = xor
@@ -419,21 +487,64 @@ screenchange-reload = true
 ;compositing-border = over
 ;pseudo-transparency = false
 
+
+;TODO
 [global/wm]
 margin-top = 5
 margin-bottom = 5
+
+
+# find ~/.config/polybar/bin -name "*.py" -exec chmod u+x {} \;
+# find ~/.config/polybar/bin -name "*.sh" -exec chmod u+x {} \;
 
 
 [module/ethernet]
 type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_ethernet.sh
+click-left = ${programs.network}
+
+[module/internet]
+type = custom/script
+interval = 10
+exec = ~/.config/polybar/bin/status_internet.sh
+
+[module/wifi]
+type = custom/script
+interval = 2
+exec = ~/.config/polybar/bin/status_wifi.sh
+click-left = ${programs.network}
 
 
 [module/htb]
 type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_htb.sh
+click-left = ${programs.network}
+
+
+[module/info-redshift-temp]
+type = custom/script
+exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-redshift-temp/info-redshift-temp.sh
+interval = 5
+
+
+[module/updates-fedora]
+type = custom/script
+exec = ~/.config/polybar/bin/scripts/polybar-scripts/updates-fedora/updates-fedora.sh
+interval = 600
+
+
+[module/info-hackspeed]
+type = custom/script
+exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-hackspeed/info-hackspeed.sh
+tail = true
+
+
+[module/info-softwarecounter]
+type = custom/script
+exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-softwarecounter/info-softwarecounter.py
+interval = 10
 
 ;
 ; vim:ft=dosini

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# keyboard Internation English
+setxkbmap eu
+
+PROGRAMS=( konsole firefox Telegram)
+
+for prog in "${PROGRAMS[@]}"; do
+    ! (ps aux | /bin/grep "$prog" | /bin/grep -v "grep" > /dev/null) && $prog &
+    sleep 0.5
+done
+
+
+# ! (ps aux | /bin/grep "Telegram" | /bin/grep -vq "grep") && (sleep 5 && Telegram > /dev/null 2>&1) &
+
+# out for because program requiere argument
+! (ps aux | /bin/grep "insync" | /bin/grep -vq "grep") && (sleep 5 && insync start > /dev/null 2>&1) &
+

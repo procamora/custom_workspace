@@ -1,11 +1,11 @@
 #!/bin/sh
 
-IFACE=$(/usr/sbin/ip address | grep "tun0:" | awk '{print $2}' | tr -d ":")
+ETH="tun0"
+IFACE=$(/usr/sbin/ip address | grep "$ETH:" | awk '{print $2}' | tr -d ":")
 
-if [ "$IFACE" = "tun0" ]; then
-    echo "%{F#1bbf3e} %{F#e2ee6a}$(/usr/sbin/ip address show tun0 | grep "inet " | awk '{print $2}' | cut -d/ -f1)%{u-}"
-
+if [ "$IFACE" = "$ETH" ]; then
+    echo "%{F#1BBF3E} %{F#E2EE6A}$(/usr/sbin/ip address show $ETH | grep "inet " | awk '{print $2}' | cut -d/ -f1)%{u-}"
 else
-    echo "%{F#1bbf3e}%{u-}%{F-}"
+    echo "%{F#1BBF3E}%{u-}%{F-}"
 fi
 

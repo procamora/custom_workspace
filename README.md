@@ -80,11 +80,11 @@ Running the script again regenerates the default settings. You can also leave so
 
 ```bash
 
-./custom_workspace.sh all		# all
-./custom_workspace.sh bspwm		# bspqm + polybar + i3lock
-./custom_workspace.sh vim		# vim
-./custom_workspace.sh zsh		# zsh
-./custom_workspace.sh _polybar	# polybar
+./custom_workspace.sh all       # all
+./custom_workspace.sh bspwm     # bspqm + polybar + i3lock
+./custom_workspace.sh vim       # vim
+./custom_workspace.sh zsh       # zsh
+./custom_workspace.sh _polybar  # polybar
 
 
 ```
@@ -143,6 +143,38 @@ The configuration files and/or directories of the different programs are as foll
 - i3-lock: __
 - vim: _/opt/vim_runtime/_
 - zsh: _~/.zshrc_ y _~/.p10k.zsh_
+
+
+
+### Shortcut
+
+In case we don't know the name of the key we want to assign a shortcut to with sxhkd, we can use the xev utility to get the name of that key, we can see below an example for the _PrtScn_ key:
+
+```bash
+sudo dnf install -y XBindKeys
+
+# url: https://unix.stackexchange.com/questions/120199/how-to-detect-global-key-presses
+xev | /bin/grep -A2 --line-buffered '^KeyRelease' \
+    | sed -n '/keycode /s/^.*keycode \([0-9]*\).* (.*, \(.*\)).*$/\1 \2/p'
+```
+
+
+Getting the next output:
+
+
+```
+107 Print
+```
+
+
+So now we only need to indicate the shortcut in sxhkd so that when we press the _PrtScn_ key we will have the desired screenshot utility:
+
+```
+Print
+    spectacle
+```
+
+
 
 
 ### Backgroud

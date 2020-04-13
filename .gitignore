@@ -1,2 +1,4 @@
 dnf.log
 apt.log 
+wget.log
+pacman.log

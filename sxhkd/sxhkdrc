@@ -4,11 +4,12 @@
 
 # terminal emulator
 super + Return
-    konsole
+    konsole -e tmux
 
 # program launcher
+# rofi -show  run
 super + d
-    rofi -show  run
+    krunner
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -136,3 +137,12 @@ super + shift + f
 # Block screen
 ctrl + super + alt + x
     i3lock-fancy
+
+# System Monitor
+ctrl + Escape
+    ksysguard
+
+# ScreenShot
+Print
+    spectacle
+
