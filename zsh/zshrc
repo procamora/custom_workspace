@@ -130,6 +130,11 @@ alias lessc='/usr/local/bin/prettybat'
 alias rm="echo Use trash, or the full path i.e. /bin/rm"
 alias which="alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde"
 
+alias vipolybar="vim ~/.config/polybar/config"
+alias vibspwm="vim ~/.config/bspwm/bspwmrc"
+alias vicompton="vim ~/.config/compton/compton.conf"
+alias vizsh="vim ~/.zshrc"
+
 ! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services
 
 # Functions

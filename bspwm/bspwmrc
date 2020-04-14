@@ -6,12 +6,10 @@ killall -q compton                                      # killall previus compto
 compton --config ~/.config/compton/compton.conf &       # Transparency Management
 killall -q xautolock                                    # killall autolock
 xautolock -detectsleep -time 10 \
-    -locker "i3lock -fenti ~/.config/lock.png"          # Automatic screenlock
+    -locker "i3lock -fenti ~/.config/lock.png" &        # Automatic screenlock
 wmname LG3D &                                           # Fix problem Burp Suite proportion full screen
 feh --bg-fill ~/.config/wallpaper.png &                 # Set wallpaper brackground
-
 ~/.config/polybar/launch.sh &                           # Launch polybar
-~/.config/bspwm/scripts/autorun &                       # Autorun scripts
 
 bspc config pointer_modifier mod1                       # Set key super to key windows (metawin)
 bspc monitor -d I II III IV V VI VII VIII IX X
@@ -53,4 +51,8 @@ bspc rule -a Chromium desktop='^1' state=pseudo_tiled follow=on
 # Other
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
+
+
+
+~/.config/bspwm/scripts/autorun &                       # Autorun scripts
 

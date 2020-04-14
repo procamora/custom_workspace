@@ -7,6 +7,19 @@ setxkbmap eu
 numlockx
 
 
+# autorun scripts
+find ~/scripts/ -name "*.py" -exec chmod u+x {} \;
+find ~/scripts/ -name "*.sh" -exec chmod u+x {} \;
+find ~/scripts/ -name "*.exp" -exec chmod u+x {} \;
+
+! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null
+~/scripts/load_key_personal.exp
+~/scripts/load_key_services.exp
+~/sctipts/mountDirSSH.sh
+
+# mkdir -p ~/decrypt_gdrive/ && ~/scripts/encfs.exp
+
+
 # if exits touchpad, enable tap to click
 id_touchpad=$(xinput | /bin/grep -i "TouchPad" | xargs | cut -d "=" -f2 | cut -d " " -f1)
 if [ "$?" -eq "0" ]; then
@@ -25,6 +38,7 @@ done
 
 # ! (ps aux | /bin/grep "Telegram" | /bin/grep -vq "grep") && (sleep 5 && Telegram > /dev/null 2>&1) &
 
-# out for because program requiere argument
+# out for because program requiere arguments
 ! (ps aux | /bin/grep "insync" | /bin/grep -vq "grep") && (sleep 5 && insync start > /dev/null 2>&1) &
+
 

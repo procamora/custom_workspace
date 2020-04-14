@@ -82,7 +82,7 @@ font-3 = Hack Nerd Font Mono:pizelsize=15;2
 
 modules-left = bspwm cpu memory temperature
 modules-center = xwindow eth wlan
-modules-right = wifi xkeyboard htb ethernet internet alsa battery date powermenu
+modules-right = redshift wifi xkeyboard htb ethernet internet alsa battery date powermenu
 #modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
 
 
@@ -536,7 +536,7 @@ exec = ~/.config/polybar/bin/status_htb.sh
 click-left = ${programs.network}
 
 
-[module/info-redshift-temp]
+[module/redshift]
 type = custom/script
 exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-redshift-temp/info-redshift-temp.sh
 interval = 5
