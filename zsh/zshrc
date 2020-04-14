@@ -99,7 +99,6 @@ export LANGUAGE=en_US.UTF-8
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -133,6 +132,7 @@ alias which="alias | /usr/bin/which --tty-only --read-alias --show-dot --show-ti
 alias vipolybar="vim ~/.config/polybar/config"
 alias vibspwm="vim ~/.config/bspwm/bspwmrc"
 alias vicompton="vim ~/.config/compton/compton.conf"
+alias visxhkd="vim ~/.config/sxhkd/sxhkdrc"
 alias vizsh="vim ~/.zshrc"
 
 ! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services

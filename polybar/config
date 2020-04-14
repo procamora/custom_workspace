@@ -80,9 +80,9 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pizelsize=15;2
 
-modules-left = bspwm cpu memory temperature battery
-modules-center = xwindow 
-modules-right = redshift xkeyboard wifi_icon wlan eth htb internet alsa date powermenu
+modules-left = bspwm cpu memory temperature battery filesystem
+modules-center = xwindow
+modules-right = redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa date powermenu
 #modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
 
 
@@ -127,55 +127,23 @@ label-indicator-foreground = ${colors.foreground}
 label-indicator-background = ${colors.foreground-alt}
 
 
-; TODO
 [module/filesystem]
 type = internal/fs
 interval = 30
 
 mount-0 = /
-mount-1 = /home
-
+;mount-1 = /home
 ;label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
 ;label-unmounted = %mountpoint% not mounted
 ;label-unmounted-foreground = ${colors.foreground-alt}
-;;;;;;;;;;;;;;;;;;;;
-# Display fixed precision values
-# Default: false
 fixed-values = false
-
-# Spacing between entries
-# Default: 2
 spacing = 3
 
-# Available tags:
-#   <label-mounted> (default)
-#   <bar-free>
-#   <bar-used>
-#   <ramp-capacity>
 format-mounted = <label-mounted>
-
-# Available tags:
-#   <label-unmounted> (default)
 format-unmounted = <label-unmounted>
-
-# Available tokens:
-#   %mountpoint%
-#   %type%
-#   %fsname%
-#   %percentage_free%
-#   %percentage_used%
-#   %total%
-#   %free%
-#   %used%
-# Default: %mountpoint% %percentage_free%%
 label-mounted = %{F#888}%mountpoint% %{F-}%free%
-
-# Available tokens:
-#   %mountpoint%
-# Default: %mountpoint% is not mounted
 label-unmounted = %mountpoint%: not mounted
-label-unmounted-foreground = ${colors.gray}
-
+label-unmounted-foreground = ${colors.foreground}
 
 
 [module/bspwm]
@@ -296,12 +264,11 @@ bar-used-foreground-2 = #f5a70a
 bar-used-foreground-3 = #ed5456
 
 
-; TODO
 [module/wlan]
 type = internal/network
 interface = wlp2s0
 interval = 3.0
-;ping-interval = 10
+;ping-interval = 10 ; experimental
 
 format-connected = <label-connected>
 ;format-connected-prefix = "  "
@@ -313,18 +280,17 @@ format-disconnected =
 format-disconnected-foreground = ${colors.red}
 
 
-; TODO
 [module/eth]
 type = internal/network
 interface = enp4s0
 interval = 3.0
 
-format-connected-prefix =  
-format-connected-prefix-foreground = ${colors.blue}
-label-connected = [%local_ip%]
+;format-connected-prefix =  
+;format-connected-prefix-foreground = ${colors.blue}
+label-connected = "[%local_ip%]"
 
-format-disconnected-prefix =  
-format-disconnected-prefix-foreground = ${colors.red}
+;format-disconnected-prefix =  
+;format-disconnected-prefix-foreground = ${colors.red}
 label-disconnected = 
 ;format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
@@ -347,36 +313,6 @@ format-prefix-foreground = ${colors.foreground-alt}
 label = %date% %time%
 
 
-; TODO
-[module/pulseaudio]
-type = internal/pulseaudio
-
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL %percentage%%
-label-volume-foreground = ${root.foreground}
-
-label-muted = 🔇 muted
-label-muted-foreground = #666
-
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = false
-bar-volume-indicator = |
-bar-volume-indicator-font = 2
-bar-volume-fill = ─
-bar-volume-fill-font = 2
-bar-volume-empty = ─
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
-
-
-; TODO
 [module/alsa]
 type = internal/alsa
 
@@ -506,11 +442,11 @@ margin-bottom = 5
 # find ~/.config/polybar/bin -name "*.sh" -exec chmod u+x {} \;
 
 
-;[module/ethernet]
-;type = custom/script
-;interval = 2
-;exec = ~/.config/polybar/bin/status_ethernet.sh
-;click-left = ${programs.network}
+[module/eth_icon]
+type = custom/script
+interval = 2
+exec = ~/.config/polybar/bin/status_ethernet.sh
+click-left = ${programs.network}
 
 
 [module/internet]
@@ -519,7 +455,7 @@ interval = 10
 exec = ~/.config/polybar/bin/status_internet.sh
 
 
-[module/wifi_icon]
+[module/wlan_icon]
 type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_wifi.sh

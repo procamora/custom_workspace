@@ -136,7 +136,7 @@ super + shift + f
 
 # Block screen
 super + l
-    xautolock -detectsleep -time 10 -locker "i3lock -fenti ~/.config/lock.png"
+    i3lock -fenti ~/.config/lock.png
 
 # System Monitor
 ctrl + Escape

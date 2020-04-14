@@ -1,5 +1,6 @@
 #!/bin/bash
 
+killall -q sxhkd
 sxhkd &
 
 killall -q compton                                      # killall previus compton
