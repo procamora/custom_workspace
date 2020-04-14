@@ -2,8 +2,11 @@
 
 sxhkd &
 
-killall -q compton                                      # Killsll previos compton
+killall -q compton                                      # killall previus compton
 compton --config ~/.config/compton/compton.conf &       # Transparency Management
+killall -q xautolock                                    # killall autolock
+xautolock -detectsleep -time 10 \
+    -locker "i3lock -fenti ~/.config/lock.png"          # Automatic screenlock
 wmname LG3D &                                           # Fix problem Burp Suite proportion full screen
 feh --bg-fill ~/.config/wallpaper.png &                 # Set wallpaper brackground
 
@@ -50,3 +53,4 @@ bspc rule -a Chromium desktop='^1' state=pseudo_tiled follow=on
 # Other
 bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
+

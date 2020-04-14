@@ -69,7 +69,7 @@ function setup_bspwm() {
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
-exec bspwm" >> ~/.xinitrc
+exec bspwm" > ~/.xinitrc
 
     cp $MY_PATH/bspwm/scripts/resize ~/.config/bspwm/scripts/
     chmod u+x  ~/.config/bspwm/scripts/resize
@@ -78,7 +78,9 @@ exec bspwm" >> ~/.xinitrc
     cp $MY_PATH/compton/compton.conf ~/.config/compton/
 
     # set wallpaper
-    wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png > wget.log
+    #wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png > wget.log
+    cp $MY_PATH/resources/wallpaper.png ~/.config/wallpaper.png
+    cp $MY_PATH/resources/lock.png ~/.config/lock.png
 
     echo -e "${GREEN}Finishing Installing bspwm, sxhkd, compton and feh${NC}"
 }
@@ -117,7 +119,7 @@ function setup_fonts() {
 
 function polybar_debian(){
     sudo cp resources/polybar-3.4.2.tar /opt/
-    sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/ 
+    sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/
     sudo /bin/rm /opt/polybar-3.4.2.tar
     mkdir -p /opt/polybar/build
     cd /opt/polybar/build
@@ -128,14 +130,14 @@ function polybar_debian(){
 }
 
 
-function setup_polybar() { 
+function setup_polybar() {
     echo -e "${GREEN}Installing polybar and dependencies${NC}"
 
     dnf --version > /dev/null 2>&1 && sudo dnf install -y gcc-c++ clang git cmake @development-tools python3-sphinx \
      cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar >> dnf.log 2>&1
 
     # FIXME FALTA POR PONER LAS LIBRERIAS PARA PACMAN
-    #pacman --version > /dev/null 2>&1 && sudo 
+    #pacman --version > /dev/null 2>&1 && sudo
 
     apt --version > /dev/null 2>&1 && sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
      libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python-xcbgen \
@@ -157,19 +159,24 @@ function setup_polybar() {
     # plugins
     git clone https://github.com/polybar/polybar-scripts.git ~/.config/polybar/bin/scripts/
 
+    # manage NetworkMaganer
+    test -d ~/.config/polybar/bin/networkmanager-dmenu/ && /bin/rm -rf ~/.config/polybar/bin/networkmanager-dmenu/
+    git clone https://github.com/firecat53/networkmanager-dmenu.git ~/.config/polybar/bin/networkmanager-dmenu/
+
     echo -e "${GREEN}Finishing Installing polybar${NC}"
 }
 
-    #####################################################
-    #################### i3-lock ########################
-    #####################################################
+#####################################################
+#################### i3-lock ########################
+#####################################################
 
 function setup_i3lock() {
     echo -e "${GREEN}Finish Installing i3lock and ImageMagick ${NC}"
-    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock >> dnf.log 2>&1
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock >> pacman.log 2>&1
-    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock >> apt.log 2>&1
+    dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y ImageMagick i3lock xautolock >> dnf.log 2>&1
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock xautolock >> pacman.log 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock xautolock >> apt.log 2>&1
 
+    # TODO delete i3lock-fancy by use i3lock alone
     test -d /opt/i3lock-fancy/ && sudo /bin/rm -rf /opt/i3lock-fancy/
     sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
     cd /opt/i3lock-fancy
@@ -317,7 +324,7 @@ function setup_konsole() {
     mkdir -p ~/.local/share/konsole/
     mkdir -p ~/.config/
     cp konsole/zsh.profile ~/.local/share/konsole/
-    cp konsole/config_konsolerc ~/.config/konsolerc  
+    cp konsole/config_konsolerc ~/.config/konsolerc
 }
 
 
@@ -345,9 +352,9 @@ function main() {
     test -f dnf.log && /bin/rm -r dnf.log
     test -f apt.log && /bin/rm -f apt.log
 
-    test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_tmux
+    test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
     test "$1" = "vim" && setup_utils && setup_vim
-    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh && setup_konsole 
+    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh && setup_konsole && setup_tmux
     test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole && setup_tmux
     test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole && setup_tmux
 

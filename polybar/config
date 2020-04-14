@@ -18,7 +18,7 @@
 [programs]
 network = nm-connection-editor
 system = ksysguard
-
+dmenu = python3 ~/.config/polybar/bin/networkmanager-dmenu/networkmanager_dmenu
 
 [colors]
 ;background = ${xrdb:color0:#222}
@@ -80,9 +80,9 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pizelsize=15;2
 
-modules-left = bspwm eth wlan
-modules-center = xwindow 
-modules-right = battery temperature wifi xkeyboard htb ethernet internet memory cpu alsa date powermenu
+modules-left = bspwm cpu memory temperature
+modules-center = xwindow eth wlan
+modules-right = wifi xkeyboard htb ethernet internet alsa battery date powermenu
 #modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
 
 
@@ -130,13 +130,52 @@ label-indicator-background = ${colors.foreground-alt}
 ; TODO
 [module/filesystem]
 type = internal/fs
-interval = 25
+interval = 30
 
 mount-0 = /
+mount-1 = /home
 
-label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
-label-unmounted = %mountpoint% not mounted
-label-unmounted-foreground = ${colors.foreground-alt}
+;label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
+;label-unmounted = %mountpoint% not mounted
+;label-unmounted-foreground = ${colors.foreground-alt}
+;;;;;;;;;;;;;;;;;;;;
+# Display fixed precision values
+# Default: false
+fixed-values = false
+
+# Spacing between entries
+# Default: 2
+spacing = 3
+
+# Available tags:
+#   <label-mounted> (default)
+#   <bar-free>
+#   <bar-used>
+#   <ramp-capacity>
+format-mounted = <label-mounted>
+
+# Available tags:
+#   <label-unmounted> (default)
+format-unmounted = <label-unmounted>
+
+# Available tokens:
+#   %mountpoint%
+#   %type%
+#   %fsname%
+#   %percentage_free%
+#   %percentage_used%
+#   %total%
+#   %free%
+#   %used%
+# Default: %mountpoint% %percentage_free%%
+label-mounted = %{F#888}%mountpoint% %{F-}%free%
+
+# Available tokens:
+#   %mountpoint%
+# Default: %mountpoint% is not mounted
+label-unmounted = %mountpoint%: not mounted
+label-unmounted-foreground = ${colors.gray}
+
 
 
 [module/bspwm]
@@ -262,10 +301,11 @@ bar-used-foreground-3 = #ed5456
 type = internal/network
 interface = wlp2s0
 interval = 3.0
+ping-interval = 10
 
 format-connected = <ramp-signal> <label-connected>
 label-connected = " %signal% [  %downspeed%  ] [  %upspeed%  ]"
-format-disconnected = 
+format-disconnected = 睊 
 ramp-signal-0 = 
 ramp-signal-1 = 
 ramp-signal-2 = 
@@ -273,6 +313,11 @@ ramp-signal-3 = 
 ramp-signal-4 = 
 ramp-signal-foreground = ${colors.foreground-alt}
 
+animation-packetloss-0 = 
+animation-packetloss-0-foreground = #ffa64c
+animation-packetloss-1 = 
+animation-packetloss-1-foreground = ${bar/top.foreground}
+animation-packetloss-framerate = 500
 
 ; TODO
 [module/eth]
@@ -342,7 +387,7 @@ type = internal/alsa
 
 format-volume = <label-volume> <bar-volume>
 label-volume = 墳
-label-volume-foreground = ${root.foreground}
+label-volume-foreground = ${colors.foreground-alt}
 
 format-muted-prefix =
 format-muted-foreground = ${colors.red}
@@ -375,7 +420,7 @@ full-at = 99
 poll-interval = 5
 time-format = %H:%M
 
-format-charging-prefix =  
+format-charging-prefix = "  "
 format-charging-prefix-foreground = ${colors.yellow}
 format-charging = <animation-charging> <label-charging>
 format-discharging = <ramp-capacity> <label-discharging>
@@ -385,21 +430,21 @@ format-full = <ramp-capacity> <label-full>
 ;label-discharging = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
 ;label-full = %{A1:xfce4-power-manager-settings & disown:}%percentage%% %{A}
 
-ramp-capacity-0 =   
-ramp-capacity-1 =   
-ramp-capacity-2 =   
-ramp-capacity-3 =   
-ramp-capacity-4 =   
+ramp-capacity-0 =  
+ramp-capacity-1 =  
+ramp-capacity-2 =  
+ramp-capacity-3 =  
+ramp-capacity-4 =  
 ramp-capacity-0-foreground = ${colors.alert}
 ramp-capacity-1-foreground = ${colors.yellow}
 ramp-capacity-foreground   = ${colors.blue}
 
 bar-capacity-width = 10
-animation-charging-0 = " " 
-animation-charging-1 = " "
-animation-charging-2 = " "
-animation-charging-3 = " "
-animation-charging-4 = " "
+animation-charging-0 =  
+animation-charging-1 =  
+animation-charging-2 =  
+animation-charging-3 =  
+animation-charging-4 =  
 animation-charging-framerate = 750
 animation-charging-foreground = ${colors.primary}
 
@@ -408,7 +453,7 @@ animation-charging-foreground = ${colors.primary}
 type = internal/temperature
 interval = 3
 thermaml-zone = 0
-warn-temperature = 60
+warn-temperature = 70
 format = <ramp> <label>
 format-padding = 1
 label = %temperature-c%
@@ -481,7 +526,7 @@ exec = ~/.config/polybar/bin/status_internet.sh
 type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_wifi.sh
-click-left = ${programs.network}
+click-left = ${programs.dmenu}
 
 
 [module/htb]
