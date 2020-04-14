@@ -80,9 +80,9 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pizelsize=15;2
 
-modules-left = bspwm cpu memory temperature
-modules-center = xwindow eth wlan
-modules-right = redshift wifi xkeyboard htb ethernet internet alsa battery date powermenu
+modules-left = bspwm cpu memory temperature battery
+modules-center = xwindow 
+modules-right = redshift xkeyboard wifi_icon wlan eth htb internet alsa date powermenu
 #modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
 
 
@@ -181,18 +181,18 @@ label-unmounted-foreground = ${colors.gray}
 [module/bspwm]
 type = internal/bspwm
 
-label-focused = 
+label-focused =  
 label-focused-background = ${colors.foreground-alt}
 label-focused-padding = 2
 
-label-occupied = 
+label-occupied =  
 label-occupied-padding = 2
 
-label-urgent = 
+label-urgent =  
 label-urgent-background = ${colors.alert}
 label-urgent-padding = 2
 
-label-empty = 
+label-empty =  
 label-empty-foreground = ${colors.foreground-alt}
 label-empty-padding = 2
 
@@ -301,23 +301,17 @@ bar-used-foreground-3 = #ed5456
 type = internal/network
 interface = wlp2s0
 interval = 3.0
-ping-interval = 10
+;ping-interval = 10
 
-format-connected = <ramp-signal> <label-connected>
-label-connected = " %signal% [  %downspeed%  ] [  %upspeed%  ]"
-format-disconnected = 睊 
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
-ramp-signal-foreground = ${colors.foreground-alt}
+format-connected = <label-connected>
+;format-connected-prefix = "  "
+format-connected-prefix-foreground = ${colors.blue}
+;label-connected = "%signal% [%local_ip%] [  %downspeed%  ] [  %upspeed%  ]"
+label-connected = "%signal% [%local_ip%]"
+format-disconnected = 
+;format-disconnected-prefix = "睊 "
+format-disconnected-foreground = ${colors.red}
 
-animation-packetloss-0 = 
-animation-packetloss-0-foreground = #ffa64c
-animation-packetloss-1 = 
-animation-packetloss-1-foreground = ${bar/top.foreground}
-animation-packetloss-framerate = 500
 
 ; TODO
 [module/eth]
@@ -325,12 +319,13 @@ type = internal/network
 interface = enp4s0
 interval = 3.0
 
-format-connected-underline = #55aa55
-format-connected-prefix = "- "
-format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
+format-connected-prefix =  
+format-connected-prefix-foreground = ${colors.blue}
+label-connected = [%local_ip%]
 
-format-disconnected =
+format-disconnected-prefix =  
+format-disconnected-prefix-foreground = ${colors.red}
+label-disconnected = 
 ;format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
 ;label-disconnected = %ifname% disconnected
@@ -420,7 +415,7 @@ full-at = 99
 poll-interval = 5
 time-format = %H:%M
 
-format-charging-prefix = "  "
+format-charging-prefix = " "
 format-charging-prefix-foreground = ${colors.yellow}
 format-charging = <animation-charging> <label-charging>
 format-discharging = <ramp-capacity> <label-discharging>
@@ -437,7 +432,7 @@ ramp-capacity-3 = 
 ramp-capacity-4 =  
 ramp-capacity-0-foreground = ${colors.alert}
 ramp-capacity-1-foreground = ${colors.yellow}
-ramp-capacity-foreground   = ${colors.blue}
+ramp-capacity-foreground   = ${colors.green}
 
 bar-capacity-width = 10
 animation-charging-0 =  
@@ -511,18 +506,20 @@ margin-bottom = 5
 # find ~/.config/polybar/bin -name "*.sh" -exec chmod u+x {} \;
 
 
-[module/ethernet]
-type = custom/script
-interval = 2
-exec = ~/.config/polybar/bin/status_ethernet.sh
-click-left = ${programs.network}
+;[module/ethernet]
+;type = custom/script
+;interval = 2
+;exec = ~/.config/polybar/bin/status_ethernet.sh
+;click-left = ${programs.network}
+
 
 [module/internet]
 type = custom/script
 interval = 10
 exec = ~/.config/polybar/bin/status_internet.sh
 
-[module/wifi]
+
+[module/wifi_icon]
 type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_wifi.sh
@@ -534,6 +531,7 @@ type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_htb.sh
 click-left = ${programs.network}
+exec-if = ip address show tun0
 
 
 [module/redshift]
