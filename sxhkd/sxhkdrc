@@ -135,8 +135,8 @@ super + shift + f
     firefox
 
 # Block screen
-ctrl + super + alt + x
-    i3lock-fancy
+super + l
+    xautolock -detectsleep -time 10 -locker "i3lock -fenti ~/.config/lock.png"
 
 # System Monitor
 ctrl + Escape

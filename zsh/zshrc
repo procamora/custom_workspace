@@ -122,17 +122,15 @@ export _JAVA_AWT_WM_NONREPARENTING=1        # Fix problem Java
 #alias ls="ls -lhGQ --color=auto"
 alias ls="lsd -lh --group-dirs=first"
 alias la="lsd -lha --group-dirs=first"
-alias catn='/usr/bin/cat'
-alias cat='bat --paging=never'              # cat 
+alias catc='bat --paging=never'             # cat 
 alias catl='bat'                            # cat + less
 alias catd='bat -A'                         # cat mode debug (show space and tabs)
-alias grepn='/usr/bin/grep'
-alias grep='/usr/local/bin/batgrep --color -C 0'
-alias less='/usr/local/bin/prettybat'
+alias grepc='/usr/local/bin/batgrep --color -C 0'
+alias lessc='/usr/local/bin/prettybat'
 alias rm="echo Use trash, or the full path i.e. /bin/rm"
 alias which="alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde"
 
-! ssh-add -l > /dev/null && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services
+! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services
 
 # Functions
 function mkt(){
