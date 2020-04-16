@@ -23,30 +23,72 @@ bspc config borderless_monocle   true
 bspc config gapless_monocle      true
 
 
-# fullscreen applications
-bspc rule -a vlc desktop='^7' state=fullscreen follow=on
 
 
-# floating applications
-bspc rule -a dolphin desktop='^2' state=floating follow=on
-bspc rule -a Gimp desktop='^8' state=floating follow=on
-bspc rule -a mplayer2 state=floating
-bspc rule -a ksysguard state=floating follow=on
-bspc rule -a TelegramDersktop state=floating follow=on
+# http://fontawesome.io/cheatsheet/
+# remove all rules first
+#bspc rule -r *:*
+#bspc rule -a spotify monitor="^1" desktop="^2"
+
+# fullscreen -> super + f
+# floating -> super + s
+# tiled -> mosaico
+# pseudo_tiled -> mosaico que se puede especificar size rectangle=800x800+0+0
+bspc rule -a Nm-connection-editor state=floating rectangle=800x800+0+0 follow=on focus=on
+
+## workspace 1 (labs) 
+bspc rule -a konsole desktop='^1' state=tiled follow=on focus=on
+bspc rule -a VirtualBox Manager desktop='^1' follow=on focus=on
+bspc rule -a VirtualBox Machine desktop='^1' follow=on focus=on
+
+## workspace 2 (web browsers) 
+bspc rule -a Firefox desktop='^2' follow=on focus=on
+bspc rule -a TelegramDersktop desktop='^2' follow=on focus=on
+bspc rule -a Chromium desktop='^7' state=pseudo_tiled follow=on focus=on
 
 
-# tiled applications
-bspc rule -a Sublime_text state=tiled follow=on
-bspc rule -a systemsettings state=tiled follow=on
+## workspace 3 (file-manager) 
+bspc rule -a dolphin desktop='^3' follow=on focus=on
+bspc rule -a Insync desktop='^3' state=floating rectangle=500x500+0+0 follow=on focus=on
 
 
-# pseudo_tiled applications
-bspc rule -a inkscape state=pseudo_tiled follow=on
-bspc rule -a Spotify state=pseudo_tiled follow=on
-bspc rule -a VirtualBox Manager state=pseudo_tiled follow=on
-bspc rule -a VirtualBox Machine state=pseudo_tiled follow=on
-bspc rule -a Firefox desktop='^1' state=pseudo_tiled follow=on
-bspc rule -a Chromium desktop='^1' state=pseudo_tiled follow=on
+## workspace 4 (text-editors) 
+bspc rule -a Sublime_text desktop='^4' follow=on focus=on
+bspc rule -a Meld desktop='^4' state=floating follow=on focus=on
+bspc rule -a libreoffice desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-base desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-calc desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-draw desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-impress desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-math desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-writer desktop='^4' follow=on focus=on
+bspc rule -a libreoffice-startcenter desktop='^4' follow=on focus=on
+
+## workspace 5 (graphic-editors) 
+bspc rule -a Gimp desktop='^5' follow=on focus=on
+bspc rule -a Inkscape desktop='^5' follow=on focus=on
+
+## workspace 6 (multimedia) 
+bspc rule -a vlc desktop='^6' state=fullscreen follow=on focus=on
+bspc rule -a Spotify desktop='^6' follow=on
+
+
+## workspace 7 (code) 
+bspc rule -a jetbrains-pycharm desktop='^7' follow=on focus=on
+
+
+## workspace 8 (system-settings) 
+bspc rule -a ksysguard desktop='^8' follow=on focus=on
+bspc rule -a GParted desktop='^8' follow=on focus=on
+bspc rule -a systemsettings desktop='^8' follow=on focus=on
+bspc rule -a Pavucontrol desktop='^8' follow=on focus=on
+
+
+
+#       v      
+
+
+
 
 
 # Other
