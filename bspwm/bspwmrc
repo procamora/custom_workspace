@@ -35,25 +35,25 @@ bspc config gapless_monocle      true
 # tiled -> mosaico
 # pseudo_tiled -> mosaico que se puede especificar size rectangle=800x800+0+0
 bspc rule -a Nm-connection-editor state=floating rectangle=800x800+0+0 follow=on focus=on
+bspc rule -a TelegramDesktop state=floating follow=on focus=on
 
-## workspace 1 (labs) 
-bspc rule -a konsole desktop='^1' state=tiled follow=on focus=on
+## workspace 1 (labs)  
+bspc rule -a konsole state=tiled follow=on focus=on
 bspc rule -a VirtualBox Manager desktop='^1' follow=on focus=on
 bspc rule -a VirtualBox Machine desktop='^1' follow=on focus=on
 
-## workspace 2 (web browsers) 
+## workspace 2 (web browsers)  
 bspc rule -a Firefox desktop='^2' follow=on focus=on
-bspc rule -a TelegramDersktop desktop='^2' follow=on focus=on
-bspc rule -a Chromium desktop='^7' state=pseudo_tiled follow=on focus=on
+bspc rule -a Chromium desktop='^2' state=pseudo_tiled follow=on focus=on
 
 
-## workspace 3 (file-manager) 
-bspc rule -a dolphin desktop='^3' follow=on focus=on
-bspc rule -a Insync desktop='^3' state=floating rectangle=500x500+0+0 follow=on focus=on
+## workspace 3 (file-manager)  
+bspc rule -a dolphin follow=on focus=on
+bspc rule -a Insync state=floating rectangle=500x500+0+0 follow=on focus=on
 
 
-## workspace 4 (text-editors) 
-bspc rule -a Sublime_text desktop='^4' follow=on focus=on
+## workspace 4 (text-editors)  
+bspc rule -a Sublime_text follow=on focus=on
 bspc rule -a Meld desktop='^4' state=floating follow=on focus=on
 bspc rule -a libreoffice desktop='^4' follow=on focus=on
 bspc rule -a libreoffice-base desktop='^4' follow=on focus=on
@@ -64,20 +64,20 @@ bspc rule -a libreoffice-math desktop='^4' follow=on focus=on
 bspc rule -a libreoffice-writer desktop='^4' follow=on focus=on
 bspc rule -a libreoffice-startcenter desktop='^4' follow=on focus=on
 
-## workspace 5 (graphic-editors) 
+## workspace 5 (graphic-editors)  
 bspc rule -a Gimp desktop='^5' follow=on focus=on
 bspc rule -a Inkscape desktop='^5' follow=on focus=on
 
-## workspace 6 (multimedia) 
+## workspace 6 (multimedia)  
 bspc rule -a vlc desktop='^6' state=fullscreen follow=on focus=on
 bspc rule -a Spotify desktop='^6' follow=on
 
 
-## workspace 7 (code) 
+## workspace 7 (code)  
 bspc rule -a jetbrains-pycharm desktop='^7' follow=on focus=on
 
 
-## workspace 8 (system-settings) 
+## workspace 8 (system-settings)  
 bspc rule -a ksysguard desktop='^8' follow=on focus=on
 bspc rule -a GParted desktop='^8' follow=on focus=on
 bspc rule -a systemsettings desktop='^8' follow=on focus=on
@@ -85,7 +85,7 @@ bspc rule -a Pavucontrol desktop='^8' follow=on focus=on
 
 
 
-#       v      
+#       v       
 
 
 
@@ -96,6 +96,6 @@ bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 
 
-
-~/.config/bspwm/scripts/autorun &                       # Autorun scripts
+killall -q autorun
+~/.config/bspwm/scripts/autorun >> /tmp/bspwm.log &                       # Autorun scripts
 

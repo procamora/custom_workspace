@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "init autorun"
+
 # keyboard Internation English
 setxkbmap eu
 
@@ -15,15 +17,14 @@ find ~/scripts/ -name "*.exp" -exec chmod u+x {} \;
 #! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null
 #~/scripts/load_key_personal.exp
 #~/scripts/load_key_services.exp
-~/scripts/mountDirSSH.sh
-~/scripts/encfs.exp > /dev/null
-
+bash ~/scripts/mountDirSSH.sh
+expect ~/scripts/encfs.exp # > /dev/null
 # mkdir -p ~/decrypt_gdrive/ && ~/scripts/encfs.exp
 
 
 # if exits touchpad, enable tap to click
 id_touchpad=$(xinput | /bin/grep -i "TouchPad" | xargs | cut -d "=" -f2 | cut -d " " -f1)
-if [ "${?}" != "0" ] && [ "${id_touchpad}" != "" ]; then
+if [ "${?}" = "0" ] && [ "${id_touchpad}" != "" ]; then
     id_tap=$(xinput list-props 12 | /bin/grep -i "Tapping Enabled (" | xargs | cut -d "(" -f2 | cut -d ")" -f1)
     xinput set-prop $id_touchpad $id_tap 1
 fi
@@ -49,4 +50,4 @@ done
 #      ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
 #fi
 
-
+echo "finish autorun"
