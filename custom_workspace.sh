@@ -140,7 +140,7 @@ function setup_polybar() {
     #pacman --version > /dev/null 2>&1 && sudo
 
     apt --version > /dev/null 2>&1 && sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
-     libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python-xcbgen \
+     libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python3-xcbgen \
      xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
      build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb >> apt.log 2>&1 \
      && polybar_debian
@@ -227,7 +227,7 @@ function zsh_fedora() {
     #for r in "${repositories[@]}"; do
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
-    sudo sudo dnf install -y $INSTALL lsd bat >> dnf.log
+    sudo sudo dnf install -y $INSTALL lsd bat ripgrep >> dnf.log
 }
 
 
@@ -244,6 +244,7 @@ function zsh_debian() {
     #    /bin/rm Release.key
     #done
     sudo apt install -y $INSTALL >> apt.log
+    sudo apt install -y ripgrep >> apt.log # maybe not store in repositories
     sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
     sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
 }
@@ -252,25 +253,17 @@ function zsh_debian() {
 function zsh_raspbian() {
     INSTALL=$1
     sudo apt install -y $INSTALL >> apt.log
+    sudo apt install -y ripgrep >> apt.log # maybe not store in repositories
     sudo cp $MY_PATH/resources/lsd-0.17.0-arm /usr/local/bin/lsd
     sudo cp $MY_PATH/resources/bat-0.13.0-arm /usr/local/bin/bat
 }
 
 
-function zsh_ubuntu() {
-    INSTALL=$1
-    sudo apt install -y $INSTALL >> apt.log
-    sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
-    sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
-}
-
-
 function setup_zsh() {
-    INSTALL="zsh scrub ripgrep fzf"
-    echo -e "${GREEN}Installing zsh $INSTALL lsd bat${NC}"
+    INSTALL="zsh scrub fzf"
+    echo -e "${GREEN}Installing zsh $INSTALL lsd bat ripgrep${NC}"
 
-    test $OS_NAME = "Ubuntu" && zsh_ubuntu "$INSTALL"
-    test $OS_NAME = "Debian" && zsh_debian "$INSTALL"
+    apt --version > /dev/null 2>&1 && test $OS_NAME != "Raspbian" && zsh_debian "$INSTALL"
     test $OS_NAME = "Raspbian" && zsh_raspbian "$INSTALL"
     dnf --version > /dev/null 2>&1 && zsh_fedora "$INSTALL"
 
