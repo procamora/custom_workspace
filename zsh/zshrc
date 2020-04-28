@@ -137,13 +137,13 @@ alias viautorun="vim ~/.config/bspwm/scripts/autorun"
 alias vizsh="vim ~/.zshrc"
 alias reload="source ~/.zshrc"
 
-alias pycharm="bash ~/Programs/pycharm-2019.1.3/bin/pycharm.sh > /dev/null 2>&1 &"
+alias pycharm="bash ~/Programs/pycharm-2019.1.3/bin/pycharm.sh > /dev/null 2>&1 &; disown"
 
 
 # Keys SSH
-! ((ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services) > /dev/null 2>&1
-~/scripts/load_key_personal.exp > /dev/null 2>&1
-~/scripts/load_key_services.exp > /dev/null 2>&1
+#! ((ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null && test -f ~/.ssh/services && ssh-add ~/.ssh/services) > /dev/null 2>&1
+#~/scripts/load_key_personal.exp > /dev/null 2>&1
+#~/scripts/load_key_services.exp > /dev/null 2>&1
 
 # Functions
 function mkt(){

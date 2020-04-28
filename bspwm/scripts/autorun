@@ -14,12 +14,10 @@ find ~/scripts/ -name "*.sh" -exec chmod u+x {} \;
 find ~/scripts/ -name "*.exp" -exec chmod u+x {} \;
 
 
-#! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null
-#~/scripts/load_key_personal.exp
-#~/scripts/load_key_services.exp
+! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null
+~/scripts/load_key_personal.exp
 bash ~/scripts/mountDirSSH.sh
-expect ~/scripts/encfs.exp # > /dev/null
-# mkdir -p ~/decrypt_gdrive/ && ~/scripts/encfs.exp
+! (df | grep -q "decrypt_gdrive") && mkdir -p ~/decrypt_gdrive && expect ~/scripts/encfs.exp 
 
 
 # if exits touchpad, enable tap to click

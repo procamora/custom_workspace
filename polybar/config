@@ -510,16 +510,5 @@ exec = ~/.config/polybar/bin/scripts/polybar-scripts/updates-fedora/updates-fedo
 interval = 600
 
 
-[module/info-hackspeed]
-type = custom/script
-exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-hackspeed/info-hackspeed.sh
-tail = true
-
-
-[module/info-softwarecounter]
-type = custom/script
-exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-softwarecounter/info-softwarecounter.py
-interval = 10
-
 ;
 ; vim:ft=dosini
