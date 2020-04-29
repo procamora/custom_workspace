@@ -18,7 +18,6 @@
 [programs]
 network = nm-connection-editor
 system = ksysguard
-dmenu = python3 ~/.config/polybar/bin/networkmanager-dmenu/networkmanager_dmenu
 
 [colors]
 ;background = ${xrdb:color0:#222}
@@ -78,12 +77,13 @@ module-margin-right = 2
 font-0 = fixed:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
-font-3 = Hack Nerd Font Mono:pizelsize=15;2
+font-3 = Hack Nerd Font Mono:pixelsize=15;2
+font-4 = Hack Nerd Font Mono:pixelsize=10;2
 
 modules-left = bspwm cpu memory temperature battery filesystem
 modules-center = xwindow
-modules-right = redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa date powermenu
-#modules-right = filesystem xbacklight alsa xkeyboard memory cpu battery temperature date powermenu
+modules-right = backlight redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa calendar powermenu
+
 
 
 tray-position = right
@@ -196,12 +196,11 @@ label-empty-padding = 2
 ; label-separator = |
 
 
-; TODO
 [module/xbacklight]
 type = internal/xbacklight
 
 format = <label> <bar>
-label =  %percentage%%
+label =  %percentage%%
 
 ; Only applies if <ramp> is used
 ramp-0 = 🌕
@@ -223,10 +222,19 @@ bar-empty-foreground = ${colors.foreground-alt}
 
 
 ; TODO
-[module/backlight-acpi]
+[module/backlight]
 inherit = module/xbacklight
 type = internal/backlight
+; list available cards: ls /sys/class/backlight
 card = intel_backlight
+
+;enable = true
+
+;format = <label> <bar>
+;label =  %percentage%%
+
+
+
 
 
 [module/cpu]
@@ -303,6 +311,7 @@ format-connected = <label-connected>
 ;format-connected-prefix-foreground = ${colors.blue}
 ;label-connected = "%signal% [%local_ip%] [  %downspeed%  ] [  %upspeed%  ]"
 label-connected = "%signal% [%local_ip%]"
+label-connected-font = 2
 format-disconnected = 
 ;format-disconnected-prefix = "睊 "
 ;format-disconnected-foreground = ${colors.red}
@@ -316,7 +325,7 @@ interval = 3.0
 ;format-connected-prefix =  
 ;format-connected-prefix-foreground = ${colors.blue}
 label-connected = "[%local_ip%]"
-
+label-connected-font = 2
 ;format-disconnected-prefix =  
 ;format-disconnected-prefix-foreground = ${colors.red}
 label-disconnected = 
@@ -380,6 +389,7 @@ poll-interval = 5
 time-format = %H:%M
 
 format-charging-prefix = " "
+format-charging-prefix-font = 5
 format-charging-prefix-foreground = ${colors.yellow}
 format-charging = <animation-charging> <label-charging>
 format-discharging = <ramp-capacity> <label-discharging>
@@ -414,6 +424,7 @@ interval = 3
 thermaml-zone = 0
 warn-temperature = 70
 format = <ramp> <label>
+format-font = 5
 format-padding = 1
 label = %temperature-c%
 
@@ -487,7 +498,7 @@ exec = ~/.config/polybar/bin/status_internet.sh
 type = custom/script
 interval = 2
 exec = ~/.config/polybar/bin/status_wifi.sh
-click-left = ${programs.dmenu}
+click-left = python3 ~/.config/polybar/scripts/networkmanager_dmenu.py
 
 
 [module/htb]
@@ -498,17 +509,29 @@ click-left = ${programs.network}
 exec-if = ip address show tun0
 
 
+[module/netwokmanager]
+type = custom/script
+exec = ~/.config/polybar/scripts/network-networkmanager.sh
+tail = true
+
 [module/redshift]
 type = custom/script
-exec = ~/.config/polybar/bin/scripts/polybar-scripts/info-redshift-temp/info-redshift-temp.sh
-interval = 5
+format-prefix = " "  
+format-prefix-font = 5
+exec = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh temperature 
+click-left = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh toggle 
+scroll-up = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh increase
+scroll-down = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh decrease
+interval=0.5
 
 
-[module/updates-fedora]
+[module/calendar]
 type = custom/script
-exec = ~/.config/polybar/bin/scripts/polybar-scripts/updates-fedora/updates-fedora.sh
-interval = 600
-
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+exec = ~/.config/polybar/scripts/popup-calendar.sh
+interval = 5
+click-left = ~/.config/polybar/scripts/popup-calendar.sh --popup &
 
 ;
 ; vim:ft=dosini

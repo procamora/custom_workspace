@@ -63,9 +63,10 @@ function setup_bspwm() {
      libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev >> apt.log 2>&1
 
 
-    mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton}
+    mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi}
     cp -r $MY_PATH/bspwm/* ~/.config/bspwm/
     cp -r $MY_PATH/sxhkd/* ~/.config/sxhkd/
+    cp -f $MY_PATH/rofi/* ~/.config/rofi/
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
@@ -100,7 +101,7 @@ function setup_fonts() {
     # Set custom fonts
     sudo mkdir -p /usr/local/share/fonts
     sudo cp resources/Hack.zip /usr/local/share/fonts/
-    sudo unzip -o /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/
+    sudo unzip -o /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/ > /dev/null
     sudo /bin/rm /usr/local/share/fonts/Hack.zip
 
     test -f /etc/vconsole.conf && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
@@ -146,7 +147,7 @@ function setup_polybar() {
      && polybar_debian
 
 
-    mkdir -p ~/.config/polybar/bin
+    mkdir -p ~/.config/polybar/{bin,scripts}
 
     cp $MY_PATH/polybar/launch.sh ~/.config/polybar/
     chmod u+x ~/.config/polybar/launch.sh
@@ -157,12 +158,33 @@ function setup_polybar() {
     chmod u+x ~/.config/polybar/bin/*.sh
 
     # plugins
-    git clone https://github.com/polybar/polybar-scripts.git ~/.config/polybar/bin/scripts/
+    test -d polybar-scripts/ && /bin/rm -rf polybar-scripts/
+    git clone https://github.com/polybar/polybar-scripts.git polybar-scripts/
 
-    # manage NetworkMaganer
-    test -d ~/.config/polybar/bin/networkmanager-dmenu/ && /bin/rm -rf ~/.config/polybar/bin/networkmanager-dmenu/
-    git clone https://github.com/firecat53/networkmanager-dmenu.git ~/.config/polybar/bin/networkmanager-dmenu/
+    cp polybar-scripts/polybar-scripts/popup-calendar/popup-calendar.sh ~/.config/polybar/scripts/
+    cp polybar-scripts/polybar-scripts/info-todotxt/info-todotxt.sh ~/.config/polybar/scripts/
+    cp polybar-scripts/polybar-scripts/network-networkmanager/network-networkmanager.sh ~/.config/polybar/scripts/
+    sudo cp polybar-scripts/polybar-scripts/network-networkmanager/90-polybar /etc/NetworkManager/dispatcher.d/
 
+
+    wget -O ~/.config/polybar/scripts/redshift.sh https://raw.githubusercontent.com/VineshReddy/polybar-redshift/master/redshift.sh 2> /dev/null
+    wget -O ~/.config/polybar/scripts/env.sh https://raw.githubusercontent.com/VineshReddy/polybar-redshift/master/env.sh 2> /dev/null
+    wget -O ~/.config/polybar/scripts/networkmanager_dmenu.py https://raw.githubusercontent.com/firecat53/networkmanager-dmenu/master/networkmanager_dmenu  2> /dev/null  
+
+    find ~/.config/polybar/ -name "*.sh" -exec chmod u+x {} \;
+    find ~/.config/polybar/ -name "*.py" -exec chmod u+x {} \;
+
+    # install libreries scripts FIXME falta apt pacman y otro
+    dnf --version > /dev/null 2>&1 && sudo dnf install -y redshift xdotool yad xbacklight > /dev/null
+
+    cp $MY_PATH/polybar/redshift.conf ~/.config/redshift.conf
+    #sed -i.back 's/ #/ /g' ~/.config/polybar/bin/scripts/polybar-scripts/info-redshift-temp/info-redshift-temp.sh
+
+
+    # laptop backlight 
+    sudo usermod -aG video procamora
+    sudo chown root:video /sys/class/backlight/intel_backlight/brightness
+    sudo chmod 664 /sys/class/backlight/intel_backlight/brightness
     echo -e "${GREEN}Finishing Installing polybar${NC}"
 }
 
@@ -177,10 +199,10 @@ function setup_i3lock() {
     apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock xautolock >> apt.log 2>&1
 
     # TODO delete i3lock-fancy by use i3lock alone
-    test -d /opt/i3lock-fancy/ && sudo /bin/rm -rf /opt/i3lock-fancy/
-    sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
-    cd /opt/i3lock-fancy
-    sudo make install
+    #test -d /opt/i3lock-fancy/ && sudo /bin/rm -rf /opt/i3lock-fancy/
+    #sudo git clone https://github.com/meskarune/i3lock-fancy.git /opt/i3lock-fancy/
+    #cd /opt/i3lock-fancy
+    #sudo make install
 
     cd $MY_PATH
     echo -e "${GREEN}Finishing Installing i3lock${NC}"
@@ -227,7 +249,8 @@ function zsh_fedora() {
     #for r in "${repositories[@]}"; do
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
-    sudo sudo dnf install -y $INSTALL lsd bat ripgrep >> dnf.log
+    sudo sudo dnf install -y $INSTALL >> dnf.log
+    sudo sudo dnf install -y lsd bat ripgrep >> dnf.log
 }
 
 
@@ -270,7 +293,7 @@ function setup_zsh() {
     zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
-    unzip -o resources/bat-extras-20200401.zip -d resources/
+    unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
     sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
     /bin/rm -rf resources/bat-extras
@@ -303,9 +326,9 @@ function setup_zsh() {
     git clone https://github.com/zsh-users/zsh-docker.git $ZSH_CUSTOM/plugins/zsh-docker
 
     # Create link to user root (insegure but comfortable)
-    sudo ln -s -f ~/.zshrc /root/.zshrc
-    sudo ln -s -f ~/.p10k.zsh /root/.p10k.zsh
-    sudo ln -s ~/.oh-my-zsh/ /root/
+    sudo ln -sf ~/.zshrc /root/.zshrc
+    sudo ln -sf ~/.p10k.zsh /root/.p10k.zsh
+    sudo ln -sf ~/.oh-my-zsh/ /root/
 
     echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
@@ -335,7 +358,7 @@ function setup_tmux() {
     test -f ~/.tmux.conf.local && /bin/rm -f ~/.tmux.conf.local
 
     git clone https://github.com/gpakosz/.tmux.git ~/.tmux
-    ln -s -f ~/.tmux/.tmux.conf ~/.tmux.conf
+    ln -sf ~/.tmux/.tmux.conf ~/.tmux.conf
     cp ~/.tmux/.tmux.conf.local ~/.tmux.conf.local
     echo -e "${GREEN}Finishing Installing $INSTALL ${NC}"
 }
@@ -366,7 +389,6 @@ function main() {
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
 
     echo -e "${GREEN}Finishing Installing custom_workspace${NC}"
-    echo -e "${GREEN}Set the Hack Nerd Font font on your console${NC}"
 
     #kill -9 -1
 }

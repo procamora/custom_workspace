@@ -3,6 +3,10 @@
 killall -q sxhkd
 sxhkd &
 
+killall -9 -q redshift                                  # killall previus process
+redshift -x                                             # reset mode
+redshift -c ~/.config/redshift.conf &                   # screen light
+
 killall -q compton                                      # killall previus compton
 compton --config ~/.config/compton/compton.conf &       # Transparency Management
 killall -q xautolock                                    # killall autolock
@@ -36,6 +40,7 @@ bspc config gapless_monocle      true
 # pseudo_tiled -> mosaico que se puede especificar size rectangle=800x800+0+0
 bspc rule -a Nm-connection-editor state=floating rectangle=800x800+0+0 follow=on focus=on
 bspc rule -a TelegramDesktop state=floating follow=on focus=on
+bspc rule -a Yad state=floating follow=on focus=on
 
 ## workspace 1 (labs)  
 bspc rule -a konsole state=tiled follow=on focus=on
@@ -49,12 +54,12 @@ bspc rule -a Chromium desktop='^2' state=pseudo_tiled follow=on focus=on
 
 ## workspace 3 (file-manager)  
 bspc rule -a dolphin follow=on focus=on
-bspc rule -a Insync state=floating rectangle=500x500+0+0 follow=on focus=on
+bspc rule -a Insync state=floating rectangle=500x800+0+20 follow=on focus=on
 
 
 ## workspace 4 (text-editors)  
 bspc rule -a Sublime_text follow=on focus=on
-bspc rule -a Meld desktop='^4' state=floating follow=on focus=on
+bspc rule -a Meld desktop='^4' state=fullscreen follow=on focus=on
 bspc rule -a libreoffice desktop='^4' follow=on focus=on
 bspc rule -a libreoffice-base desktop='^4' follow=on focus=on
 bspc rule -a libreoffice-calc desktop='^4' follow=on focus=on
