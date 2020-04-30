@@ -38,7 +38,7 @@ def valid(l) -> bool:
         return False
     return True
 
-file: Path = Path('sxhkdrc')
+file: Path = Path('~/.config/sxhkd/sxhkdrc').expanduser()
 
 shortcuts: List[Text] = list()
 for i in file.read_text().split('\n'):

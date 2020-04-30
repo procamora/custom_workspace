@@ -51,6 +51,24 @@ function setup_utils() {
 # feh -> configurar fondo de pantalla
 # rofi -> lanzador de programas en forma de lista interactica
 
+function dunst() {
+    dnf --version > /dev/null 2>&1 && sudo dnf install -y dbus-devel libX11-devel libXrandr-devel glib2-devel pango-devel \
+     gtk2-devel libxdg-basedir-devel libXScrnSaver-devel libnotify-devel >> dnf.log 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt install -y libdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libxss-dev \
+     libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev >> apt.log 2>&1
+
+    # clone the repository
+    test -d dunst/ && /bin/rm -rf dunst/
+    git clone https://github.com/dunst-project/dunst.git dunst/
+    cd dunst/
+    # compile and install
+    make
+    sudo make install
+    sudo cp -f {dunst,dunstify} /usr/local/bin/
+    test -d dunst/ && /bin/rm -rf dunst/
+}
+
+
 function setup_bspwm() {
     INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins numlockx"
     echo -e "${GREEN}Installing $INSTALL ${NC}"
@@ -63,10 +81,11 @@ function setup_bspwm() {
      libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev >> apt.log 2>&1
 
 
-    mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi}
-    cp -r $MY_PATH/bspwm/* ~/.config/bspwm/
-    cp -r $MY_PATH/sxhkd/* ~/.config/sxhkd/
-    cp -f $MY_PATH/rofi/* ~/.config/rofi/
+    mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons}
+    cp -ru $MY_PATH/bspwm/* ~/.config/bspwm/
+    cp -ru $MY_PATH/sxhkd/* ~/.config/sxhkd/
+    cp -fu $MY_PATH/rofi/* ~/.config/rofi/
+    cp -fu $MY_PATH/icons/* ~/.config/icons/
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
@@ -82,6 +101,8 @@ exec bspwm" > ~/.xinitrc
     #wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png > wget.log
     cp $MY_PATH/resources/wallpaper.png ~/.config/wallpaper.png
     cp $MY_PATH/resources/lock.png ~/.config/lock.png
+
+    dunst
 
     echo -e "${GREEN}Finishing Installing bspwm, sxhkd, compton and feh${NC}"
 }
@@ -169,7 +190,9 @@ function setup_polybar() {
 
     wget -O ~/.config/polybar/scripts/redshift.sh https://raw.githubusercontent.com/VineshReddy/polybar-redshift/master/redshift.sh 2> /dev/null
     wget -O ~/.config/polybar/scripts/env.sh https://raw.githubusercontent.com/VineshReddy/polybar-redshift/master/env.sh 2> /dev/null
-    wget -O ~/.config/polybar/scripts/networkmanager_dmenu.py https://raw.githubusercontent.com/firecat53/networkmanager-dmenu/master/networkmanager_dmenu  2> /dev/null  
+    wget -O ~/.config/polybar/scripts/networkmanager_dmenu.py https://raw.githubusercontent.com/firecat53/networkmanager-dmenu/master/networkmanager_dmenu  2> /dev/null
+
+    test -d polybar-scripts/ && /bin/rm -rf polybar-scripts/
 
     find ~/.config/polybar/ -name "*.sh" -exec chmod u+x {} \;
     find ~/.config/polybar/ -name "*.py" -exec chmod u+x {} \;
@@ -181,7 +204,7 @@ function setup_polybar() {
     #sed -i.back 's/ #/ /g' ~/.config/polybar/bin/scripts/polybar-scripts/info-redshift-temp/info-redshift-temp.sh
 
 
-    # laptop backlight 
+    # laptop backlight
     sudo usermod -aG video procamora
     sudo chown root:video /sys/class/backlight/intel_backlight/brightness
     sudo chmod 664 /sys/class/backlight/intel_backlight/brightness

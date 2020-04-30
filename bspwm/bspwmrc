@@ -1,19 +1,26 @@
 #!/bin/bash
 
-killall -q sxhkd
+killall -9 -q sxhkd
 sxhkd &
 
-killall -9 -q redshift                                  # killall previus process
-redshift -x                                             # reset mode
-redshift -c ~/.config/redshift.conf &                   # screen light
+killall -9 -q redshift
+redshift -x                   # reset mode
+#redshift -c ~/.config/redshift.conf &                   # screen light
+
+killall -9 -q dunst
+dunst &                          # notification daemon 
 
 killall -q compton                                      # killall previus compton
 compton --config ~/.config/compton/compton.conf &       # Transparency Management
+
 killall -q xautolock                                    # killall autolock
 xautolock -detectsleep -time 10 \
     -locker "i3lock -fenti ~/.config/lock.png" &        # Automatic screenlock
+
 wmname LG3D &                                           # Fix problem Burp Suite proportion full screen
+
 feh --bg-fill ~/.config/wallpaper.png &                 # Set wallpaper brackground
+
 ~/.config/polybar/launch.sh &                           # Launch polybar
 
 bspc config pointer_modifier mod1                       # Set key super to key windows (metawin)
@@ -25,8 +32,6 @@ bspc config window_gap          0
 bspc config split_ratio          0.50
 bspc config borderless_monocle   true
 bspc config gapless_monocle      true
-
-
 
 
 # http://fontawesome.io/cheatsheet/
@@ -101,6 +106,9 @@ bspc rule -a Kupfer.py focus=on
 bspc rule -a Screenkey manage=off
 
 
-killall -q autorun
+killall -9 -q autorun
 ~/.config/bspwm/scripts/autorun >> /tmp/bspwm.log &                       # Autorun scripts
+
+
+dunstify -i ~/.config/icons/ok.svg -u normal -t 5000 "bspwm" "bspwm started correctly"
 

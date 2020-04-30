@@ -5,6 +5,7 @@ custom_workspace is a script to install and configure a complete workspace in a 
 - [bspwm][bspwm]: It is a mosaic type window manager that works with shortcuts and that will be put as a desktop environment.
 - [sxhkd][sxhkd]: This is a shortcuts manager that we will use to control bspwm.
 - [compton][compton]: This is the transparency manager that we will use to put transparencies to the windows.
+- [dunst][dunst]: notification daemon
 - [feh][feh]: This is a lightweight, configurable and versatile image viewer that allows us to set up wallpapers.
 - [rofi][rofi]: it is a program launcher in the form of an interactive list.
 - [Hack Nerd Font][nerd]: These are the fonts we're going to use for the zsh Powerlevel10k theme.
@@ -18,6 +19,7 @@ custom_workspace is a script to install and configure a complete workspace in a 
 [bspwm]: https://github.com/baskerville/bspwm
 [sxhkd]: https://github.com/baskerville/sxhkd
 [compton]: https://github.com/chjj/compton
+[dunst]: https://github.com/dunst-project/dunst/wiki/Installation
 [feh]: https://github.com/derf/feh
 [rofi]: https://github.com/davatorium/rofi
 [nerd]: https://github.com/ryanoasis/nerd-fonts
@@ -109,6 +111,7 @@ This script has been tested on the following Operating Systems
 
 - [ ] Arch
 - [ ] OpenSUSE
+- [ ] Kali
 
 
 

@@ -3,10 +3,15 @@
 echo "init autorun"
 
 # keyboard Internation English
-setxkbmap eu
+setxkbmap eu &
 
 # Key NumLock activate by default
-numlockx
+numlockx &
+
+# Automounter for removable media
+killall -9 -q udiskie
+udiskie &
+udiskie --no-automount --no-notify --tray &
 
 # autorun scripts
 find ~/scripts/ -name "*.py" -exec chmod u+x {} \;
@@ -14,10 +19,12 @@ find ~/scripts/ -name "*.sh" -exec chmod u+x {} \;
 find ~/scripts/ -name "*.exp" -exec chmod u+x {} \;
 
 
-! (ssh-add -l > /dev/null) && eval "$(ssh-agent -s)" > /dev/null
-~/scripts/load_key_personal.exp
-bash ~/scripts/mountDirSSH.sh
-! (df | grep -q "decrypt_gdrive") && mkdir -p ~/decrypt_gdrive && expect ~/scripts/encfs.exp 
+! (ssh-add -l > /dev/null) && (eval "$(ssh-agent -s)" > /dev/null) &
+~/scripts/load_key_personal.exp &
+
+# delay for establish network connection
+(sleep 10 && bash ~/scripts/mountDirSSH.sh) &
+(sleep 5 && ! (df | grep -q "decrypt_gdrive") && mkdir -p ~/decrypt_gdrive && expect ~/scripts/encfs.exp) &
 
 
 # if exits touchpad, enable tap to click
@@ -27,7 +34,7 @@ if [ "${?}" = "0" ] && [ "${id_touchpad}" != "" ]; then
     xinput set-prop $id_touchpad $id_tap 1
 fi
 
-PROGRAMS=( konsole firefox Telegram)
+PROGRAMS=( konsole firefox Telegram )
 
 for prog in "${PROGRAMS[@]}"; do
     # killall -q $prog
@@ -47,5 +54,24 @@ done
 #if [ $? -ge 2  ]; then
 #      ssh-agent -a "$SSH_AUTH_SOCK" >/dev/null
 #fi
+
+
+check=$(python3 ~/.config/sxhkd/check.py)
+
+if [ "$check" = "No duplicates" ]; then
+    dunstify -i ~/.config/icons/sxhkd.svg -u low -t 1000 "sxhkd" "Correct Configuration"
+else
+    dunstify -i ~/.config/icons/sxhkd.svg -u critical -t 3000 "sxhkd" "Incorrect Configuration"
+fi
+
+
+SERVICES=( bspwm sxhkd feh compton dunst polybar xautolock redshift udiskie)
+
+for serv in "${PROGRAMS[@]}"; do
+    # killall -q $prog
+    ! (ps aux | /bin/grep "$serv" | /bin/grep -v "grep" > /dev/null) && dunstify -i ~/.config/icons/sxhkd.svg -t 3000 -u critical "$serv" "Service $serv is not active"
+    sleep 0.1
+done
+
 
 echo "finish autorun"

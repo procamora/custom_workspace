@@ -4,6 +4,9 @@
 
 # terminal emulator
 super + Return
+    konsole
+
+super + shift + Return
     konsole -e tmux
 
 # program launcher

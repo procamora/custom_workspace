@@ -74,6 +74,8 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
+; for apply (font-1) => label-font = 2
+; default font
 font-0 = fixed:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
@@ -196,45 +198,15 @@ label-empty-padding = 2
 ; label-separator = |
 
 
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label =  %percentage%%
-
-; Only applies if <ramp> is used
-ramp-0 = 🌕
-ramp-1 = 🌔
-ramp-2 = 🌓
-ramp-3 = 🌒
-ramp-4 = 🌑
-
-bar-width = 1
-bar-indicator = |
-bar-indicator-foreground = #ff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
-
-
-; TODO
 [module/backlight]
-inherit = module/xbacklight
 type = internal/backlight
 ; list available cards: ls /sys/class/backlight
 card = intel_backlight
 
-;enable = true
+enable = true
 
 ;format = <label> <bar>
 ;label =  %percentage%%
-
-
-
 
 
 [module/cpu]
