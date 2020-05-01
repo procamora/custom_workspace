@@ -62,7 +62,7 @@ function dunst() {
     git clone https://github.com/dunst-project/dunst.git dunst_comp/
     cd dunst_comp/
     # compile and install
-    make > /dev/null 2> &1
+    make > /dev/null 2>&1
     sudo make install
     #sudo cp -f {dunst,dunstify} /usr/local/bin/
     cd -

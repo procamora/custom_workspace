@@ -10,12 +10,13 @@ redshift -c ~/.config/redshift.conf &                   # screen light
 killall -9 -q dunst
 dunst &                          # notification daemon 
 
-killall -q compton                                      # killall previus compton
+killall -9 -q compton                                      # killall previus compton
 compton --config ~/.config/compton/compton.conf &       # Transparency Management
 
-killall -q xautolock                                    # killall autolock
+killall -9 -q xautolock                                    # killall autolock
 xautolock -detectsleep -time 10 \
-    -locker "i3lock -fenti ~/.config/lock.png" &        # Automatic screenlock
+ -locker "i3lock -fenti ~/.config/lock.png" -notify 60 \
+ -notifier "notify-send -u critical -t 20000 -- 'LOCKING screen in 60 seconds'" &        # Automatic screenlock
 
 wmname LG3D &                                           # Fix problem Burp Suite proportion full screen
 
@@ -112,5 +113,6 @@ killall -9 -q autorun
 ~/.config/bspwm/scripts/autorun >> /tmp/bspwm.log &                       # Autorun scripts
 
 
-dunstify -i ~/.config/icons/ok.svg -u normal -t 5000 "bspwm" "bspwm started correctly"
+notify-send -u normal -t 5000 "bspwm" "bspwm started correctly"
+#dunstify -i ~/.config/icons/ok.svg -u normal -t 5000 "bspwm" "bspwm started correctly"
 

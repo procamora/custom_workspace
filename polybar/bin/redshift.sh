@@ -10,6 +10,7 @@ change_status() {
         killall -9 -q redshift
         redshift -x
     fi
+    info
 }
 
 info() {

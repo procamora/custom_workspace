@@ -287,28 +287,28 @@
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
     #background = "#EBCB8B"
-    background = "#383C4A"
+    background = "#88C0D0"
     foreground = "#D8DEE9"
     frame_color = "#767676"
     timeout = 4
     # Icon for notifications with low urgency, uncomment to enable
-    icon = ~/.config/icons/ok.svg
+    #icon = ~/.config/icons/ok.svg
 
 [urgency_normal]
-    background = "#383C4A"
+    background = "#5AC18E"
     foreground = "#D8DEE9"
     frame_color = "#767676"
     timeout = 8
     # Icon for notifications with normal urgency, uncomment to enable
-    icon = ~/.config/icons/ok.svg
+    icon = ~/.config/icons/bell.svg
 
 [urgency_critical]
-    background = "#88C0D0"
+    background = "#BD2C40"
     foreground = "#383C4A"
     frame_color = "#767676"
     timeout = 16
     # Icon for notifications with critical urgency, uncomment to enable
-    icon = ~/.config/icons/ok.svg
+    icon = ~/.config/icons/danger.svg
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

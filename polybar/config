@@ -491,8 +491,8 @@ tail = true
 [module/redshift]
 type = custom/script
 ;format-prefix = " "  
-format-prefix-font = 5
-exec = ~/.config/polybar/bin/redshift.sh
+;format-prefix-font = 5
+exec = ~/.config/polybar/bin/redshift.sh info
 click-left = ~/.config/polybar/bin/redshift.sh change
 interval = 5
 
