@@ -58,14 +58,16 @@ function dunst() {
      libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev >> apt.log 2>&1
 
     # clone the repository
-    test -d dunst/ && /bin/rm -rf dunst/
-    git clone https://github.com/dunst-project/dunst.git dunst/
-    cd dunst/
+    test -d dunst_comp/ && /bin/rm -rf dunst_comp/
+    git clone https://github.com/dunst-project/dunst.git dunst_comp/
+    cd dunst_comp/
     # compile and install
-    make
+    make > /dev/null 2> &1
     sudo make install
-    sudo cp -f {dunst,dunstify} /usr/local/bin/
-    test -d dunst/ && /bin/rm -rf dunst/
+    #sudo cp -f {dunst,dunstify} /usr/local/bin/
+    cd -
+    test -d dunst_comp/ && /bin/rm -rf dunst_comp/
+    cp -fu $MY_PATH/dunst/dunstrc ~/.config/dunst/dunstrc
 }
 
 
@@ -81,7 +83,7 @@ function setup_bspwm() {
      libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev >> apt.log 2>&1
 
 
-    mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons}
+    mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons,dunst}
     cp -ru $MY_PATH/bspwm/* ~/.config/bspwm/
     cp -ru $MY_PATH/sxhkd/* ~/.config/sxhkd/
     cp -fu $MY_PATH/rofi/* ~/.config/rofi/
@@ -176,33 +178,19 @@ function setup_polybar() {
     cp $MY_PATH/polybar/config ~/.config/polybar/
 
     cp $MY_PATH/polybar/bin/* ~/.config/polybar/bin/
+    cp $MY_PATH/polybar/scripts/* ~/.config/polybar/scripts/
     chmod u+x ~/.config/polybar/bin/*.sh
+    chmod u+x ~/.config/polybar/scripts/*.sh
 
-    # plugins
-    test -d polybar-scripts/ && /bin/rm -rf polybar-scripts/
-    git clone https://github.com/polybar/polybar-scripts.git polybar-scripts/
-
-    cp polybar-scripts/polybar-scripts/popup-calendar/popup-calendar.sh ~/.config/polybar/scripts/
-    cp polybar-scripts/polybar-scripts/info-todotxt/info-todotxt.sh ~/.config/polybar/scripts/
-    cp polybar-scripts/polybar-scripts/network-networkmanager/network-networkmanager.sh ~/.config/polybar/scripts/
-    sudo cp polybar-scripts/polybar-scripts/network-networkmanager/90-polybar /etc/NetworkManager/dispatcher.d/
-
-
-    wget -O ~/.config/polybar/scripts/redshift.sh https://raw.githubusercontent.com/VineshReddy/polybar-redshift/master/redshift.sh 2> /dev/null
-    wget -O ~/.config/polybar/scripts/env.sh https://raw.githubusercontent.com/VineshReddy/polybar-redshift/master/env.sh 2> /dev/null
     wget -O ~/.config/polybar/scripts/networkmanager_dmenu.py https://raw.githubusercontent.com/firecat53/networkmanager-dmenu/master/networkmanager_dmenu  2> /dev/null
-
-    test -d polybar-scripts/ && /bin/rm -rf polybar-scripts/
 
     find ~/.config/polybar/ -name "*.sh" -exec chmod u+x {} \;
     find ~/.config/polybar/ -name "*.py" -exec chmod u+x {} \;
 
     # install libreries scripts FIXME falta apt pacman y otro
-    dnf --version > /dev/null 2>&1 && sudo dnf install -y redshift xdotool yad xbacklight > /dev/null
+    dnf --version > /dev/null 2>&1 && sudo dnf install -y redshift xdotool yad light jq > /dev/null
 
-    cp $MY_PATH/polybar/redshift.conf ~/.config/redshift.conf
-    #sed -i.back 's/ #/ /g' ~/.config/polybar/bin/scripts/polybar-scripts/info-redshift-temp/info-redshift-temp.sh
-
+    cp $MY_PATH/redshift.conf ~/.config/redshift.conf
 
     # laptop backlight
     sudo usermod -aG video procamora

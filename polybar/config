@@ -82,9 +82,9 @@ font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pixelsize=15;2
 font-4 = Hack Nerd Font Mono:pixelsize=10;2
 
-modules-left = bspwm cpu memory temperature battery filesystem
+modules-left = bspwm cpu memory temperature battery filesystem backlight
 modules-center = xwindow
-modules-right = backlight redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa calendar powermenu
+modules-right = bluetooth usb redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa calendar powermenu
 
 
 
@@ -203,6 +203,7 @@ type = internal/backlight
 ; list available cards: ls /sys/class/backlight
 card = intel_backlight
 
+format-prefix = " "
 enable = true
 
 ;format = <label> <bar>
@@ -481,20 +482,34 @@ click-left = ${programs.network}
 exec-if = ip address show tun0
 
 
-[module/netwokmanager]
+[module/networkmanager]
 type = custom/script
 exec = ~/.config/polybar/scripts/network-networkmanager.sh
 tail = true
 
+
 [module/redshift]
 type = custom/script
-format-prefix = " "  
+;format-prefix = " "  
 format-prefix-font = 5
-exec = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh temperature 
-click-left = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh toggle 
-scroll-up = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh increase
-scroll-down = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh decrease
-interval=0.5
+exec = ~/.config/polybar/bin/redshift.sh
+click-left = ~/.config/polybar/bin/redshift.sh change
+interval = 5
+
+
+[module/usb]
+type = custom/script
+exec = ~/.config/polybar/scripts/system-usb-udev.sh
+tail = true
+click-left = ~/.config/polybar/scripts/system-usb-udev.sh --mount &
+click-right = ~/.config/polybar/scripts/system-usb-udev.sh --unmount &
+
+
+[module/bluetooth]
+type = custom/script
+exec = ~/.config/polybar/scripts/system-bluetooth-bluetoothctl.sh
+tail = true
+click-left = ~/.config/polybar/scripts/system-bluetooth-bluetoothctl.sh --toggle &
 
 
 [module/calendar]

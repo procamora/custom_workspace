@@ -148,3 +148,13 @@ ctrl + Escape
 Print
     spectacle
 
+# add brightnes
+# super + f5 if key fn block
+# f5 if fn unlock
+{super + F5,XF86MonBrightnessUp}
+    light -A 10
+
+# sub brightness
+{super + F4,XF86MonBrightnessDown}
+    light -U 10
+
