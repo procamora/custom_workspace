@@ -25,10 +25,14 @@ feh --bg-fill ~/.config/wallpaper.png &                 # Set wallpaper brackgro
 ~/.config/polybar/launch.sh &                           # Launch polybar
 
 bspc config pointer_modifier mod1                       # Set key super to key windows (metawin)
-#bspc monitor -d I II III IV V VI VII VIII IX X
-bspc monitor eDP-1  -d I II III IV V VI VII VIII
-bspc monitor HDMI-2 -d IX X
 
+
+if [ "$HOST" = "xiaomi" ]; then
+    bspc monitor eDP-1  -d I II III IV V VI VII VIII
+    bspc monitor HDMI-2 -d IX X
+else
+    bspc monitor -d I II III IV V VI VII VIII IX X
+fi
 
 bspc config border_width        5
 bspc config window_gap          0
@@ -119,4 +123,6 @@ killall -9 -q autorun
 
 notify-send -u normal -t 5000 "bspwm" "bspwm started correctly"
 #dunstify -i ~/.config/icons/ok.svg -u normal -t 5000 "bspwm" "bspwm started correctly"
+
+
 

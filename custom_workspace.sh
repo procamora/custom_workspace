@@ -130,6 +130,11 @@ function setup_fonts() {
     # test -f /etc/vconsole.conf && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
     # ! test -f /etc/vconsole.conf && sudo cp resources/vconsole.conf /etc/
 
+    # basic language and time init calander monday
+    echo 'LANG="en_US.UTF-8"
+LC_TIME="en_GB.UTF-8"
+LC_PAPER="en_GB.UTF-8"
+LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
     echo -e "${GREEN}Finishing Installing Hack Nerd Font${NC}"
 }
 
