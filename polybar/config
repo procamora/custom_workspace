@@ -84,7 +84,7 @@ font-4 = Hack Nerd Font Mono:pixelsize=10;2
 
 modules-left = bspwm cpu memory temperature battery filesystem backlight
 modules-center = xwindow
-modules-right = bluetooth usb redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa calendar powermenu
+modules-right = bluetooth redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa calendar powermenu
 
 
 
@@ -164,8 +164,8 @@ ws-icon-4 = V;
 ws-icon-5 = VI;
 ws-icon-6 = VII;
 ws-icon-7 = VIII;
-ws-icon-8 = IX;
-ws-icon-9 = X;
+;ws-icon-8 = IX;
+;ws-icon-9 = X;
 ws-icon-default = 
 
 
@@ -203,7 +203,7 @@ type = internal/backlight
 ; list available cards: ls /sys/class/backlight
 card = intel_backlight
 
-format-prefix = " "
+format-prefix = " "
 enable = true
 
 ;format = <label> <bar>
@@ -497,19 +497,16 @@ click-left = ~/.config/polybar/bin/redshift.sh change
 interval = 5
 
 
-[module/usb]
-type = custom/script
-exec = ~/.config/polybar/scripts/system-usb-udev.sh
-tail = true
-click-left = ~/.config/polybar/scripts/system-usb-udev.sh --mount &
-click-right = ~/.config/polybar/scripts/system-usb-udev.sh --unmount &
-
-
+; https://github.com/msaitz/polybar-bluetooth
 [module/bluetooth]
 type = custom/script
-exec = ~/.config/polybar/scripts/system-bluetooth-bluetoothctl.sh
-tail = true
-click-left = ~/.config/polybar/scripts/system-bluetooth-bluetoothctl.sh --toggle &
+exec = ~/.config/polybar/scripts/bluetooth.sh
+interval = 2
+click-left = exec blueberry
+click-right = exec ~/.config/polybar/scripts/toggle_bluetooth.sh
+format-padding = 1
+format-background = #000000
+format-foreground = #ffffff
 
 
 [module/calendar]

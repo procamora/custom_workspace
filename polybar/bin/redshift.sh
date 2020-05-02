@@ -18,14 +18,17 @@ info() {
         temp=$(redshift -p 2> /dev/null | grep temp | cut -d ":" -f 2 | tr -dc "[:digit:]")
 
         if [ -z "$temp" ]; then
-            echo "%{F#65737E} "
+            echo "%{F#ffffff}%{u-}"
         elif [ "$temp" -ge 5000 ]; then  # blue
-            echo "%{F#8FA1B3} "
+            echo "%{F#7fe5f0}%{u-}"
         elif [ "$temp" -ge 4000 ]; then  # yellow
-            echo "%{F#EBCB8B} "
+            echo "%{F#ffff00}%{u-}"
         else                             # orange
-            echo "%{F#D08770} "
+            echo "%{F#ff7f50}%{u-}"
         fi
+
+    else
+    	echo "%{F#555}%{u-}"
     fi
 }
 
