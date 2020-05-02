@@ -197,6 +197,9 @@ function setup_polybar() {
 
     cp $MY_PATH/redshift.conf ~/.config/redshift.conf
 
+    git clone https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
+    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib --user
+
     # laptop backlight
     if [ -f  /sys/class/backlight/intel_backlight/brightness ]; then
         sudo usermod -aG video $MY_USER

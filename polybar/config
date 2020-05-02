@@ -83,7 +83,7 @@ font-2 = siji:pixelsize=10;1
 font-3 = Hack Nerd Font Mono:pixelsize=15;2
 font-4 = Hack Nerd Font Mono:pixelsize=10;2
 
-modules-left = bspwm cpu memory temperature battery filesystem backlight
+modules-left = bspwm cpu memory temperature battery filesystem backlight gmail
 modules-center = xwindow
 modules-right = bluetooth redshift xkeyboard wlan_icon wlan eth_icon eth htb internet alsa calendar powermenu
 
@@ -518,6 +518,15 @@ format-prefix-foreground = ${colors.foreground-alt}
 exec = ~/.config/polybar/scripts/popup-calendar.sh
 interval = 5
 click-left = ~/.config/polybar/scripts/popup-calendar.sh --popup &
+
+
+; https://github.com/vyachkonovalov/polybar-gmail
+[module/gmail]
+type = custom/script
+exec = python3 ~/.config/polybar/scripts/gmail/launch.py
+tail = true
+click-left = xdg-open https://mail.google.com
+
 
 ;
 ; vim:ft=dosini
