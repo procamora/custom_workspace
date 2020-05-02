@@ -49,6 +49,7 @@ bspc config gapless_monocle      true
 bspc rule -a Nm-connection-editor state=floating rectangle=800x800+0+0 follow=on focus=on
 bspc rule -a TelegramDesktop state=floating follow=on focus=on
 bspc rule -a Yad state=floating follow=on focus=on
+bspc rule -a Blueberry.py state=floating follow=on focus=on
 
 ## workspace 1 (labs)  
 bspc rule -a konsole state=tiled follow=on focus=on

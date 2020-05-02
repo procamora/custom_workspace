@@ -127,8 +127,8 @@ function setup_fonts() {
     sudo unzip -o /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/ > /dev/null
     sudo /bin/rm /usr/local/share/fonts/Hack.zip
 
-    test -f /etc/vconsole.conf && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
-    ! test -f /etc/vconsole.conf && sudo cp resources/vconsole.conf /etc/
+    # test -f /etc/vconsole.conf && sudo sed -i.back -re "s/FONT=\".*\"/FONT=\"$MY_FONT\"/g" /etc/vconsole.conf
+    # ! test -f /etc/vconsole.conf && sudo cp resources/vconsole.conf /etc/
 
     echo -e "${GREEN}Finishing Installing Hack Nerd Font${NC}"
 }
@@ -193,9 +193,12 @@ function setup_polybar() {
     cp $MY_PATH/redshift.conf ~/.config/redshift.conf
 
     # laptop backlight
-    sudo usermod -aG video procamora
-    sudo chown root:video /sys/class/backlight/intel_backlight/brightness
-    sudo chmod 664 /sys/class/backlight/intel_backlight/brightness
+    if [ -f  /sys/class/backlight/intel_backlight/brightness ]; then
+        sudo usermod -aG video $MY_USER
+        sudo chown root:video /sys/class/backlight/intel_backlight/brightness
+        sudo chmod 664 /sys/class/backlight/intel_backlight/brightness
+    fi
+
     echo -e "${GREEN}Finishing Installing polybar${NC}"
 }
 

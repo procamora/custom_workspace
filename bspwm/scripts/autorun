@@ -65,7 +65,7 @@ check=$(python3 ~/.config/sxhkd/check.py)
 if [ "$check" = "No duplicates" ]; then
     notify-send -i ~/.config/icons/sxhkd.svg -u low -t 1000 "sxhkd" "Correct Configuration"
 else
-    notify-send -i ~/.config/icons/sxhkd.svg -u critical -t 3000 "sxhkd" "Incorrect Configuration"
+    notify-send -i ~/.config/icons/sxhkd.svg -u critical -t 10000 "sxhkd" "Incorrect Configuration"
 fi
 
 
@@ -73,7 +73,7 @@ SERVICES=( bspwm sxhkd feh compton dunst polybar xautolock redshift udiskie)
 
 for serv in "${PROGRAMS[@]}"; do
     # killall -q $prog
-    ! (ps aux | /bin/grep "$serv" | /bin/grep -v "grep" > /dev/null) && notify-send -t 3000 -u critical "$serv" "Service $serv is not active"
+    ! (ps aux | /bin/grep "$serv" | /bin/grep -v "grep" > /dev/null) && notify-send -t 10000 -u critical "$serv" "Service $serv is not active"
     sleep 0.1
 done
 

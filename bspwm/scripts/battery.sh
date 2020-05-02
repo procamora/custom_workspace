@@ -10,7 +10,7 @@ while sleep 60; do
         notify-send -u normal -t 5000 "Battery" "The capacity of the battery is $capacity%."
         light -S 20  # 20% britgness
 
-    else if [ "$capacity" -eq 30 ]; then
+    else if [ "$capacity" -eq 20 ]; then
         notify-send -u normal -t 5000 "Battery" "The capacity of the battery is $capacity%."
         light -S 20  # 20% britgness
 

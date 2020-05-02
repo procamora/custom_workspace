@@ -494,6 +494,7 @@ type = custom/script
 ;format-prefix-font = 5
 exec = ~/.config/polybar/bin/redshift.sh info
 click-left = ~/.config/polybar/bin/redshift.sh change
+click-right = ~/.config/polybar/bin/redshift.sh notify 
 interval = 5
 
 

@@ -32,10 +32,15 @@ info() {
     fi
 }
 
+notify() {
+    notify-send "redshift" "$(redshift -p)"
+}
 
 
 if [ "$1" = "info" ]; then
     info
 elif [ "$1" = "change" ]; then
     change_status
+elif [ "$1" = "notify" ]; then
+    notify
 fi
