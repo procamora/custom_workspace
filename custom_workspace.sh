@@ -197,6 +197,7 @@ function setup_polybar() {
 
     cp $MY_PATH/redshift.conf ~/.config/redshift.conf
 
+    test -d ~/.config/polybar/scripts/gmail/ && /bin/rm -rf ~/.config/polybar/scripts/gmail/
     git clone https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
     pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib --user
 
