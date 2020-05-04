@@ -27,7 +27,7 @@ feh --bg-fill ~/.config/wallpaper.png &                 # Set wallpaper brackgro
 bspc config pointer_modifier mod1                       # Set key super to key windows (metawin)
 
 
-if [ "$HOST" = "xiaomi" ]; then
+if [ "$(cat /etc/hostname)" = "xiaomi" ]; then
     bspc monitor eDP-1  -d I II III IV V VI VII VIII
     bspc monitor HDMI-2 -d IX X
 else
