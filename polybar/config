@@ -457,7 +457,7 @@ margin-bottom = 5
 
 [module/eth_icon]
 type = custom/script
-interval = 2
+interval = 3.0
 exec = ~/.config/polybar/bin/status_ethernet.sh
 click-left = ${programs.network}
 
@@ -470,7 +470,7 @@ exec = ~/.config/polybar/bin/status_internet.sh
 
 [module/wlan_icon]
 type = custom/script
-interval = 2
+interval = 3.0
 exec = ~/.config/polybar/bin/status_wifi.sh
 click-left = python3 ~/.config/polybar/scripts/networkmanager_dmenu.py
 
