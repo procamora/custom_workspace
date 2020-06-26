@@ -136,6 +136,10 @@ alt + ctrl + {Left,Down,Up,Right}
 super + shift + f
     firefox
 
+# Dolphin
+super + e
+    dolphin ~
+
 # Block screen
 super + l
     i3lock -fenti ~/.config/lock.png

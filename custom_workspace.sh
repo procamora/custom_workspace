@@ -193,7 +193,7 @@ function setup_polybar() {
     find ~/.config/polybar/ -name "*.py" -exec chmod u+x {} \;
 
     # install libreries scripts FIXME falta apt pacman y otro
-    dnf --version > /dev/null 2>&1 && sudo dnf install -y redshift xdotool yad light jq blueberry udiskie > /dev/null
+    dnf --version > /dev/null 2>&1 && sudo dnf install -y python3-pip redshift xdotool yad light jq blueberry udiskie > /dev/null
 
     cp $MY_PATH/redshift.conf ~/.config/redshift.conf
 
