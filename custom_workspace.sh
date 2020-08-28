@@ -136,6 +136,41 @@ LC_TIME="en_GB.UTF-8"
 LC_PAPER="en_GB.UTF-8"
 LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
     echo -e "${GREEN}Finishing Installing Hack Nerd Font${NC}"
+
+
+    echo -e "${GREEN}Installing papirus theme${NC}"
+    wget -qO- https://git.io/papirus-icon-theme-install | sh
+
+    kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
+    kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
+    
+    kwriteconfig5 --file kdeglobals --group Icons --key Theme "Papirus"
+
+    kwriteconfig5 --file "$HOME/.directory" --group "Dolphin" --key "PreviewsShown" "false"
+    kwriteconfig5 --file "$HOME/.directory" --group "Dolphin" --key "SortOrder" "1"
+    kwriteconfig5 --file "$HOME/.directory" --group "Dolphin" --key "SortRole" "modificationtime"
+    kwriteconfig5 --file "$HOME/.directory" --group "Dolphin" --key "Timestamp" "2020,8,27,17,53,2"
+    kwriteconfig5 --file "$HOME/.directory" --group "Dolphin" --key "Version" "4"
+    kwriteconfig5 --file "$HOME/.directory" --group "Settings" --key "HiddenFilesShown" "true"
+
+    kwriteconfig5 --file "$HOME/Documents/.directory" --group "Desktop Entry" --key "Icon" "folder-documents"
+    kwriteconfig5 --file "$HOME/Downloads/.directory" --group "Desktop Entry" --key "Icon" "folder-downloads"
+    kwriteconfig5 --file "$HOME/Public/.directory" --group "Desktop Entry" --key "Icon" "folder-public"
+    kwriteconfig5 --file "$HOME/Pictures/.directory" --group "Desktop Entry" --key "Icon" "folder-pictures"
+    kwriteconfig5 --file "$HOME/Videos/.directory" --group "Desktop Entry" --key "Icon" "folder-videos"
+    kwriteconfig5 --file "$HOME/Templates/.directory" --group "Desktop Entry" --key "Icon" "folder-templates"
+    kwriteconfig5 --file "$HOME/Music/.directory" --group "Desktop Entry" --key "Icon" "folder-music"
+    kwriteconfig5 --file "$HOME/Desktop/.directory" --group "Desktop Entry" --key "Icon" "desktop"
+    kwriteconfig5 --file "$HOME/scripts/.directory" --group "Desktop Entry" --key "Icon" "folder-script"
+
+    #sed -i.back 's/Theme=[[:alpha:]]\+/Theme=Papirus/g' $HOME/.config/kdeglobals
+    #sed -i.back 's/Theme=[[:alpha:]]\+/Theme=Papirus/g' $HOME/.kde/share/config/kdeglobals
+
+    git clone https://github.com/jsmitar/dolphin-folder-color /tmp/dolphin-folder-color
+    cd /tmp/dolphin-folder-color
+    bash install.sh
+    cd -
+    rm -rf /tmp/dolphin-folder-color
 }
 
 
