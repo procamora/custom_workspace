@@ -72,7 +72,7 @@ function dunst() {
 
 
 function setup_bspwm() {
-    INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins numlockx"
+    INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins numlockx plasma-integration"
     echo -e "${GREEN}Installing $INSTALL ${NC}"
 
     dnf --version > /dev/null 2>&1 && sudo sudo dnf install -y $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
@@ -143,7 +143,7 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
 
     kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
     kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
-    
+
     kwriteconfig5 --file kdeglobals --group Icons --key Theme "Papirus"
 
     kwriteconfig5 --file "$HOME/.directory" --group "Dolphin" --key "PreviewsShown" "false"
@@ -166,11 +166,12 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
     #sed -i.back 's/Theme=[[:alpha:]]\+/Theme=Papirus/g' $HOME/.config/kdeglobals
     #sed -i.back 's/Theme=[[:alpha:]]\+/Theme=Papirus/g' $HOME/.kde/share/config/kdeglobals
 
-    git clone https://github.com/jsmitar/dolphin-folder-color /tmp/dolphin-folder-color
-    cd /tmp/dolphin-folder-color
-    bash install.sh
-    cd -
-    rm -rf /tmp/dolphin-folder-color
+    #dnf --version > /dev/null 2>&1 && sudo dnf install -y kde-runtime
+    #git clone https://github.com/jsmitar/dolphin-folder-color /tmp/dolphin-folder-color
+    #cd /tmp/dolphin-folder-color
+    #bash install.sh
+    #cd -
+    #rm -rf /tmp/dolphin-folder-color
 }
 
 
@@ -365,7 +366,7 @@ function setup_zsh() {
     test -d ~/.oh-my-zsh && /bin/rm -rf ~/.oh-my-zsh
 
     # Download and configuration oh my zsh
-    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) &"
 
     sudo chsh -s $(which zsh) $MY_USER
     sudo chsh -s $(which zsh) root
