@@ -7,7 +7,6 @@
 export DEBIAN_FRONTEND=noninteractive
 
 DNF="sudo dnf -yq"
-GIT="git -q"
 WGET="wget -q"
 RM="/bin/rm"
 
@@ -53,7 +52,7 @@ function dunst() {
 
     # clone the repository
     test -d dunst_comp/ && $RM -rf dunst_comp/
-    $GIT clone https://github.com/dunst-project/dunst.git dunst_comp/
+    git clone -q https://github.com/dunst-project/dunst.git dunst_comp/
     cd dunst_comp/
     # compile and install
     make > /dev/null 2>&1
@@ -135,7 +134,7 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
     echo -e "${GREEN}Installing papirus theme${NC}"
     $WGET -qO- https://git.io/papirus-icon-theme-install | sh
 
-    locate kwriteconfig5
+    locate kwriteconfig5  # if exists command execute 
     if [ "$?" -eq 0 ]; then
         kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
         kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
@@ -231,7 +230,7 @@ function setup_polybar() {
     cp $MY_PATH/redshift.conf ~/.config/redshift.conf
 
     test -d ~/.config/polybar/scripts/gmail/ && $RM -rf ~/.config/polybar/scripts/gmail/
-    $GIT clone https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
+    git clone -q https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
     pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib --user
 
     # laptop backlight
@@ -275,7 +274,7 @@ function setup_vim() {
     #USERS="root $MY_USER"
     # Clonamos repositorio
     test -d /opt/vim_runtime && sudo $RM -rf /opt/vim_runtime
-    sudo $GIT clone --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
+    sudo git clone -q --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
 
     # Dar permiso a los ficheros para los usuarios no root
     sudo chmod 755 /opt/vim_runtime/ -R
@@ -370,16 +369,16 @@ function setup_zsh() {
 
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
-    $GIT clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+    git clone -q --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
     cp $MY_PATH/zsh/zshrc ~/.zshrc
     cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
 
     # plugins zsh
-    $GIT clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-    $GIT clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-    $GIT clone https://github.com/zsh-users/zsh-completions.git $ZSH_CUSTOM/plugins/zsh-completions
-    $GIT clone https://github.com/zsh-users/zsh-history-substring-search.git $ZSH_CUSTOM/plugins/zsh-history-substring-search
-    $GIT clone https://github.com/zsh-users/zsh-docker.git $ZSH_CUSTOM/plugins/zsh-docker
+    git clone -q https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+    git clone -q https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+    git clone -q https://github.com/zsh-users/zsh-completions.git $ZSH_CUSTOM/plugins/zsh-completions
+    git clone -q https://github.com/zsh-users/zsh-history-substring-search.git $ZSH_CUSTOM/plugins/zsh-history-substring-search
+    git clone -q https://github.com/zsh-users/zsh-docker.git $ZSH_CUSTOM/plugins/zsh-docker
 
     # Create link to user root (insegure but comfortable)
     sudo ln -sf ~/.zshrc /root/.zshrc
@@ -413,7 +412,7 @@ function setup_tmux() {
     test -L ~/.tmux.conf && unlink ~/.tmux.conf
     test -f ~/.tmux.conf.local && $RM -f ~/.tmux.conf.local
 
-    $GIT clone https://github.com/gpakosz/.tmux.git ~/.tmux
+    git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux
     ln -sf ~/.tmux/.tmux.conf ~/.tmux.conf
     cp ~/.tmux/.tmux.conf.local ~/.tmux.conf.local
     echo -e "${GREEN}Finishing Installing $INSTALL ${NC}"
