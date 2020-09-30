@@ -13,7 +13,7 @@ RM="/bin/rm"
 
 MY_PATH=$(pwd)
 MY_USER=$USER
-OS_NAME=$(cat /etc/os-release | grep NAME | cut -d \" -f2 | cut -d " " -f1 | head -n1)
+OS_NAME=$(cat /etc/os-release | egrep "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
 OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
 
 
@@ -135,8 +135,8 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
     echo -e "${GREEN}Installing papirus theme${NC}"
     $WGET -qO- https://git.io/papirus-icon-theme-install | sh
 
-    if [ $(locate kwriteconfig5) -eq "1" ]; then
-
+    locate kwriteconfig5
+    if [ "$?" -eq 0 ]; then
         kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
         kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
 
