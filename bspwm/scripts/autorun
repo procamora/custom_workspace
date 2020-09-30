@@ -18,17 +18,17 @@ udiskie &
 udiskie --no-automount --no-notify --tray &
 
 # autorun scripts
-find ~/scripts/ -name "*.py" -exec chmod u+x {} \;
-find ~/scripts/ -name "*.sh" -exec chmod u+x {} \;
-find ~/scripts/ -name "*.exp" -exec chmod u+x {} \;
-
+#find ~/scripts/ -name "*.py" -exec chmod u+x {} \;
+#find ~/scripts/ -name "*.sh" -exec chmod u+x {} \;
+#find ~/scripts/ -name "*.exp" -exec chmod u+x {} \;
+find ~/scripts/ -type f ! -executable -regex '.*\.\(sh\|py\|exp\)' -exec chmod u+x {} \;
 
 ! (ssh-add -l > /dev/null) && (eval "$(ssh-agent -s)" > /dev/null) &
 ~/scripts/load_key_personal.exp &
 
 # delay for establish network connection
-(sleep 10 && bash ~/scripts/mountDirSSH.sh) &
-(sleep 5 && ! (df | grep -q "decrypt_gdrive") && mkdir -p ~/decrypt_gdrive && expect ~/scripts/encfs.exp) &
+(sleep 10 && bash ~/scripts/mount_dir_ssh.sh) &
+(sleep 5 && (df | grep -q "decrypt_gdrive") || (mkdir -p ~/decrypt_gdrive && expect ~/scripts/load_encfs_dir.exp)) &
 
 
 # if exits touchpad, enable tap to click

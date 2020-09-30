@@ -8,5 +8,6 @@ meld ~/Documents/custom_workspace/rofi/ ~/.config/rofi/
 
 meld ~/Documents/custom_workspace/redshift.conf ~/.config/redshift.conf
 meld ~/Documents/custom_workspace/zsh/zshrc ~/.zshrc
+meld ~/Documents/custom_workspace/zsh/p10k.zsh ~/.p10k.zsh
 
 meld ~/Documents/custom_workspace/dunst ~/.config/dunst
