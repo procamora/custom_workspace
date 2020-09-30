@@ -132,9 +132,9 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
 
 
     echo -e "${GREEN}Installing papirus theme${NC}"
-    $WGET -qO- https://git.io/papirus-icon-theme-install | sh
+    $WGET -qO- https://git.io/papirus-icon-theme-install | sh > /dev/null
 
-    locate kwriteconfig5  # if exists command execute 
+    locate kwriteconfig5 > /dev/null  # if exists command execute 
     if [ "$?" -eq 0 ]; then
         kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
         kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
@@ -305,7 +305,7 @@ function zsh_fedora() {
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
     $DNF install $INSTALL
-    $DNF install lsd bat ripgrep
+    $DNF install lsd bat ripgrep util-linux-user
 }
 
 
@@ -362,7 +362,7 @@ function setup_zsh() {
     test -d ~/.oh-my-zsh && $RM -rf ~/.oh-my-zsh
 
     # Download and configuration oh my zsh
-    timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null
 
     sudo chsh -s $(which zsh) $MY_USER
     sudo chsh -s $(which zsh) root
