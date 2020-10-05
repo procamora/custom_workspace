@@ -66,7 +66,7 @@ To install the workspace it is necessary to download the project and run the scr
 git clone https://github.com/procamora/custom_workspace.git
 cd custom_workspace/
 chmod u+x custom_workspace.sh
-./custom_workspace.sh all
+./custom_workspace.sh all > output.log
 ```
 
 

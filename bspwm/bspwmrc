@@ -28,8 +28,8 @@ bspc config pointer_modifier mod1                       # Set key super to key w
 
 
 if [ "$(cat /etc/hostname)" = "xiaomi" ]; then
-    bspc monitor eDP-1  -d I II III IV V VI VII VIII
-    bspc monitor HDMI-2 -d IX X
+    bspc monitor eDP-1  -d I II III IV V VI VII
+    bspc monitor HDMI-2 -d VIII IX X
 else
     bspc monitor -d I II III IV V VI VII VIII IX X
 fi

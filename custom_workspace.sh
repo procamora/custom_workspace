@@ -203,11 +203,7 @@ function polybar_debian(){
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/
     sudo $RM /opt/polybar-3.4.2.tar
     mkdir -p /opt/polybar/build
-    cd /opt/polybar/build
-    cmake ..
-    make -j$(nproc)
-    sudo make install
-    cd $Y_PATH
+    pushd /opt/polybar/build && cmake .. && make -j$(nproc) && sudo make install && popd
 }
 
 
@@ -239,7 +235,7 @@ function setup_polybar() {
     chmod u+x ~/.config/polybar/bin/*.sh
     chmod u+x ~/.config/polybar/scripts/*.sh
 
-    $WGET -O ~/.config/polybar/scripts/networkmanager_dmenu.py https://raw.githubusercontent.com/firecat53/networkmanager-dmenu/master/networkmanager_dmenu
+    $WGET -O ~/.config/polybar/scripts/networkmanager_dmenu.py https://raw.githubusercontent.com/firecat53/networkmanager-dmenu/main/networkmanager_dmenu
 
     find ~/.config/polybar/ -name "*.sh" -exec chmod u+x {} \;
     find ~/.config/polybar/ -name "*.py" -exec chmod u+x {} \;
@@ -278,7 +274,7 @@ function setup_i3lock() {
     #cd /opt/i3lock-fancy
     #sudo make install
 
-    cd $MY_PATH
+    #cd $MY_PATH
 }
 
 
