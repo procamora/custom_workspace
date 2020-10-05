@@ -10,10 +10,31 @@ DNF="sudo dnf -yq"
 WGET="wget -q"
 RM="/bin/rm"
 
+LOG="install.log"
+
+
 MY_PATH=$(pwd)
 MY_USER=$USER
 OS_NAME=$(cat /etc/os-release | egrep "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
 OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
+
+
+function print_format() {
+    echo -e "${GREEN_COLOUR}$1${RESET_COLOUR}" # print stdout
+    >&2 echo -e "${RED_COLOUR}$1${RESET_COLOUR}" # print stderr
+}
+
+
+function ctrl_c(){
+    print_format "Exiting..."
+    #print_format "\n${RED}Exiting...${RESET_COLOUR}"
+    tput cnorm
+    exit 0
+}
+
+
+#trap 'exit 130' INT #Exit if trap Ctrl+C
+trap ctrl_c INT
 
 
 #####################################################
@@ -22,12 +43,11 @@ OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
 
 function setup_utils() {
     INSTALL="unzip wget git gcc make cmake vim"
-    echo -e "${GREEN}Installing basic utilities $INSTALL ${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL @development-tools${RESET_COLOUR}"
 
     dnf --version > /dev/null 2>&1 && $DNF install $INSTALL @development-tools
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
     apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
-    echo -e "${GREEN}Finishing Installing  basic utilities${NC}"
 }
 
 
@@ -53,27 +73,29 @@ function dunst() {
     # clone the repository
     test -d dunst_comp/ && $RM -rf dunst_comp/
     git clone -q https://github.com/dunst-project/dunst.git dunst_comp/
-    cd dunst_comp/
+    pushd dunst_comp/
     # compile and install
-    make > /dev/null 2>&1
-    sudo make install
+    make > /dev/null
+    sudo make install > /dev/null
     #sudo cp -f {dunst,dunstify} /usr/local/bin/
-    cd -
+    popd
     test -d dunst_comp/ && $RM -rf dunst_comp/
     cp -fu $MY_PATH/dunst/dunstrc ~/.config/dunst/dunstrc
 }
 
 
 function setup_bspwm() {
-    INSTALL="bspwm sxhkd compton feh konsole rofi ksysguard dolphin dolphin-plugins numlockx plasma-integration"
-    echo -e "${GREEN}Installing $INSTALL ${NC}"
+    INSTALL="bspwm sxhkd compton feh rofi ksysguard dolphin dolphin-plugins numlockx plasma-integration"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL ${RESET_COLOUR}"
 
     dnf --version > /dev/null 2>&1 && $DNF install $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
      xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
      xcb-util-wm xcb-util-keysyms
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms
+    dnf --version > /dev/null 2>&1 && $DNF install konsole 2>&1  # puede fallar si lo teng excluido
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms \
+     konsole
     apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
-     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev
+     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
 
 
     mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons,dunst}
@@ -99,7 +121,6 @@ exec bspwm" > ~/.xinitrc
 
     dunst
 
-    echo -e "${GREEN}Finishing Installing bspwm, sxhkd, compton and feh${NC}"
 }
 
 
@@ -110,7 +131,7 @@ exec bspwm" > ~/.xinitrc
 # https://github.com/ryanoasis/nerd-fonts/
 
 function setup_fonts() {
-    echo -e "${GREEN}Installing Hack Nerd Font${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}Hack Nerd Font${RESET_COLOUR}"
 
     MY_FONT="Hack Nerd Font"
 
@@ -127,14 +148,13 @@ function setup_fonts() {
     echo 'LANG="en_US.UTF-8"
 LC_TIME="en_GB.UTF-8"
 LC_PAPER="en_GB.UTF-8"
-LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf
-    echo -e "${GREEN}Finishing Installing Hack Nerd Font${NC}"
+LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf > /dev/null
 
 
-    echo -e "${GREEN}Installing papirus theme${NC}"
-    $WGET -qO- https://git.io/papirus-icon-theme-install | sh > /dev/null
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}papirus theme${RESET_COLOUR}"
+    $WGET -qO- https://git.io/papirus-icon-theme-install | sh >/dev/null 2> $LOG
 
-    locate kwriteconfig5 > /dev/null  # if exists command execute 
+    locate kwriteconfig5 > /dev/null  # if exists command execute
     if [ "$?" -eq 0 ]; then
         kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
         kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
@@ -192,7 +212,7 @@ function polybar_debian(){
 
 
 function setup_polybar() {
-    echo -e "${GREEN}Installing polybar and dependencies${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}polybar and dependencies${RESET_COLOUR}"
 
     dnf --version > /dev/null 2>&1 && $DNF install gcc-c++ clang git cmake @development-tools python3-sphinx \
      cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar
@@ -231,7 +251,7 @@ function setup_polybar() {
 
     test -d ~/.config/polybar/scripts/gmail/ && $RM -rf ~/.config/polybar/scripts/gmail/
     git clone -q https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
-    pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib --user
+    pip3 -q install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib --user
 
     # laptop backlight
     if [ -f  /sys/class/backlight/intel_backlight/brightness ]; then
@@ -240,7 +260,6 @@ function setup_polybar() {
         sudo chmod 664 /sys/class/backlight/intel_backlight/brightness
     fi
 
-    echo -e "${GREEN}Finishing Installing polybar${NC}"
 }
 
 #####################################################
@@ -248,7 +267,7 @@ function setup_polybar() {
 #####################################################
 
 function setup_i3lock() {
-    echo -e "${GREEN}Finish Installing i3lock and ImageMagick ${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}i3lock and ImageMagick ${RESET_COLOUR}"
     dnf --version > /dev/null 2>&1 && $DNF install ImageMagick i3lock xautolock
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock xautolock
     apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock xautolock
@@ -260,7 +279,6 @@ function setup_i3lock() {
     #sudo make install
 
     cd $MY_PATH
-    echo -e "${GREEN}Finishing Installing i3lock${NC}"
 }
 
 
@@ -270,7 +288,7 @@ function setup_i3lock() {
 #####################################################
 
 function setup_vim() {
-    echo -e "${GREEN}Installing vim and plugins ${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}vim and plugins ${RESET_COLOUR}"
     #USERS="root $MY_USER"
     # Clonamos repositorio
     test -d /opt/vim_runtime && sudo $RM -rf /opt/vim_runtime
@@ -284,7 +302,8 @@ function setup_vim() {
     sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
 
     test -f $MY_USER/.vimrc && sudo chown $MY_USER:$MY_USER $MY_USER/.vimrc -R
-    echo -e "${GREEN}Finishing Installing vim${NC}"
+
+    echo > /dev/null  # force return true
 }
 
 
@@ -339,7 +358,7 @@ function zsh_raspbian() {
 
 function setup_zsh() {
     INSTALL="zsh scrub fzf"
-    echo -e "${GREEN}Installing zsh $INSTALL lsd bat ripgrep${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
     apt --version > /dev/null 2>&1 && test $OS_NAME != "Raspbian" && zsh_debian "$INSTALL"
     test $OS_NAME = "Raspbian" && zsh_raspbian "$INSTALL"
@@ -362,10 +381,10 @@ function setup_zsh() {
     test -d ~/.oh-my-zsh && $RM -rf ~/.oh-my-zsh
 
     # Download and configuration oh my zsh
-    timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null
+    timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2> $LOG
 
-    sudo chsh -s $(which zsh) $MY_USER
-    sudo chsh -s $(which zsh) root
+    sudo chsh -s $(which zsh) $MY_USER 2>&1
+    sudo chsh -s $(which zsh) root 2>&1
 
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
@@ -385,7 +404,6 @@ function setup_zsh() {
     sudo ln -sf ~/.p10k.zsh /root/.p10k.zsh
     sudo ln -sf ~/.oh-my-zsh/ /root/
 
-    echo -e "${GREEN}Finishing Installing zsh${NC}"
 }
 
 
@@ -401,7 +419,7 @@ function setup_konsole() {
 
 function setup_tmux() {
     INSTALL="tmux"
-    echo -e "${GREEN}Installing terminal $INSTALL ${NC}"
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL ${RESET_COLOUR}"
 
     dnf --version > /dev/null 2>&1 && $DNF install $INSTALL
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
@@ -415,48 +433,100 @@ function setup_tmux() {
     git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux
     ln -sf ~/.tmux/.tmux.conf ~/.tmux.conf
     cp ~/.tmux/.tmux.conf.local ~/.tmux.conf.local
-    echo -e "${GREEN}Finishing Installing $INSTALL ${NC}"
 }
+
+
+function install_bspwn() {
+    setup_utils
+    setup_bspwm
+    setup_fonts
+    setup_polybar
+    setup_i3lock
+}
+
+
+function install_vim() { 
+    setup_utils
+    setup_vim
+}
+
+
+function install_zsh() {
+    setup_utils
+    setup_fonts
+    setup_zsh
+    setup_konsole
+    setup_tmux
+}
+
+
+function install_all() {
+    setup_utils 
+    setup_bspwm
+    setup_fonts 
+    setup_polybar 
+    setup_i3lock
+    setup_vim
+    setup_zsh 
+    setup_konsole
+    setup_tmux
+}
+
+
+function print_help() {
+    PROGRAM=$(echo "$0" | tr -d './' | tr -d '.sh')
+    PROGRAM=$(echo "$0" | awk -F "./" '{print $NF}' | tr -d '.sh')
+
+    echo -e "\n${PURPLE_COLOUR}${PROGRAM} v1.0 (Source: https://github.com/procamora/custom_workspace)${RESET_COLOUR}"
+    echo -e  "\n${ORANGE_COLOUR}[*] Use: ./${PROGRAM}.sh OPTION${RESET_COLOUR}"
+    echo -e  "\n${ORANGE_COLOUR}[*] DO NOT EXECUTE the script with the sudo command without specifying the user${RESET_COLOUR}"
+    echo -e  "\n${ORANGE_COLOUR}[*] List of available options:${RESET_COLOUR}"
+    echo -e  "\t${GREEN_COLOUR}bspwm${RESET_COLOUR}\t\t Install the bspwm window manager and all its requirements"
+    echo -e  "\t${GREEN_COLOUR}vim${RESET_COLOUR}\t\t Install the vim editor with a custom theme"
+    echo -e  "\t${GREEN_COLOUR}zsh${RESET_COLOUR}\t\t Install the zsh shell, various plugins and customize"
+    echo -e  "\t${GREEN_COLOUR}all${RESET_COLOUR}\t\t Install all packages"
+    echo -e  "\t${GREEN_COLOUR}help${RESET_COLOUR}\t\t Show help"
+
+
+    echo -e  "\n\n${BLUE_COLOUR}Example: ./${PROGRAM}.sh all${RESET_COLOUR}\n"
+
+    #tput cnorm
+    exit 1
+}
+
 
 
 function main() {
-    test "$1" = "bspwm" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock
-    test "$1" = "vim" && setup_utils && setup_vim
-    test "$1" = "zsh" && setup_utils && setup_fonts && setup_zsh && setup_konsole && setup_tmux
-    test "$1" = "all" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole && setup_tmux
-    test "$1" = "" && setup_utils && setup_bspwm && setup_fonts && setup_polybar && setup_i3lock && setup_vim && setup_zsh && setup_konsole && setup_tmux
+    #tput civis
+    #print_format "$@"
 
+    VALID_ARGUMENT="False" # Usado para detectar si se ha puesto un argumento valido
 
-    test "$1" = "_utils" && setup_utils
-    test "$1" = "_bspwm" && setup_bspwm
-    test "$1" = "_fonts" && setup_fonts
-    test "$1" = "_polybar" && setup_polybar
-    test "$1" = "_i3lock" && setup_i3lock
-    test "$1" = "_vim" && setup_vim
-    test "$1" = "_zsh" && setup_zsh
-    test "$1" = "_konsole" && setup_konsole
-    test "$1" = "_tmux" && setup_tmux
+    test "$1" = "" && print_help
+    test "$1" = "help" && print_help
+
+    test "$1" = "bspwm" && install_bspwn && VALID_ARGUMENT="True"
+    test "$1" = "vim" && install_vim && VALID_ARGUMENT="True"
+    test "$1" = "zsh" && install_zsh  && VALID_ARGUMENT="True"
+    test "$1" = "all" && install_all && VALID_ARGUMENT="True"
+
+    test "$1" = "_utils" && setup_utils && VALID_ARGUMENT="True"
+    test "$1" = "_bspwm" && setup_bspwm && VALID_ARGUMENT="True"
+    test "$1" = "_fonts" && setup_fonts && VALID_ARGUMENT="True"
+    test "$1" = "_polybar" && setup_polybar && VALID_ARGUMENT="True"
+    test "$1" = "_i3lock" && setup_i3lock && VALID_ARGUMENT="True"
+    test "$1" = "_vim" && setup_vim && VALID_ARGUMENT="True"
+    test "$1" = "_zsh" && setup_zsh && VALID_ARGUMENT="True"
+    test "$1" = "_konsole" && setup_konsole && VALID_ARGUMENT="True"
+    test "$1" = "_tmux" && setup_tmux && VALID_ARGUMENT="True"
 
 
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
+    test "$VALID_ARGUMENT" = "False" && print_help
 
-    echo -e "${GREEN}Finishing Installing custom_workspace${NC}"
-
+    echo -e "${GREEN_COLOUR}Finishing $0${RESET_COLOUR}"
     #kill -9 -1
 }
-
-
-
-function ctrl_c(){
-    print_format "Exiting..."
-    #echo -e "\n${RED}Exiting...${NC}"
-    tput cnorm
-    exit 0
-}
-
-
-#trap 'exit 130' INT #Exit if trap Ctrl+C
-trap ctrl_c INT
 
 
 #Colours

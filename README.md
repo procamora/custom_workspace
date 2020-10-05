@@ -93,6 +93,9 @@ Running the script again regenerates the default settings. You can also leave so
 
 
 
+![help][help]
+
+[help]: help.png
 
 
 
