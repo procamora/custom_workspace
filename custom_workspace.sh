@@ -441,7 +441,7 @@ function install_bspwn() {
 }
 
 
-function install_vim() { 
+function install_vim() {
     setup_utils
     setup_vim
 }
@@ -457,13 +457,13 @@ function install_zsh() {
 
 
 function install_all() {
-    setup_utils 
+    setup_utils
     setup_bspwm
-    setup_fonts 
-    setup_polybar 
+    setup_fonts
+    setup_polybar
     setup_i3lock
     setup_vim
-    setup_zsh 
+    setup_zsh
     setup_konsole
     setup_tmux
 }
@@ -495,11 +495,13 @@ function print_help() {
 function main() {
     #tput civis
     #print_format "$@"
-
     VALID_ARGUMENT="False" # Usado para detectar si se ha puesto un argumento valido
 
     test "$1" = "" && print_help
     test "$1" = "help" && print_help
+
+    # check user administrator
+    sudo -l > /dev/null || (print_format "$My_USER is not user administrator" && exit 1)
 
     test "$1" = "bspwm" && install_bspwn && VALID_ARGUMENT="True"
     test "$1" = "vim" && install_vim && VALID_ARGUMENT="True"
