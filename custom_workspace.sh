@@ -471,7 +471,7 @@ function install_all() {
 
 function print_help() {
     PROGRAM=$(echo "$0" | tr -d './' | tr -d '.sh')
-    PROGRAM=$(echo "$0" | awk -F "./" '{print $NF}' | tr -d '.sh')
+    PROGRAM=$(echo "$0" | awk -F "./" '{print $NF}' | awk -F ".sh" '{print $1}')
 
     echo -e "\n${PURPLE_COLOUR}${PROGRAM} v1.0 (Source: https://github.com/procamora/custom_workspace)${RESET_COLOUR}"
     echo -e  "\n${ORANGE_COLOUR}[*] Use: ./${PROGRAM}.sh OPTION${RESET_COLOUR}"
