@@ -157,31 +157,31 @@ type = internal/bspwm
 #bspc query -D --names | while read -r name; do
 #  printf 'ws-icon-%i = "%s;<insert-icon-here>"\n' $((counter++)) $name
 #done
-ws-icon-0 = I;
-ws-icon-1 = II;
-ws-icon-2 = III;
-ws-icon-3 = IV;
-ws-icon-4 = V;
-ws-icon-5 = VI;
-ws-icon-6 = VII;
-ws-icon-7 = VIII;
+;ws-icon-0 = I;
+;ws-icon-1 = II;
+;ws-icon-2 = III;
+;ws-icon-3 = IV;
+;ws-icon-4 = V;
+;ws-icon-5 = VI;
+;ws-icon-6 = VII;
+;ws-icon-7 = VIII;
 ;ws-icon-8 = IX;
 ;ws-icon-9 = X;
-ws-icon-default = 
+;ws-icon-default = 
 
 
 format = <label-state> <label-mode>
 label-monitor = %name%
 
 
-label-focused = %icon%
-#label-focused =  
+;label-focused = %icon%
+label-focused =  
 label-focused-background = ${colors.foreground-alt}
 label-focused-foreground = ${colors.green}
 label-focused-padding = 2
 
-label-occupied = %icon%
-#label-occupied =  
+;label-occupied = %icon%
+label-occupied =  
 label-occupied-padding = 2
 label-occupied-foreground = ${colors.blue}
 
@@ -190,8 +190,8 @@ label-urgent-background = ${colors.alert}
 label-urgent-foreground = ${colors.blue}
 label-urgent-padding = 2
 
-label-empty = %icon%
-#label-empty =  
+;label-empty = %icon%
+label-empty =  
 label-empty-foreground = ${colors.foreground}
 label-empty-padding = 2
 

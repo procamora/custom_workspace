@@ -42,7 +42,7 @@ PROGRAMS=( konsole firefox Telegram )
 
 for prog in "${PROGRAMS[@]}"; do
     # killall -q $prog
-    ! (ps aux | /bin/grep "$prog" | /bin/grep -v "grep" > /dev/null) && $prog &
+    ! (ps aux | /bin/grep "$prog" | /bin/grep -vq "grep") && $prog &
     sleep 0.2
 done
 
@@ -69,11 +69,11 @@ else
 fi
 
 
-SERVICES=( bspwm sxhkd feh compton dunst polybar xautolock redshift udiskie)
+SERVICES=( bspwm sxhkd compton dunst polybar xautolock redshift udiskie)
 
-for serv in "${PROGRAMS[@]}"; do
+for serv in "${SERVICES[@]}"; do
     # killall -q $prog
-    ! (ps aux | /bin/grep "$serv" | /bin/grep -v "grep" > /dev/null) && notify-send -t 10000 -u critical "$serv" "Service $serv is not active"
+    ! (ps aux | /bin/grep "$serv" | /bin/grep -vq "grep") && notify-send -t 10000 -u critical "$serv" "Service $serv is not active"
     sleep 0.1
 done
 

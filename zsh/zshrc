@@ -137,8 +137,11 @@ alias viautorun="vim ~/.config/bspwm/scripts/autorun"
 alias vizsh="vim ~/.zshrc"
 alias reload="source ~/.zshrc"
 
+# Custom alias
 alias docker='podman'
-alias pycharm="bash ~/Programs/pycharm-2020.1.2/bin/pycharm.sh > /dev/null 2>&1 &; disown"
+alias pycharm="bash ~/Programs/pycharm/bin/pycharm.sh > /dev/null 2>&1 &; disown"
+alias goland="bash ~/Programs/goland/bin/goland.sh > /dev/null 2>&1 &; disown"
+alias msi="~/scripts/hdmi.sh l DP-0 HDMI-0 144 60"
 
 
 # Keys SSH
