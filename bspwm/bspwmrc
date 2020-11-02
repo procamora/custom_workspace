@@ -1,35 +1,39 @@
 #!/bin/bash
 
 killall -9 -q sxhkd
-sxhkd &
+sxhkd &                                             # shortcut
 
 killall -9 -q redshift
-redshift -x                   # reset mode
-redshift -c ~/.config/redshift.conf &                   # screen light
+redshift -x                                         # reset mode
+redshift -c ~/.config/redshift.conf &               # screen light
 
 killall -9 -q dunst
-dunst &                          # notification daemon 
+dunst &                                             # notification daemon 
 
-killall -9 -q compton                                      # killall previus compton
-compton --config ~/.config/compton/compton.conf &       # Transparency Management
+killall -9 -q compton
+compton --config ~/.config/compton/compton.conf &   # Transparency Management
 
 killall -9 -q xautolock                                    # killall autolock
 xautolock -detectsleep -time 10 \
  -locker "i3lock -fenti ~/.config/lock.png" -notify 60 \
  -notifier "notify-send -u critical -t 20000 -- 'LOCKING screen in 60 seconds'" &        # Automatic screenlock
 
-wmname LG3D &                                           # Fix problem Burp Suite proportion full screen
+wmname LG3D &                                       # Fix problem Burp Suite proportion full screen
 
-feh --bg-fill ~/.config/wallpaper.png &                 # Set wallpaper brackground
+feh --bg-fill ~/.config/wallpaper.png &             # Set wallpaper brackground
 
-~/.config/polybar/launch.sh &                           # Launch polybar
+~/.config/polybar/launch.sh &                       # Launch polybar
 
-bspc config pointer_modifier mod1                       # Set key super to key windows (metawin)
+bspc config pointer_modifier mod1                   # Set key super to key windows (metawin)
 
 
-if [ "$(cat /etc/hostname)" = "xiaomi" ]; then
-    bspc monitor eDP-1  -d I II III IV V VI VII
+if [ "$(cat /etc/hostname)" == "xiaomi" ]; then
+    bspc monitor eDP-1 -d I II III IV V VI VII
     bspc monitor HDMI-2 -d VIII IX X
+elif [ "$(cat /etc/hostname)" == "4770K" ]; then
+    #~/scripts/hdmi.sh l DP-0 HDMI-0 144 60 > /dev/null
+    bspc monitor HDMI-0 -d I II III IV V
+    bspc monitor DP-0 -d VI VII VIII IX X
 else
     bspc monitor -d I II III IV V VI VII VIII IX X
 fi
@@ -60,49 +64,41 @@ bspc rule -a Blueberry.py state=floating follow=on focus=on
 
 ## workspace 1 (labs)  
 bspc rule -a konsole state=tiled follow=on focus=on
-bspc rule -a VirtualBox Manager desktop='^1' follow=on focus=on
-bspc rule -a VirtualBox Machine desktop='^1' follow=on focus=on
+bspc rule -a VirtualBox Manager follow=on focus=on
+bspc rule -a VirtualBox Machine follow=on focus=on
 
 ## workspace 2 (web browsers)  
-bspc rule -a Firefox desktop='^2' follow=on focus=on
-bspc rule -a Chromium desktop='^2' state=pseudo_tiled follow=on focus=on
+bspc rule -a Firefox follow=on focus=on
+bspc rule -a Chromium state=pseudo_tiled follow=on focus=on
 
 
 ## workspace 3 (file-manager)  
 bspc rule -a dolphin follow=on focus=on
-bspc rule -a Insync state=floating rectangle=500x800+0+20 follow=on focus=on
+bspc rule -a Insync state=floating rectangle=500x800+5+40 follow=on focus=on
 
 
 ## workspace 4 (text-editors)  
 bspc rule -a Sublime_text follow=on focus=on
-bspc rule -a Meld desktop='^4' state=fullscreen follow=on focus=on
-bspc rule -a libreoffice desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-base desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-calc desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-draw desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-impress desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-math desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-writer desktop='^4' follow=on focus=on
-bspc rule -a libreoffice-startcenter desktop='^4' follow=on focus=on
+bspc rule -a Meld state=fullscreen follow=on focus=on
 
 ## workspace 5 (graphic-editors)  
-bspc rule -a Gimp desktop='^5' follow=on focus=on
-bspc rule -a Inkscape desktop='^5' follow=on focus=on
+bspc rule -a Gimp follow=on focus=on
+bspc rule -a Inkscape follow=on focus=on
 
 ## workspace 6 (multimedia)  
-bspc rule -a vlc desktop='^6' state=fullscreen follow=on focus=on
-bspc rule -a Spotify desktop='^6' follow=on
+bspc rule -a vlc state=fullscreen follow=on focus=on
+bspc rule -a Spotify follow=on
 
 
 ## workspace 7 (code)  
-bspc rule -a jetbrains-pycharm desktop='^7' follow=on focus=on
+bspc rule -a jetbrains-pycharm follow=on focus=on
 
 
 ## workspace 8 (system-settings)  
-bspc rule -a ksysguard desktop='^8' follow=on focus=on
-bspc rule -a GParted desktop='^8' follow=on focus=on
-bspc rule -a systemsettings desktop='^8' follow=on focus=on
-bspc rule -a Pavucontrol desktop='^8' follow=on focus=on
+bspc rule -a ksysguard follow=on focus=on
+bspc rule -a GParted follow=on focus=on
+bspc rule -a systemsettings follow=on focus=on
+bspc rule -a Pavucontrol follow=on focus=on
 
 
 
