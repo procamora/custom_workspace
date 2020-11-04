@@ -443,8 +443,10 @@ function setup_tmux() {
 function install_bspwn() {
     setup_utils
     setup_bspwm
+    sudo -v # refresh timeout
     setup_fonts
     setup_polybar
+    sudo -v # refresh timeout
     setup_i3lock
 }
 
@@ -458,6 +460,7 @@ function install_vim() {
 function install_zsh() {
     setup_utils
     setup_fonts
+    sudo -v # refresh timeout
     setup_zsh
     setup_konsole
     setup_tmux
@@ -467,12 +470,16 @@ function install_zsh() {
 function install_all() {
     setup_utils
     setup_bspwm
-    setup_fonts
-    setup_polybar
+    sudo -v # refresh timeout
+    setup_fonts 
+    setup_polybar 
+    sudo -v # refresh timeout
     setup_i3lock
     setup_vim
-    setup_zsh
+    sudo -v # refresh timeout
+    setup_zsh 
     setup_konsole
+    sudo -v # refresh timeout
     setup_tmux
 }
 
