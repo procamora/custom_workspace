@@ -11,35 +11,12 @@ jobs:
             find . -type f -name '*.sh' | wc -l
             # find . -type f -name '*.sh' -exec shellcheck --external-sources {} \;
             shellcheck --external-sources custom_workspace.sh
-  yamllint:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - checkout
-      - run:
-          name: Install YamlLint
-          command: pip install --user yamllint
-      - run:
-          name: Run YamlLint
-          command: |
-            export PATH=/home/circleci/.local/bin:$PATH
-            wget https://gist.githubusercontent.com/procamora/a8e68a2067003994581562e35e364ade\
-            /raw/616e78cc0a242e2f551414c8b80af161cf608e51/my_relased.yml
-            yamllint -c my_relased.yml . > output
-            cat output
-            grep -q "error" output && (echo "detect error" && exit 1) || exit 0
+
 workflows:
   version: 2
   check-build:
     jobs:
       - shellcheck:
-          filters:
-            branches: # only run shellcheck on branchs
-              only:
-                - main
-                - master
-                - dev
-      - yamllint:
           filters:
             branches: # only run shellcheck on branchs
               only:
