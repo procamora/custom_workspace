@@ -1,3 +1,9 @@
+[![CircleCI](https://circleci.com/gh/procamora/custom_workspace/tree/master.svg?style=shield)](https://circleci.com/gh/procamora/custom_workspace/tree/master)
+[![license](https://img.shields.io/github/license/procamora/custom_workspace.svg?style=flat-square)](https://github.com/procamora/custom_workspace/blob/master/license.md)
+![Maintenance](https://img.shields.io/maintenance/yes/2020.svg?style=flat-square)
+[![GitHub last commit](https://img.shields.io/github/last-commit/procamora/custom_workspace.svg?style=flat-square)](https://github.com/procamora/custom_workspace/commit/master)
+
+
 # custom_workspace
 
 custom_workspace is a script to install and configure a complete workspace in a fully automated way. The utilities to be installed and configured are the following:
