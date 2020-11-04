@@ -1,7 +1,14 @@
 #!/bin/bash
 # Author: Pablo Rocamora (aka procamora)
 
-#set -ex
+# Exit script if you try to use an uninitialized variable.
+#set -o nounset
+
+# Exit script if a statement returns a non-true return value.
+#set -o errexit
+
+# Use the error status of the first failure, rather than that of the last item in a pipeline.
+set -o pipefail
 
 
 export DEBIAN_FRONTEND=noninteractive
@@ -15,8 +22,8 @@ LOG="install.log"
 
 MY_PATH=$(pwd)
 MY_USER=$USER
-OS_NAME=$(cat /etc/os-release | egrep "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
-OS_ID=$(cat /etc/os-release | grep VERSION_ID | cut -d= -f2 | tr -d \")
+OS_NAME=$(< /etc/os-release grep -E "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
+#OS_ID=$(< /etc/os-release grep VERSION_ID | cut -d= -f2 | tr -d \")
 
 
 function print_format() {
@@ -45,9 +52,9 @@ function setup_utils() {
     INSTALL="unzip wget git gcc make cmake vim"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL @development-tools${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL @development-tools
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
-    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
+    dnf --version > /dev/null 2>&1 && $DNF install "$INSTALL" @development-tools
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy "$INSTALL" 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y "$INSTALL"
 }
 
 
@@ -73,14 +80,14 @@ function dunst() {
     # clone the repository
     test -d dunst_comp/ && $RM -rf dunst_comp/
     git clone -q https://github.com/dunst-project/dunst.git dunst_comp/
-    pushd dunst_comp/
+    pushd dunst_comp/ || exit 2
     # compile and install
     make > /dev/null
     sudo make install > /dev/null
     #sudo cp -f {dunst,dunstify} /usr/local/bin/
-    popd
+    popd || exit 2
     test -d dunst_comp/ && $RM -rf dunst_comp/
-    cp -fu $MY_PATH/dunst/dunstrc ~/.config/dunst/dunstrc
+    cp -fu "$MY_PATH/dunst/dunstrc" ~/.config/dunst/dunstrc
 }
 
 
@@ -88,36 +95,36 @@ function setup_bspwm() {
     INSTALL="bspwm sxhkd compton feh rofi ksysguard dolphin dolphin-plugins numlockx plasma-integration"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL ${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
+    dnf --version > /dev/null 2>&1 && $DNF install "$INSTALL" libXinerama libXinerama-devel libxcb xcb-util \
      xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
      xcb-util-wm xcb-util-keysyms
     dnf --version > /dev/null 2>&1 && $DNF install konsole 2>&1  # puede fallar si lo teng excluido
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms \
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy "$INSTALL" libxcb xcb-util xcb-util-wm xcb-util-keysyms \
      konsole
-    apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
+    apt --version > /dev/null 2>&1 && sudo apt install -y "$INSTALL" libxcb-xinerama0-dev libxcb-icccm4-dev \
      libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
 
 
     mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons,dunst}
-    cp -ru $MY_PATH/bspwm/* ~/.config/bspwm/
-    cp -ru $MY_PATH/sxhkd/* ~/.config/sxhkd/
-    cp -fu $MY_PATH/rofi/* ~/.config/rofi/
-    cp -fu $MY_PATH/icons/* ~/.config/icons/
+    cp -ru "$MY_PATH/bspwm/*" ~/.config/bspwm/
+    cp -ru "$MY_PATH/sxhkd/*" ~/.config/sxhkd/
+    cp -fu "$MY_PATH/rofi/*" ~/.config/rofi/
+    cp -fu "$MY_PATH/icons/*" ~/.config/icons/
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
 exec bspwm" > ~/.xinitrc
 
-    cp $MY_PATH/bspwm/scripts/resize ~/.config/bspwm/scripts/
+    cp "$MY_PATH/bspwm/scripts/resize" ~/.config/bspwm/scripts/
     chmod u+x  ~/.config/bspwm/scripts/resize
 
     # set transparent
-    cp $MY_PATH/compton/compton.conf ~/.config/compton/
+    cp "$MY_PATH/compton/compton.conf" ~/.config/compton/
 
     # set wallpaper
     #wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png > wget.log
-    cp $MY_PATH/resources/wallpaper.png ~/.config/wallpaper.png
-    cp $MY_PATH/resources/lock.png ~/.config/lock.png
+    cp "$MY_PATH/resources/wallpaper.png" ~/.config/wallpaper.png
+    cp "$MY_PATH/resources/lock.pn"g ~/.config/lock.png
 
     dunst
 
@@ -133,7 +140,7 @@ exec bspwm" > ~/.xinitrc
 function setup_fonts() {
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}Hack Nerd Font${RESET_COLOUR}"
 
-    MY_FONT="Hack Nerd Font"
+    #MY_FONT="Hack Nerd Font"
 
     # Set custom fonts
     sudo mkdir -p /usr/local/share/fonts
@@ -154,8 +161,8 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf > /dev/null
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}papirus theme${RESET_COLOUR}"
     $WGET -qO- https://git.io/papirus-icon-theme-install | sh >/dev/null 2> $LOG
 
-    locate kwriteconfig5 > /dev/null  # if exists command execute
-    if [ "$?" -eq 0 ]; then
+     # if exists command execute
+    if hash kwriteconfig5 > /dev/null ; then
         kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
         kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
 
@@ -203,7 +210,7 @@ function polybar_debian(){
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/
     sudo $RM /opt/polybar-3.4.2.tar
     mkdir -p /opt/polybar/build
-    pushd /opt/polybar/build && cmake .. && make -j$(nproc) && sudo make install && popd
+    pushd /opt/polybar/build && cmake .. && make -j "$(nproc)" && sudo make install && (popd || exit 2)
 }
 
 
@@ -225,13 +232,13 @@ function setup_polybar() {
 
     mkdir -p ~/.config/polybar/{bin,scripts}
 
-    cp $MY_PATH/polybar/launch.sh ~/.config/polybar/
+    cp "$MY_PATH/polybar/launch.sh" ~/.config/polybar/
     chmod u+x ~/.config/polybar/launch.sh
 
-    cp $MY_PATH/polybar/config ~/.config/polybar/
+    cp "$MY_PATH/polybar/config" ~/.config/polybar/
 
-    cp $MY_PATH/polybar/bin/* ~/.config/polybar/bin/
-    cp $MY_PATH/polybar/scripts/* ~/.config/polybar/scripts/
+    cp "$MY_PATH/polybar/bin/*" ~/.config/polybar/bin/
+    cp "$MY_PATH/polybar/scripts/*" ~/.config/polybar/scripts/
     chmod u+x ~/.config/polybar/bin/*.sh
     chmod u+x ~/.config/polybar/scripts/*.sh
 
@@ -243,7 +250,7 @@ function setup_polybar() {
     # install libreries scripts FIXME falta apt pacman y otro
     dnf --version > /dev/null 2>&1 && $DNF install python3-pip redshift xdotool yad light jq blueberry udiskie
 
-    cp $MY_PATH/redshift.conf ~/.config/redshift.conf
+    cp "$MY_PATH/redshift.conf" ~/.config/redshift.conf
 
     test -d ~/.config/polybar/scripts/gmail/ && $RM -rf ~/.config/polybar/scripts/gmail/
     git clone -q https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
@@ -251,7 +258,7 @@ function setup_polybar() {
 
     # laptop backlight
     if [ -f  /sys/class/backlight/intel_backlight/brightness ]; then
-        sudo usermod -aG video $MY_USER
+        sudo usermod -aG video "$MY_USER"
         sudo chown root:video /sys/class/backlight/intel_backlight/brightness
         sudo chmod 664 /sys/class/backlight/intel_backlight/brightness
     fi
@@ -297,7 +304,7 @@ function setup_vim() {
     #sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime $USERS
     sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
 
-    test -f $MY_USER/.vimrc && sudo chown $MY_USER:$MY_USER $MY_USER/.vimrc -R
+    test -f "$MY_USER/.vimrc" && sudo chown "$MY_USER:$MY_USER" "$MY_USER/.vimrc" -R
 
     echo > /dev/null  # force return true
 }
@@ -319,7 +326,7 @@ function zsh_fedora() {
     #for r in "${repositories[@]}"; do
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
-    $DNF install $INSTALL
+    $DNF install "$INSTALL"
     $DNF install lsd bat ripgrep util-linux-user
 }
 
@@ -336,19 +343,19 @@ function zsh_debian() {
     #    sudo apt-key add - < Release.key
     #    $RM Release.key
     #done
-    sudo apt install -y $INSTALL
+    sudo apt install -y "$INSTALL"
     sudo apt install -y ripgrep  # maybe not store in repositories
-    sudo dpkg -i $MY_PATH/resources/lsd_0.16.0_amd64.deb
-    sudo dpkg -i $MY_PATH/resources/bat_0.13.0_amd64.deb
+    sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+    sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
 }
 
 
 function zsh_raspbian() {
     INSTALL=$1
-    sudo apt install -y $INSTALL
+    sudo apt install -y "$INSTALL"
     sudo apt install -y ripgrep  # maybe not store in repositories
-    sudo cp $MY_PATH/resources/lsd-0.17.0-arm /usr/local/bin/lsd
-    sudo cp $MY_PATH/resources/bat-0.13.0-arm /usr/local/bin/bat
+    sudo cp "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
+    sudo cp "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
 }
 
 
@@ -356,12 +363,12 @@ function setup_zsh() {
     INSTALL="zsh scrub fzf"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
-    apt --version > /dev/null 2>&1 && test $OS_NAME != "Raspbian" && zsh_debian "$INSTALL"
-    test $OS_NAME = "Raspbian" && zsh_raspbian "$INSTALL"
+    apt --version > /dev/null 2>&1 && test "$OS_NAME" != "Raspbian" && zsh_debian "$INSTALL"
+    test "$OS_NAME" = "Raspbian" && zsh_raspbian "$INSTALL"
     dnf --version > /dev/null 2>&1 && zsh_fedora "$INSTALL"
 
-    zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
+    zypper --version > /dev/null 2>&1 && sudo zypper install -y "$INSTALL" lsd bat
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy "$INSTALL" lsd bat
 
     unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
@@ -369,6 +376,7 @@ function setup_zsh() {
     $RM -rf resources/bat-extras
 
     #[ -f ~/.fzf.sh ] && source ~/.fzf.sh
+    # shellcheck disable=SC1090
     test -f ~/.fzf.sh && source ~/.fzf.sh
 
     # If exsits remove back files and dir
@@ -379,21 +387,21 @@ function setup_zsh() {
     # Download and configuration oh my zsh
     timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2> $LOG
 
-    sudo chsh -s $(which zsh) $MY_USER 2>&1
-    sudo chsh -s $(which zsh) root 2>&1
+    sudo chsh -s "$(command -v  zsh)" "$MY_USER" 2>&1
+    sudo chsh -s "$(command -v  zsh)" root 2>&1
 
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
-    git clone -q --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-    cp $MY_PATH/zsh/zshrc ~/.zshrc
-    cp $MY_PATH/zsh/p10k.zsh ~/.p10k.zsh
+    git clone -q --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
+    cp "$MY_PATH/zsh/zshrc" ~/.zshrc
+    cp "$MY_PATH/zsh/p10k.zsh" ~/.p10k.zsh
 
     # plugins zsh
-    git clone -q https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
-    git clone -q https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-    git clone -q https://github.com/zsh-users/zsh-completions.git $ZSH_CUSTOM/plugins/zsh-completions
-    git clone -q https://github.com/zsh-users/zsh-history-substring-search.git $ZSH_CUSTOM/plugins/zsh-history-substring-search
-    git clone -q https://github.com/zsh-users/zsh-docker.git $ZSH_CUSTOM/plugins/zsh-docker
+    git clone -q https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git clone -q https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    git clone -q https://github.com/zsh-users/zsh-completions.git "$ZSH_CUSTOM/plugins/zsh-completions"
+    git clone -q https://github.com/zsh-users/zsh-history-substring-search.git "$ZSH_CUSTOM/plugins/zsh-history-substring-search"
+    git clone -q https://github.com/zsh-users/zsh-docker.git "$ZSH_CUSTOM/plugins/zsh-docker"
 
     # Create link to user root (insegure but comfortable)
     sudo ln -sf ~/.zshrc /root/.zshrc
@@ -501,7 +509,7 @@ function main() {
     test "$1" = "help" && print_help
 
     # check user administrator
-    sudo -l > /dev/null || (print_format "$My_USER is not user administrator" && exit 1)
+    sudo -l > /dev/null || (print_format "$MY_USER is not user administrator" && exit 1)
 
     test "$1" = "bspwm" && install_bspwn && VALID_ARGUMENT="True"
     test "$1" = "vim" && install_vim && VALID_ARGUMENT="True"
@@ -528,13 +536,16 @@ function main() {
 
 
 #Colours
+# shellcheck disable=SC2034
 declare -r BLACK_COLOUR='\e[0;30m'
 declare -r RED_COLOUR='\e[0;31m'
 declare -r GREEN_COLOUR='\e[0;32m'
 declare -r ORANGE_COLOUR='\e[0;33m'
 declare -r BLUE_COLOUR='\e[0;34m'
 declare -r PURPLE_COLOUR='\e[0;35m'
+# shellcheck disable=SC2034
 declare -r CYAN_COLOUR='\e[0;36m'
+# shellcheck disable=SC2034
 declare -r WHITE_COLOUR='\e[0;37m'
 declare -r RESET_COLOUR='\e[0m'
 

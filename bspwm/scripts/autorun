@@ -35,7 +35,7 @@ find ~/scripts/ -type f ! -executable -regex '.*\.\(sh\|py\|exp\)' -exec chmod u
 id_touchpad=$(xinput | /bin/grep -i "TouchPad" | xargs | cut -d "=" -f2 | cut -d " " -f1)
 if [ "${?}" = "0" ] && [ "${id_touchpad}" != "" ]; then
     id_tap=$(xinput list-props 12 | /bin/grep -i "Tapping Enabled (" | xargs | cut -d "(" -f2 | cut -d ")" -f1)
-    xinput set-prop $id_touchpad $id_tap 1
+    xinput set-prop "$id_touchpad" "$id_tap" 1
 fi
 
 PROGRAMS=( konsole firefox Telegram )

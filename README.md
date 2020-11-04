@@ -48,8 +48,11 @@ Execute the script with a user with permissions to execute the sudo command and 
 #### Recommendation:
 
 - Execute the script from a console other than konsole, so that the profile with the specific configuration of konsole can be applied correctly.
+
 - If it is done from konsole, later it can be executed from another console so that the profile is applied in the following way:
 
+- It is important to run the script with the user who is going to use the system. The script executes the commands with sudo when
+ necessary so you should not execute the script with sudo.
 
 ```bash
 ./custom_workspace.sh _konsole
@@ -70,9 +73,6 @@ chmod u+x custom_workspace.sh
 ```
 
 
-> Important: when the zsh prompt is exited it is necessary to execute the exit command in order for the script to continue executing
-
-
 
 
 
@@ -81,14 +81,11 @@ Running the script again regenerates the default settings. You can also leave so
 
 
 ```bash
-
-./custom_workspace.sh all       # all
+./custom_workspace.sh all       # all packages
 ./custom_workspace.sh bspwm     # bspqm + polybar + i3lock
 ./custom_workspace.sh vim       # vim
 ./custom_workspace.sh zsh       # zsh
 ./custom_workspace.sh _polybar  # polybar
-
-
 ```
 
 

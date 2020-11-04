@@ -13,7 +13,7 @@ dunst &                                             # notification daemon
 killall -9 -q compton
 compton --config ~/.config/compton/compton.conf &   # Transparency Management
 
-killall -9 -q xautolock                                    # killall autolock
+killall -9 -q xautolock                             # killall autolock
 xautolock -detectsleep -time 10 \
  -locker "i3lock -fenti ~/.config/lock.png" -notify 60 \
  -notifier "notify-send -u critical -t 20000 -- 'LOCKING screen in 60 seconds'" &        # Automatic screenlock
@@ -31,9 +31,12 @@ if [ "$(cat /etc/hostname)" == "xiaomi" ]; then
     bspc monitor eDP-1 -d I II III IV V VI VII
     bspc monitor HDMI-2 -d VIII IX X
 elif [ "$(cat /etc/hostname)" == "4770K" ]; then
-    #~/scripts/hdmi.sh l DP-0 HDMI-0 144 60 > /dev/null
-    bspc monitor HDMI-0 -d I II III IV V
-    bspc monitor DP-0 -d VI VII VIII IX X
+    if [[ "$(xrandr | grep HDMI-0 | awk -F ' ' '{print $2}')" == "connected" ]]; then
+        bspc monitor HDMI-0 -d I II III IV V
+        bspc monitor DP-0 -d VI VII VIII IX X
+    else
+        bspc monitor -d I II III IV V VI VII VIII IX X
+    fi
 else
     bspc monitor -d I II III IV V VI VII VIII IX X
 fi
@@ -100,13 +103,7 @@ bspc rule -a GParted follow=on focus=on
 bspc rule -a systemsettings follow=on focus=on
 bspc rule -a Pavucontrol follow=on focus=on
 
-
-
 #       v       
-
-
-
-
 
 # Other
 bspc rule -a Kupfer.py focus=on
@@ -114,7 +111,7 @@ bspc rule -a Screenkey manage=off
 
 
 killall -9 -q autorun
-~/.config/bspwm/scripts/autorun >> /tmp/bspwm.log &                       # Autorun scripts
+~/.config/bspwm/scripts/autorun >> /tmp/bspwm.log & disown              # Autorun scripts
 
 
 notify-send -u normal -t 5000 "bspwm" "bspwm started correctly"
