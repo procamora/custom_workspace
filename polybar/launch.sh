@@ -3,7 +3,7 @@
 #killall -q -9 polybar
 #ps aux | grep ".config/polybar/scripts/" | grep -v grep | awk '{print $2}' | xargs kill -9 2> /dev/null
 # shellcheck disable=SC2046
-kill -9 $(pgrep -f polybar)
+pgrep -fa polybar | grep -v "launch.sh" | awk '{print $1}' | xargs kill -9 || true
 
 #while pgrep -u $UID -x polybar > /dev/null; do sleep 1; done
 
