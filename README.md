@@ -108,7 +108,7 @@ This script has been tested on the following Operating Systems
 
 ### Tested Operating Systems
 
-- [x] Fedora (31)
+- [x] Fedora (33)
 - [x] Ubuntu (19.04)
 - [x] Debian (10)
 - [x] Raspbian 10

@@ -360,7 +360,7 @@ function zsh_raspbian() {
 
 
 function setup_zsh() {
-    INSTALL="zsh scrub fzf"
+    INSTALL="zsh scrub fzf most"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
     apt --version > /dev/null 2>&1 && test "$OS_NAME" != "Raspbian" && zsh_debian "$INSTALL"
@@ -471,13 +471,13 @@ function install_all() {
     setup_utils
     setup_bspwm
     sudo -v # refresh timeout
-    setup_fonts 
-    setup_polybar 
+    setup_fonts
+    setup_polybar
     sudo -v # refresh timeout
     setup_i3lock
     setup_vim
     sudo -v # refresh timeout
-    setup_zsh 
+    setup_zsh
     setup_konsole
     sudo -v # refresh timeout
     setup_tmux

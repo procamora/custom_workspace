@@ -26,13 +26,6 @@ gnome-terminal
 
 
 
-
-
-
-
-
-
-
 INSTALCION
 
 copmton transparencias
