@@ -52,9 +52,9 @@ function setup_utils() {
     INSTALL="unzip wget git gcc make cmake vim"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL @development-tools${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install "$INSTALL" @development-tools
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy "$INSTALL" 2>&1
-    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y "$INSTALL"
+    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL @development-tools
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
+    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
 }
 
 
@@ -95,36 +95,36 @@ function setup_bspwm() {
     INSTALL="bspwm sxhkd compton feh rofi ksysguard dolphin dolphin-plugins numlockx plasma-integration"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL ${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install "$INSTALL" libXinerama libXinerama-devel libxcb xcb-util \
+    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
      xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
      xcb-util-wm xcb-util-keysyms
     dnf --version > /dev/null 2>&1 && $DNF install konsole 2>&1  # puede fallar si lo teng excluido
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy "$INSTALL" libxcb xcb-util xcb-util-wm xcb-util-keysyms \
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms \
      konsole
-    apt --version > /dev/null 2>&1 && sudo apt install -y "$INSTALL" libxcb-xinerama0-dev libxcb-icccm4-dev \
+    apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
      libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
 
 
     mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons,dunst}
-    cp -ru "$MY_PATH/bspwm/*" ~/.config/bspwm/
-    cp -ru "$MY_PATH/sxhkd/*" ~/.config/sxhkd/
-    cp -fu "$MY_PATH/rofi/*" ~/.config/rofi/
-    cp -fu "$MY_PATH/icons/*" ~/.config/icons/
+    cp -rf "$MY_PATH/bspwm/" ~/.config/
+    cp -rf "$MY_PATH/sxhkd/" ~/.config/
+    cp -rf "$MY_PATH/rofi/" ~/.config/
+    cp -rf "$MY_PATH/icons/" ~/.config/
     chmod u+x ~/.config/bspwm/bspwmrc
 
     echo "sxhkd &
 exec bspwm" > ~/.xinitrc
 
-    cp "$MY_PATH/bspwm/scripts/resize" ~/.config/bspwm/scripts/
+    cp -f "$MY_PATH/bspwm/scripts/resize" ~/.config/bspwm/scripts/
     chmod u+x  ~/.config/bspwm/scripts/resize
 
     # set transparent
-    cp "$MY_PATH/compton/compton.conf" ~/.config/compton/
+    cp -f "$MY_PATH/compton/compton.conf" ~/.config/compton/
 
     # set wallpaper
     #wget -O ~/.config/wallpaper.png https://procamora.github.io/images/wallpaper.png > wget.log
-    cp "$MY_PATH/resources/wallpaper.png" ~/.config/wallpaper.png
-    cp "$MY_PATH/resources/lock.pn"g ~/.config/lock.png
+    cp -f "$MY_PATH/resources/wallpaper.png" ~/.config/wallpaper.png
+    cp -f "$MY_PATH/resources/lock.png" ~/.config/lock.png
 
     dunst
 
@@ -144,7 +144,7 @@ function setup_fonts() {
 
     # Set custom fonts
     sudo mkdir -p /usr/local/share/fonts
-    sudo cp resources/Hack.zip /usr/local/share/fonts/
+    sudo cp -f resources/Hack.zip /usr/local/share/fonts/
     sudo unzip -o /usr/local/share/fonts/Hack.zip -d /usr/local/share/fonts/ > /dev/null
     sudo $RM /usr/local/share/fonts/Hack.zip
 
@@ -206,7 +206,7 @@ LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf > /dev/null
 # https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts
 
 function polybar_debian(){
-    sudo cp resources/polybar-3.4.2.tar /opt/
+    sudo cp -f resources/polybar-3.4.2.tar /opt/
     sudo tar xvf /opt/polybar-3.4.2.tar -C /opt/
     sudo $RM /opt/polybar-3.4.2.tar
     mkdir -p /opt/polybar/build
@@ -232,13 +232,14 @@ function setup_polybar() {
 
     mkdir -p ~/.config/polybar/{bin,scripts}
 
-    cp "$MY_PATH/polybar/launch.sh" ~/.config/polybar/
+    cp -rf "$MY_PATH/polybar/" ~/.config/
+    #cp "$MY_PATH/polybar/launch.sh" ~/.config/polybar/
     chmod u+x ~/.config/polybar/launch.sh
 
-    cp "$MY_PATH/polybar/config" ~/.config/polybar/
+    #cp -r "$MY_PATH/polybar/config" ~/.config/polybar/
 
-    cp "$MY_PATH/polybar/bin/*" ~/.config/polybar/bin/
-    cp "$MY_PATH/polybar/scripts/*" ~/.config/polybar/scripts/
+    #cp -r "$MY_PATH/polybar/bin/" ~/.config/polybar/bin/
+    #cp -r "$MY_PATH/polybar/scripts/" ~/.config/polybar/scripts/
     chmod u+x ~/.config/polybar/bin/*.sh
     chmod u+x ~/.config/polybar/scripts/*.sh
 
@@ -250,7 +251,7 @@ function setup_polybar() {
     # install libreries scripts FIXME falta apt pacman y otro
     dnf --version > /dev/null 2>&1 && $DNF install python3-pip redshift xdotool yad light jq blueberry udiskie
 
-    cp "$MY_PATH/redshift.conf" ~/.config/redshift.conf
+    cp -f "$MY_PATH/redshift.conf" ~/.config/redshift.conf
 
     test -d ~/.config/polybar/scripts/gmail/ && $RM -rf ~/.config/polybar/scripts/gmail/
     git clone -q https://github.com/vyachkonovalov/polybar-gmail.git ~/.config/polybar/scripts/gmail/
@@ -326,7 +327,7 @@ function zsh_fedora() {
     #for r in "${repositories[@]}"; do
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
-    $DNF install "$INSTALL"
+    $DNF install $INSTALL
     $DNF install lsd bat ripgrep util-linux-user
 }
 
@@ -343,7 +344,7 @@ function zsh_debian() {
     #    sudo apt-key add - < Release.key
     #    $RM Release.key
     #done
-    sudo apt install -y "$INSTALL"
+    sudo apt install -y $INSTALL
     sudo apt install -y ripgrep  # maybe not store in repositories
     sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
     sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
@@ -352,23 +353,23 @@ function zsh_debian() {
 
 function zsh_raspbian() {
     INSTALL=$1
-    sudo apt install -y "$INSTALL"
+    sudo apt install -y $INSTALL
     sudo apt install -y ripgrep  # maybe not store in repositories
-    sudo cp "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
-    sudo cp "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
+    sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
+    sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
 }
 
 
 function setup_zsh() {
-    INSTALL="zsh scrub fzf most"
+    INSTALL="zsh scrub fzf"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
-    apt --version > /dev/null 2>&1 && test "$OS_NAME" != "Raspbian" && zsh_debian "$INSTALL"
-    test "$OS_NAME" = "Raspbian" && zsh_raspbian "$INSTALL"
-    dnf --version > /dev/null 2>&1 && zsh_fedora "$INSTALL"
+    apt --version > /dev/null 2>&1 && test "$OS_NAME" != "Raspbian" && zsh_debian $INSTALL
+    test "$OS_NAME" = "Raspbian" && zsh_raspbian $INSTALL
+    dnf --version > /dev/null 2>&1 && zsh_fedora $INSTALL
 
-    zypper --version > /dev/null 2>&1 && sudo zypper install -y "$INSTALL" lsd bat
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy "$INSTALL" lsd bat
+    zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
+    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
     unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
@@ -393,8 +394,8 @@ function setup_zsh() {
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
     git clone -q --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
-    cp "$MY_PATH/zsh/zshrc" ~/.zshrc
-    cp "$MY_PATH/zsh/p10k.zsh" ~/.p10k.zsh
+    cp -f "$MY_PATH/zsh/zshrc" ~/.zshrc
+    cp -f "$MY_PATH/zsh/p10k.zsh" ~/.p10k.zsh
 
     # plugins zsh
     git clone -q https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
@@ -416,8 +417,8 @@ function setup_konsole() {
     # set default profile konsole
     mkdir -p ~/.local/share/konsole/
     mkdir -p ~/.config/
-    cp konsole/zsh.profile ~/.local/share/konsole/
-    cp konsole/config_konsolerc ~/.config/konsolerc
+    cp -f konsole/zsh.profile ~/.local/share/konsole/
+    cp -f konsole/config_konsolerc ~/.config/konsolerc
 }
 
 
@@ -436,7 +437,7 @@ function setup_tmux() {
 
     git clone -q https://github.com/gpakosz/.tmux.git ~/.tmux
     ln -sf ~/.tmux/.tmux.conf ~/.tmux.conf
-    cp ~/.tmux/.tmux.conf.local ~/.tmux.conf.local
+    cp -f ~/.tmux/.tmux.conf.local ~/.tmux.conf.local
 }
 
 
