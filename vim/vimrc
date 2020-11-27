@@ -1,0 +1,166 @@
+
+" load plugins
+source ~/.vim/my_plugins.vim
+
+" encoding dectection
+set fileencodings=utf-8
+
+" enable filetype dectection and ft specific plugin/indent
+filetype plugin indent on
+
+" enable syntax hightlight and completion
+syntax on
+
+"--------
+" Vim UI
+"--------
+" color scheme
+"set background=dark
+"color solarized
+autocmd vimenter * ++nested colorscheme gruvbox
+
+" highlight current line
+au WinLeave * set nocursorline "nocursorcolumn
+au WinEnter * set cursorline "cursorcolumn
+set cursorline  " cursorcolumn
+
+
+" search
+set incsearch
+"set highlight 	" conflict with highlight current line
+set ignorecase
+set smartcase
+
+" editor settings
+set history=1000
+set nocompatible
+set nolist                                                        " hide especial chars
+set nofoldenable                                                  " disable folding"
+set confirm                                                       " prompt when existing from an unsaved file
+set backspace=indent,eol,start                                    " More powerful backspacing
+set t_Co=256                                                      " Explicitly tell vim that the terminal has 256 colors "
+set mouse=a                                                       " use mouse in all modes
+set report=0                                                      " always report number of lines changed                "
+set nowrap                                                        " dont wrap lines
+set scrolloff=5                                                   " 5 lines above/below cursor when scrolling
+set number                                                        " show line numbers
+set showmatch                                                     " show matching bracket (briefly jump)
+set showcmd                                                       " show typed command in status bar
+set title                                                         " show file in titlebar
+set laststatus=2                                                  " use 2 lines for the status bar
+set matchtime=2                                                   " show matching bracket for 0.2 seconds
+set matchpairs+=<:>                                               " specially for html
+set relativenumber
+
+" Vim's auto indentation feature does not work properly with text copied from outside of Vim. Press the <F2> key to toggle paste mode on/off.
+nnoremap <F2> :set invpaste paste?<CR>
+imap <F2> <C-O>:set invpaste paste?<CR>
+set pastetoggle=<F2>
+
+" Enable autocompletion:
+set wildmode=longest,list,full
+" Disables automatic commenting on newline:
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+
+" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
+set splitbelow splitright
+
+" Check file in shellcheck:
+map <leader>s :!clear && shellcheck %<CR
+
+
+" Default Indentation
+set autoindent
+set smartindent     " indent when
+set tabstop=4       " tab width
+set softtabstop=4   " backspace
+set shiftwidth=4    " indent width
+" set textwidth=79
+" set smarttab
+set expandtab       " expand tab to space
+
+autocmd FileType php setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
+autocmd FileType ruby setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
+autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=120
+autocmd FileType coffee,javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 textwidth=120
+autocmd FileType html,htmldjango,xhtml,haml setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=0
+autocmd FileType sass,scss,css setlocal tabstop=2 shiftwidth=2 softtabstop=2 textwidth=120
+ 
+" syntax support
+autocmd Syntax javascript set syntax=jquery   " JQuery syntax support
+
+let python_highlight_all=1
+
+" js
+let g:html_indent_inctags = "html,body,head,tbody"
+let g:html_indent_script1 = "inc"
+let g:html_indent_style1 = "inc"
+
+" pearofducks/ansible-vim
+let g:ansible_unindent_after_newline = 1
+"let g:ansible_name_highlight = 'd'
+let g:ansible_extra_keywords_highlight = 1
+
+" https://vimawesome.com/plugin/syntastic
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" NERDTree 
+"autocmd vimenter * NERDTree  " Open a NERDTree automatically
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+map <F5> :NERDTreeToggle<CR>
+
+" fzf
+map <F1> :Files<CR>
+let g:fzf_preview_window = 'right:50%'
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6  }  }
+
+" Open terminal
+map <F12> :belowright terminal<CR>
+
+" Vim Airline
+let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+
+
+"GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" 
+let g:terraform_align=1
+
+
+let g:coc_global_extensions = ['coc-tsserver', 'coc-json', 'coc-git', 'coc-clangd', 'coc-cmake', 'coc-go', 'coc-html', 'coc-markdownlint', 'coc-powershell', 'coc-python', 'coc-sql', 'coc-xml', 'coc-yaml', 'coc-java', 'coc-sh', 'coc-docker']
+
+" GoTo code navigation.
+let mapleader = ":"
+noremap <leader>gs :CocSearch
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nmap <leader>f  <Plug>(coc-format)
+
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ [BUFFER=%n]\ %{strftime('%c')}
+
+
+let b:ale_linters = {'ansible': ['ansible_lint'], 'dockerfile': ['dockerfile_lint'], 'sh': ['shellcheck']}
+let g:ale_linters_explicit = 1
+
+

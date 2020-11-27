@@ -292,20 +292,71 @@ function setup_i3lock() {
 #####################################################
 
 function setup_vim() {
-    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}vim and plugins ${RESET_COLOUR}"
-    #USERS="root $MY_USER"
-    # Clonamos repositorio
-    test -d /opt/vim_runtime && sudo $RM -rf /opt/vim_runtime
-    sudo git clone -q --depth=1 https://github.com/amix/vimrc.git /opt/vim_runtime
+    print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}vim, plugins and syntax checkers ${RESET_COLOUR}"
+    # Install checklinter to:
+    # - C C++       cppcheck
+    # - CMake       
+    # - Dockerfile  dockerfile_lint
+    # - Go          
+    # - JSON        python3-demjson (jsonlint)
+    # - Python      pylint
+    # - Sh          ShellCheck
+    # - SQL         sqlint
+    # - VimL        vim-vimlint
+    # - XML         libxml2 (xmllint)
+    # - YAML        yamllint
+    # Others: python3-ansible-lint tflint
+    hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm python3-demjson python3-pycodestyle
+    sudo gem update 2>/dev/null
+    sudo gem update --system
+    gem install sqlint
+    pip install cmakelint --user
+    sudo npm install -g dockerfile_lint
+    
+    sudo npm install sql-formatter
+    sudo npm install node-sql-parser --save
 
-    # Dar permiso a los ficheros para los usuarios no root
-    sudo chmod 755 /opt/vim_runtime/ -R
+    
+    
+    # terraform lint
+    wget https://github.com/terraform-linters/tflint/releases/download/v0.21.0/tflint_linux_amd64.zip
+    unzip tflint_linux_amd64.zip
+    sudo mv tflint /usr/local/bin/
+    rm -f tflint_linux_amd64.zip
+    
+    sudo pip install jedi
+    sudo npm install -g bash-language-server
+    #sudo npm install -g dockerfile-language-server-nodejs
+    
+    mkdir -p ~/.vim
+    cp -f vim/vimrc ~/.vimrc
+    cp -f vim/my_plugins.vim ~/.vim/
+    cp -f vim/coc-settings.json ~/.vim/coc-settings.json
+    
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-    # to install for all users with home directories
-    #sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime $USERS
-    sudo bash /opt/vim_runtime/install_awesome_parameterized.sh /opt/vim_runtime --all
+    timeout 120 vim +PlugInstall +qall
+    
+    
+    sudo dnf install cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
+    TAR_GO="go1.15.2.linux-amd64.tar.gz"
+    wget -q https://golang.org/dl/$TAR_GO \
+     -O $TAR_GO
+    sudo tar -C /usr/local -xzf $TAR_GO
+    export PATH=$PATH:/usr/local/go/bin
+    rm -rf $TAR_GO
 
-    test -f "$MY_USER/.vimrc" && sudo chown "$MY_USER:$MY_USER" "$MY_USER/.vimrc" -R
+    TAR="terraform-ls_0.10.0_linux_amd64.zip"
+    wget https://github.com/hashicorp/terraform-ls/releases/download/v0.10.0/"$TAR"
+    unzip "$TAR"
+    sudo mv terraform-ls /usr/local/bin/
+    rm -f "$TAR"
+    
+    # alias vipluginstall="vim +PlugInstall +qall"
+    # alias vimrc="vim ~/.vimrc"
+    # alias viplug="vim ~/.vim/my_plugins.vim"
+    #test -f "$MY_USER/.vimrc" && sudo chown "$MY_USER:$MY_USER" "$MY_USER/.vimrc" -R
 
     echo > /dev/null  # force return true
 }
