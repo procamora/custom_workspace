@@ -283,6 +283,7 @@ function setup_i3lock() {
     #sudo make install
 
     #cd $MY_PATH
+    echo > /dev/null # force return ok
 }
 
 
@@ -306,25 +307,15 @@ function setup_vim() {
     # - XML         libxml2 (xmllint)
     # - YAML        yamllint
     # Others: python3-ansible-lint tflint
-    hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm python3-demjson python3-pycodestyle
-    sudo gem update 2>/dev/null
-    sudo gem update --system
-    gem install sqlint
-    pip install cmakelint --user
-    sudo npm install -g dockerfile_lint
-    
-    sudo npm install sql-formatter
-    sudo npm install node-sql-parser --save
-
-    
-    
-    # terraform lint
-    wget https://github.com/terraform-linters/tflint/releases/download/v0.21.0/tflint_linux_amd64.zip
-    unzip tflint_linux_amd64.zip
-    sudo mv tflint /usr/local/bin/
-    rm -f tflint_linux_amd64.zip
-    
-    sudo pip install jedi
+    hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm python3-demjson python3-pycodestyle xterm cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
+    #sudo gem update 2>/dev/null
+    #sudo gem update --system
+    #gem install sqlint
+    #pip install cmakelint --user
+    #sudo npm install -g dockerfile_lint
+    #sudo npm install sql-formatter
+    #sudo npm install node-sql-parser --save
+    #sudo pip install jedi
     sudo npm install -g bash-language-server
     #sudo npm install -g dockerfile-language-server-nodejs
     
@@ -336,10 +327,10 @@ function setup_vim() {
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-    timeout 120 vim +PlugInstall +qall
+    (timeout 120 xterm -e /bin/bash -l -c "vim +PlugInstall +qall") &
+    #timeout 120 vim +PlugInstall +qall
     
     
-    sudo dnf install cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
     TAR_GO="go1.15.2.linux-amd64.tar.gz"
     wget -q https://golang.org/dl/$TAR_GO \
      -O $TAR_GO
@@ -357,6 +348,8 @@ function setup_vim() {
     # alias vimrc="vim ~/.vimrc"
     # alias viplug="vim ~/.vim/my_plugins.vim"
     #test -f "$MY_USER/.vimrc" && sudo chown "$MY_USER:$MY_USER" "$MY_USER/.vimrc" -R
+    
+    bash -c "$(wget -q -O - https://linux.kite.com/dls/linux/current)"
 
     echo > /dev/null  # force return true
 }
@@ -570,27 +563,27 @@ function main() {
     # check user administrator
     sudo -l > /dev/null || (print_format "$MY_USER is not user administrator" && exit 1)
 
-    test "$1" = "bspwm" && install_bspwn && VALID_ARGUMENT="True"
-    test "$1" = "vim" && install_vim && VALID_ARGUMENT="True"
-    test "$1" = "zsh" && install_zsh  && VALID_ARGUMENT="True"
-    test "$1" = "all" && install_all && VALID_ARGUMENT="True"
+    test "$1" = "bspwm" && install_bspwn ; VALID_ARGUMENT="True"
+    test "$1" = "vim" && install_vim ; VALID_ARGUMENT="True"
+    test "$1" = "zsh" && install_zsh ; VALID_ARGUMENT="True"
+    test "$1" = "all" && install_all ; VALID_ARGUMENT="True"
 
-    test "$1" = "_utils" && setup_utils && VALID_ARGUMENT="True"
-    test "$1" = "_bspwm" && setup_bspwm && VALID_ARGUMENT="True"
-    test "$1" = "_fonts" && setup_fonts && VALID_ARGUMENT="True"
-    test "$1" = "_polybar" && setup_polybar && VALID_ARGUMENT="True"
-    test "$1" = "_i3lock" && setup_i3lock && VALID_ARGUMENT="True"
-    test "$1" = "_vim" && setup_vim && VALID_ARGUMENT="True"
-    test "$1" = "_zsh" && setup_zsh && VALID_ARGUMENT="True"
-    test "$1" = "_konsole" && setup_konsole && VALID_ARGUMENT="True"
-    test "$1" = "_tmux" && setup_tmux && VALID_ARGUMENT="True"
+    test "$1" = "_utils" && setup_utils ; VALID_ARGUMENT="True"
+    test "$1" = "_bspwm" && setup_bspwm ; VALID_ARGUMENT="True"
+    test "$1" = "_fonts" && setup_fonts ; VALID_ARGUMENT="True"
+    test "$1" = "_polybar" && setup_polybar ; VALID_ARGUMENT="True"
+    test "$1" = "_i3lock" && setup_i3lock ; VALID_ARGUMENT="True"
+    test "$1" = "_vim" && setup_vim ; VALID_ARGUMENT="True"
+    test "$1" = "_zsh" && setup_zsh ; VALID_ARGUMENT="True"
+    test "$1" = "_konsole" && setup_konsole ; VALID_ARGUMENT="True"
+    test "$1" = "_tmux" && setup_tmux ; VALID_ARGUMENT="True"
 
 
     # BUSCAR DOLPHIN O CUALQUIER OTRO EXPLORADOR DE FICHEROS
     test "$VALID_ARGUMENT" = "False" && print_help
 
+    wait
     echo -e "${GREEN_COLOUR}Finishing $0${RESET_COLOUR}"
-    #kill -9 -1
 }
 
 

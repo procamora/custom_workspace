@@ -21,10 +21,10 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-"plug 'ericbn/vim-solarized'
 
 " Theme colors
 Plug 'morhetz/gruvbox'
+"Plug 'altercation/vim-colors-solarized'
 
 " Custom config in ~/.vimrc
 Plug 'pearofducks/ansible-vim'
@@ -39,8 +39,7 @@ Plug 'Vimjas/vim-python-pep8-indent'
 " Custom config in ~/.vimrc
 Plug 'preservim/nerdtree'
 
-"Plug 'scrooloose/syntastic'
-Plug 'w0rp/ale'
+Plug 'scrooloose/syntastic'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "Plug 'kovetskiy/sxhkd-vim'

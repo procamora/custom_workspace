@@ -16,7 +16,7 @@ syntax on
 "--------
 " color scheme
 "set background=dark
-"color solarized
+"colorscheme solarized
 autocmd vimenter * ++nested colorscheme gruvbox
 
 " highlight current line
@@ -103,14 +103,22 @@ let g:ansible_unindent_after_newline = 1
 "let g:ansible_name_highlight = 'd'
 let g:ansible_extra_keywords_highlight = 1
 
+
+" kite
+let g:kite_supported_languages = ['python']
+
+
 " https://vimawesome.com/plugin/syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_signs=1
+
 
 " NERDTree 
 "autocmd vimenter * NERDTree  " Open a NERDTree automatically
@@ -131,8 +139,17 @@ let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
+" Change section z for delete number column
+function! MyLineNumber()
+  return substitute(line('.'), '\d\@<=\(\(\d\{3\}\)\+\)$', ',&', 'g'). ' | '.
+    \    substitute(line('$'), '\d\@<=\(\(\d\{3\}\)\+\)$', ',&', 'g')
+endfunction
+call airline#parts#define('linenr', {'function': 'MyLineNumber', 'accents': 'bold'})
+let g:airline_section_z = airline#section#create(['%3p%%: ', 'linenr'])
+
 
 
 "GoTo code navigation.
@@ -140,12 +157,21 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+autocmd FileType python let b:coc_suggest_disable = 1
+
+" Use <c-space> to trigger completion.
+if &filetype == "javascript" || &filetype == "python"
+  inoremap <c-space> <C-x><C-u>
+else
+  inoremap <silent><expr> <c-space> coc#refresh()
+endif
+
 
 " 
 let g:terraform_align=1
 
 
-let g:coc_global_extensions = ['coc-tsserver', 'coc-json', 'coc-git', 'coc-clangd', 'coc-cmake', 'coc-go', 'coc-html', 'coc-markdownlint', 'coc-powershell', 'coc-python', 'coc-sql', 'coc-xml', 'coc-yaml', 'coc-java', 'coc-sh', 'coc-docker']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-clangd', 'coc-cmake', 'coc-go', 'coc-html', 'coc-markdownlint', 'coc-powershell', 'coc-python', 'coc-sql', 'coc-xml', 'coc-yaml', 'coc-java', 'coc-sh', 'coc-docker']
 
 " GoTo code navigation.
 let mapleader = ":"
