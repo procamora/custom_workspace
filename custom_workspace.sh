@@ -307,7 +307,8 @@ function setup_vim() {
     # - XML         libxml2 (xmllint)
     # - YAML        yamllint
     # Others: python3-ansible-lint tflint
-    hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm python3-demjson python3-pycodestyle xterm cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
+    hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
+     python3-demjson python3-pycodestyle xterm cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
     #sudo gem update 2>/dev/null
     #sudo gem update --system
     #gem install sqlint
@@ -316,7 +317,7 @@ function setup_vim() {
     #sudo npm install sql-formatter
     #sudo npm install node-sql-parser --save
     #sudo pip install jedi
-    sudo npm install -g bash-language-server
+    sudo npm install -g bash-language-server --silent >/dev/null
     #sudo npm install -g dockerfile-language-server-nodejs
     
     mkdir -p ~/.vim
@@ -324,7 +325,7 @@ function setup_vim() {
     cp -f vim/my_plugins.vim ~/.vim/
     cp -f vim/coc-settings.json ~/.vim/coc-settings.json
     
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    curl -sfLo ~/.vim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
     (timeout 120 xterm -e /bin/bash -l -c "vim +PlugInstall +qall") &
@@ -339,8 +340,8 @@ function setup_vim() {
     rm -rf $TAR_GO
 
     TAR="terraform-ls_0.10.0_linux_amd64.zip"
-    wget https://github.com/hashicorp/terraform-ls/releases/download/v0.10.0/"$TAR"
-    unzip "$TAR"
+    wget -q https://github.com/hashicorp/terraform-ls/releases/download/v0.10.0/"$TAR"
+    unzip -q "$TAR"
     sudo mv terraform-ls /usr/local/bin/
     rm -f "$TAR"
     
@@ -349,7 +350,7 @@ function setup_vim() {
     # alias viplug="vim ~/.vim/my_plugins.vim"
     #test -f "$MY_USER/.vimrc" && sudo chown "$MY_USER:$MY_USER" "$MY_USER/.vimrc" -R
     
-    bash -c "$(wget -q -O - https://linux.kite.com/dls/linux/current)"
+    #bash -c "$(wget -q -O - https://linux.kite.com/dls/linux/current)"
 
     echo > /dev/null  # force return true
 }
