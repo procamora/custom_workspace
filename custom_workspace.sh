@@ -308,17 +308,17 @@ function setup_vim() {
     # - YAML        yamllint
     # Others: python3-ansible-lint tflint
     hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
-     python3-demjson python3-pycodestyle xterm cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
-    #sudo gem update 2>/dev/null
-    #sudo gem update --system
-    #gem install sqlint
-    #pip install cmakelint --user
-    #sudo npm install -g dockerfile_lint
-    #sudo npm install sql-formatter
-    #sudo npm install node-sql-parser --save
-    #sudo pip install jedi
+     python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
+    sudo gem update 2>/dev/null
+    sudo gem update --system
+    gem install sqlint
+    pip install cmakelint --user
+    sudo npm install -g dockerfile_lint
+    sudo npm install sql-formatter
+    sudo npm install node-sql-parser --save
+    sudo pip install jedi
     sudo npm install -g bash-language-server --silent >/dev/null
-    #sudo npm install -g dockerfile-language-server-nodejs
+    sudo npm install -g dockerfile-language-server-nodejs
     
     mkdir -p ~/.vim
     cp -f vim/vimrc ~/.vimrc

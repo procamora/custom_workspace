@@ -6,10 +6,10 @@ from typing import List, Tuple, Union, Dict, Text, Set
 import re
 
 
-
 @dataclass
 class Shortcuts:
     command: Text
+
     def __post_init__(self: Shortcuts):
         """
         Coge el string del comando, lelimina la parte opcional si la tiene ({..shift..}), y crea una lista
@@ -33,34 +33,30 @@ def checkIfDuplicates_1(listOfElems):
     else:
         return True
 
+
 def valid(l) -> bool:
     if len(l) == 0 or l[0] == '#' or l[0] == ' ' or l[0] == '\t':
         return False
     return True
+
 
 file: Path = Path('~/.config/sxhkd/sxhkdrc').expanduser()
 
 shortcuts: List[Text] = list()
 for i in file.read_text().split('\n'):
     if valid(i):
-        s = Shortcuts(i)
-        #print(s)
+        s: Shortcuts = Shortcuts(i)
+        # print(s)
         shortcuts.append(str(s))
 
-
-
-#https://stackoverflow.com/questions/1541797/how-do-i-check-if-there-are-duplicates-in-a-flat-list
-s: Set= set()
+# https://stackoverflow.com/questions/1541797/how-do-i-check-if-there-are-duplicates-in-a-flat-list
+s: Set = set()
 any(x in s or s.add(x) for x in shortcuts)
 # You can use a similar approach to actually retrieve the duplicates.
-s: Set= set()
+s: Set = set()
 duplicates: Set = set(x for x in shortcuts if x in s or s.add(x))
-
-
 
 if len(duplicates) > 0:
     print(f'Duplicates: {duplicates}')
 else:
     print('No duplicates')
-
-
