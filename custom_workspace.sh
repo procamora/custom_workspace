@@ -296,9 +296,9 @@ function setup_vim() {
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}vim, plugins and syntax checkers ${RESET_COLOUR}"
     # Install checklinter to:
     # - C C++       cppcheck
-    # - CMake       
+    # - CMake
     # - Dockerfile  dockerfile_lint
-    # - Go          
+    # - Go
     # - JSON        python3-demjson (jsonlint)
     # - Python      pylint
     # - Sh          ShellCheck
@@ -310,28 +310,28 @@ function setup_vim() {
     hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
      python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
     sudo gem update 2>/dev/null
-    sudo gem update --system
-    gem install sqlint
-    pip install cmakelint --user
+    sudo gem update --system >/dev/null
+    gem install sqlint >/dev/null
+    pip install cmakelint --user >/dev/null
     sudo npm install -g dockerfile_lint --silent >/dev/null
     sudo npm install sql-formatter --silent >/dev/null
     sudo npm install node-sql-parser --save --silent >/dev/null
     sudo pip install jedi >/dev/null
     sudo npm install -g bash-language-server --silent >/dev/null
     sudo npm install -g dockerfile-language-server-nodejs --silent >/dev/null
-    
+
     mkdir -p ~/.vim
     cp -f vim/vimrc ~/.vimrc
     cp -f vim/my_plugins.vim ~/.vim/
     cp -f vim/coc-settings.json ~/.vim/coc-settings.json
-    
+
     curl -sfLo ~/.vim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
     #(timeout 120 xterm -e /bin/bash -l -c "vim +PlugInstall +qall") &
     #timeout 120 vim +PlugInstall +qall
-    
-    
+
+
     TAR_GO="go1.15.2.linux-amd64.tar.gz"
     wget -q https://golang.org/dl/$TAR_GO \
      -O $TAR_GO
@@ -344,14 +344,13 @@ function setup_vim() {
     unzip -q "$TAR"
     sudo mv terraform-ls /usr/local/bin/
     rm -f "$TAR"
-    
+
     # alias vipluginstall="vim +PlugInstall +qall"
-    # alias vimrc="vim ~/.vimrc"
-    # alias viplug="vim ~/.vim/my_plugins.vim"
-    #test -f "$MY_USER/.vimrc" && sudo chown "$MY_USER:$MY_USER" "$MY_USER/.vimrc" -R
-    
+
     #bash -c "$(wget -q -O - https://linux.kite.com/dls/linux/current)"
 
+    sudo cp -rf ~/.vimrc /root/.vimrc
+    sudo cp -rf ~/.vim /root/.vim
     echo > /dev/null  # force return true
 }
 
@@ -373,7 +372,7 @@ function zsh_fedora() {
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
     $DNF install $INSTALL
-    $DNF install lsd bat ripgrep util-linux-user
+    $DNF install lsd bat ripgrep util-linux-user trash-cli fzf
 }
 
 
@@ -390,7 +389,7 @@ function zsh_debian() {
     #    $RM Release.key
     #done
     sudo apt install -y $INSTALL
-    sudo apt install -y ripgrep  # maybe not store in repositories
+    sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
     sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
     sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
 }
@@ -399,7 +398,7 @@ function zsh_debian() {
 function zsh_raspbian() {
     INSTALL=$1
     sudo apt install -y $INSTALL
-    sudo apt install -y ripgrep  # maybe not store in repositories
+    sudo apt install -y ripgrep trash-cli # maybe not store in repositories
     sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
     sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
 }
@@ -416,10 +415,18 @@ function setup_zsh() {
     zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
+
+    test -d ./bat-extras && rm -rf ./bat-extras
+    git clone -q https://github.com/eth-p/bat-extras ./bat-extras
+    pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && rm -rf ./bat-extras
+
     unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
     sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
     $RM -rf resources/bat-extras
+    sudo mv -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
+
+    cp -f zsh/alias_git.zsh ~/.alias_git.zsh
 
     #[ -f ~/.fzf.sh ] && source ~/.fzf.sh
     # shellcheck disable=SC1090
@@ -449,11 +456,10 @@ function setup_zsh() {
     git clone -q https://github.com/zsh-users/zsh-history-substring-search.git "$ZSH_CUSTOM/plugins/zsh-history-substring-search"
     git clone -q https://github.com/zsh-users/zsh-docker.git "$ZSH_CUSTOM/plugins/zsh-docker"
 
-    # Create link to user root (insegure but comfortable)
-    sudo ln -sf ~/.zshrc /root/.zshrc
-    sudo ln -sf ~/.p10k.zsh /root/.p10k.zsh
-    sudo ln -sf ~/.oh-my-zsh/ /root/
-
+    # copy config user tp root
+    sudo cp -rf ~/.zshrc /root/.zshrc
+    sudo cp -rf ~/.p10k.zsh /root/.p10k.zsh
+    sudo cp -rf ~/.oh-my-zsh/ /root/
 }
 
 

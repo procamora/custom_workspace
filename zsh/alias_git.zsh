@@ -53,14 +53,10 @@ alias gcpc='git cherry-pick --continue'
 alias gd='git diff'
 alias gdw='git diff --word-diff'
 
-alias gf='git fetch'
-alias gfa='git fetch --all --prune --jobs=10' 
-alias gfo='git fetch origin'
+alias gf='git fetch origin'
+alias gfa='git fetch --all --prune --jobs=10'
 
-
-
-alias gl='git pull'
-alias ggpull='git pull origin "$(git_current_branch)"'
+alias gl='git pull origin "$(git_current_branch)"'
 
 alias glg='git log --graph --decorate --all'
 alias glgp="git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'"
@@ -103,7 +99,6 @@ alias gsu='git submodule update'
 
 alias gts='git tag -s'
 alias gtv='git tag | sort -V'
-alias gtl='gtl(){ git tag --sort=-v:refname -n -l "${1}*" }; noglob gtl'
 
 
 alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'

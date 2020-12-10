@@ -69,7 +69,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git common-aliases colored-man-pages zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search sudo docker 
+  common-aliases zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search sudo docker
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -110,6 +110,10 @@ alias ohmyzsh="vim ~/.oh-my-zsh"
 ################# ZONE CUSTOM #####################
 ###################################################
 
+# custom alias git
+[[ ! -f ~/.alias_git.zsh ]] || source ~/.alias_git.zsh
+
+
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
@@ -118,16 +122,38 @@ export EDITOR="$VISUAL"
 export _JAVA_AWT_WM_NONREPARENTING=1        # Fix problem Java
 
 # User specific aliases and functions
-#alias ls="ls -lhGQ --color=auto"
+# Custom ls colored
+alias l='ls -lFh'
 alias ls="lsd -lh --group-dirs=first"
 alias la="lsd -lha --group-dirs=first"
-alias catc='bat --paging=never'             # cat 
+# Custom cat colored
+alias catc='bat --paging=never'             # cat
 alias cat='bat'                            # cat + less
 alias catd='bat -A'                         # cat mode debug (show space and tabs)
-alias grepc='/usr/local/bin/batgrep --color -C 0'
-alias lessc='/usr/local/bin/prettybat'
-alias rm="echo Use trash, or the full path i.e. /bin/rm"
+# Custom grep colored
+alias grep='batgrep --color -C 0'
+alias grep2='batgrep --color -C 2'
+# custom man colored
+alias man='batman'
+# custom less colored
+alias less='/usr/local/bin/prettybat'
+
+
+alias rm="echo -e 'Use trash, or the full path i.e. /bin/rm\nUsing trash...' && trash"
 alias which="alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde"
+
+
+alias pycharm="bash ~/Programs/pycharm/bin/pycharm.sh > /dev/null 2>&1 &; disown"
+alias goland="bash ~/Programs/goland/bin/goland.sh > /dev/null 2>&1 &; disown"
+alias clion="bash ~/Programs/clion/bin/clion.sh > /dev/null 2>&1 &; disown"
+
+
+alias docker='echo "use podman :)" && podman'
+alias msi="~/scripts/hdmi.sh l DP-0 HDMI-0 144 60"
+
+alias mio="sudo chown $USER:$USER"
+
+
 
 alias vipolybar="vim ~/.config/polybar/config"
 alias vibspwm="vim ~/.config/bspwm/bspwmrc"
@@ -137,12 +163,6 @@ alias viautorun="vim ~/.config/bspwm/scripts/autorun"
 alias vizsh="vim ~/.zshrc"
 alias reload="source ~/.zshrc"
 
-# Custom alias
-alias docker='podman'
-alias pycharm="bash ~/Programs/pycharm/bin/pycharm.sh > /dev/null 2>&1 &; disown"
-alias goland="bash ~/Programs/goland/bin/goland.sh > /dev/null 2>&1 &; disown"
-alias clion="bash ~/Programs/clion/bin/clion.sh > /dev/null 2>&1 &; disown"
-alias msi="~/scripts/hdmi.sh l DP-0 HDMI-0 144 60"
 
 
 # Keys SSH
@@ -159,20 +179,6 @@ function mkt(){
 function erase1111(){
     scrub -p dod $1
     shred -zun 10 -v $1
-}
-
-
-# Set 'man' colors
-function man1() {
-    env \
-    LESS_TERMCAP_mb=$'\e[01;31m' \
-    LESS_TERMCAP_md=$'\e[01;31m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;44;33m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[01;32m' \
-    man "$@"
 }
 
 # fzf improvement
