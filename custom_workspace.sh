@@ -313,12 +313,12 @@ function setup_vim() {
     sudo gem update --system
     gem install sqlint
     pip install cmakelint --user
-    sudo npm install -g dockerfile_lint
-    sudo npm install sql-formatter
-    sudo npm install node-sql-parser --save
-    sudo pip install jedi
+    sudo npm install -g dockerfile_lint --silent >/dev/null
+    sudo npm install sql-formatter --silent >/dev/null
+    sudo npm install node-sql-parser --save --silent >/dev/null
+    sudo pip install jedi >/dev/null
     sudo npm install -g bash-language-server --silent >/dev/null
-    sudo npm install -g dockerfile-language-server-nodejs
+    sudo npm install -g dockerfile-language-server-nodejs --silent >/dev/null
     
     mkdir -p ~/.vim
     cp -f vim/vimrc ~/.vimrc
