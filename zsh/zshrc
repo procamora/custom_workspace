@@ -123,7 +123,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1        # Fix problem Java
 
 # User specific aliases and functions
 # Custom ls colored
-alias l='ls -lFh'
+alias l='ls -lF'
 alias ls="lsd -lh --group-dirs=first"
 alias la="lsd -lha --group-dirs=first"
 # Custom cat colored
@@ -131,8 +131,8 @@ alias catc='bat --paging=never'             # cat
 alias cat='bat'                            # cat + less
 alias catd='bat -A'                         # cat mode debug (show space and tabs)
 # Custom grep colored
-alias grep='batgrep --color -C 0'
-alias grep2='batgrep --color -C 2'
+alias grep='batgrep --color -C 0 --paging=never'
+alias grep2='batgrep --color -C 2 --paging=never'
 # custom man colored
 alias man='batman'
 # custom less colored
