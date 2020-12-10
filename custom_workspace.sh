@@ -372,7 +372,8 @@ function zsh_fedora() {
     #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
     #done
     $DNF install $INSTALL
-    $DNF install lsd bat ripgrep util-linux-user trash-cli fzf
+    $DNF install lsd bat ripgrep util-linux-user trash-cli
+    $DNF install scrub
 }
 
 
@@ -405,7 +406,7 @@ function zsh_raspbian() {
 
 
 function setup_zsh() {
-    INSTALL="zsh scrub fzf"
+    INSTALL="zsh fzf"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
     apt --version > /dev/null 2>&1 && test "$OS_NAME" != "Raspbian" && zsh_debian $INSTALL
@@ -416,9 +417,9 @@ function setup_zsh() {
     pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
 
-    test -d ./bat-extras && rm -rf ./bat-extras
+    test -d ./bat-extras && sudo rm -rf ./bat-extras
     git clone -q https://github.com/eth-p/bat-extras ./bat-extras
-    pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && rm -rf ./bat-extras
+    pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && sudo rm -rf ./bat-extras
 
     unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
