@@ -328,7 +328,7 @@ function setup_vim() {
     curl -sfLo ~/.vim/autoload/plug.vim --create-dirs \
      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-    (timeout 120 xterm -e /bin/bash -l -c "vim +PlugInstall +qall") &
+    #(timeout 120 xterm -e /bin/bash -l -c "vim +PlugInstall +qall") &
     #timeout 120 vim +PlugInstall +qall
     
     

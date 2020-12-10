@@ -14,17 +14,16 @@ endif
 
 
 " Run PlugInstall if there are missing plugins
-"if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-"  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-"endif
-
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
 
 call plug#begin('~/.vim/plugged')
 
 
 " Theme colors
-Plug 'morhetz/gruvbox'
-"Plug 'altercation/vim-colors-solarized'
+"Plug 'morhetz/gruvbox'
+Plug 'altercation/vim-colors-solarized'
 
 " Custom config in ~/.vimrc
 Plug 'pearofducks/ansible-vim'

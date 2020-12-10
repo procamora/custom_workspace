@@ -9,8 +9,8 @@ jobs:
           name: Check Scripts
           command: |
             find . -type f -name '*.sh' | wc -l
-            # find . -type f -name '*.sh' -exec shellcheck --external-sources {} \;
-            shellcheck --external-sources custom_workspace.sh
+            # find . -type f -name '*.sh' -exec shellcheck -e SC2086 --external-sources {} \;
+            shellcheck -e SC2086 --external-sources custom_workspace.sh
 
 workflows:
   version: 2

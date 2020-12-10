@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=Breeze
+ColorScheme=Solarized
 Font=Hack Nerd Font,10,-1,5,50,0,0,0,0,0,Regular
 
 [Cursor Options]
