@@ -308,7 +308,7 @@ function setup_vim() {
     # - YAML        yamllint
     # Others: python3-ansible-lint tflint
     hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
-     python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
+     python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs npm java-1.8.0-openjdk-devel
     sudo gem update 2>/dev/null
     sudo gem update --system >/dev/null
     gem install sqlint >/dev/null
