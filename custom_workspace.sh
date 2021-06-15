@@ -10,8 +10,19 @@
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
 set -o pipefail
 
-
 export DEBIAN_FRONTEND=noninteractive
+
+if grep -i 'Fedora' /etc/os-release; then
+  OS_SYSTEM='fedora'
+elif grep -i 'CentOS' /etc/os-release; then
+  OS_SYSTEM='centos'
+elif grep -i 'Debian' /etc/os-release; then
+  OS_SYSTEM='debian'
+elif grep -i 'Ubuntu' /etc/os-release; then
+  OS_SYSTEM='ubuntu'
+fi
+
+
 
 DNF="sudo dnf -yq"
 WGET="wget -q"
@@ -49,12 +60,26 @@ trap ctrl_c INT
 #####################################################
 
 function setup_utils() {
-    INSTALL="unzip wget git gcc make cmake vim"
+    INSTALL="unzip wget git gcc make cmake nvim"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL @development-tools${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL @development-tools
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
-    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+      $DNF install $INSTALL
+      $DNF install @development-tools
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+      $DNF install $INSTALL
+      $DNF install @development-tools
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+      sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+      sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+      sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+      sudo pacman -Sy $INSTALL 2>&1
+    else
+      print_format "Error with $OS_SYSTEM"
+    fi
 }
 
 
