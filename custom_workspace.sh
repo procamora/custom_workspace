@@ -479,8 +479,10 @@ function setup_zsh() {
         $DNF install lsd bat ripgrep util-linux-user trash-cli
         $DNF install scrub
     elif [[ $OS_SYSTEM = 'centos' ]]; then
-        $DNF install $INSTALL
-        $DNF install lsd bat ripgrep util-linux-user trash-cli
+      # failed lsd bat ripgrep trash-cli
+        $DNF install $INSTALL # failed fzf
+        $DNF install zsh
+        $DNF install util-linux-user
         $DNF install scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
