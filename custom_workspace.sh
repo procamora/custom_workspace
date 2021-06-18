@@ -405,11 +405,11 @@ function setup_vim() {
         $DNF install pylint yamllint  gem ruby-devel redhat-rpm-config npm \
             python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
-        sudo apt install -y python3-pip yamllint pylint gem shellcheck ansible-lint ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
+        sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ansible-lint ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
     elif [[ $OS_SYSTEM = 'debian' ]]; then
-        sudo apt install -y python3-pip yamllint pylint gem shellcheck ansible-lint ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
+        sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ansible-lint ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
     elif [[ $OS_SYSTEM = 'raspbian' ]]; then
-        sudo apt install -y python3-pip yamllint pylint gem shellcheck ansible-lint ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
+        sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ansible-lint ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
     elif [[ $OS_SYSTEM = 'arch' ]]; then
         sudo pacman -Sy  2>&1
     else
