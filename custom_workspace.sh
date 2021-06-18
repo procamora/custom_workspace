@@ -401,8 +401,8 @@ function setup_vim() {
         $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
             python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
     elif [[ $OS_SYSTEM = 'centos' ]]; then
-      # fixme search python3-ansible-lint python3-demjson
-        $DNF install pylint yamllint shellcheck  gem ruby-devel redhat-rpm-config npm \
+      # fixme search python3-ansible-lint python3-demjson shellcheck
+        $DNF install pylint yamllint  gem ruby-devel redhat-rpm-config npm \
             python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y
@@ -478,26 +478,27 @@ function setup_zsh() {
         $DNF install $INSTALL
         $DNF install lsd bat ripgrep util-linux-user trash-cli
         $DNF install scrub
-#    elif [[ $OS_SYSTEM = 'centos' ]]; then
-#        $DNF install $INSTALL
-#        $DNF install lsd bat ripgrep util-linux-user trash-cli
-#        $DNF install scrub
-#    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
-#        sudo apt install -y $INSTALL
-#        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
-#        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
-#        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
-#    elif [[ $OS_SYSTEM = 'debian' ]]; then
-#        sudo apt install -y $INSTALL
-#        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
-#        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
-#        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
-#    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
-#        sudo apt install -y $INSTALL
-#        sudo apt install -y ripgrep trash-cli # maybe not store in repositories
-#        sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
-#        sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat    elif [[ $OS_SYSTEM = 'arch' ]]; then
-#        sudo pacman -Sy $INSTALL lsd bat
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install $INSTALL
+        $DNF install lsd bat ripgrep util-linux-user trash-cli
+        $DNF install scrub
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y $INSTALL
+        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
+        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y $INSTALL
+        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
+        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y $INSTALL
+        sudo apt install -y ripgrep trash-cli # maybe not store in repositories
+        sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
+        sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
+   elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL lsd bat
     else
         print_format "Error with $OS_SYSTEM"
     fi
