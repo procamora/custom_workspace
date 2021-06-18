@@ -68,7 +68,7 @@ function setup_utils() {
         $DNF install @development-tools
     elif [[ $OS_SYSTEM = 'centos' ]]; then
         $DNF install $INSTALL
-        $DNF install @development-tools
+#        $DNF install @development-tools
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
     elif [[ $OS_SYSTEM = 'debian' ]]; then
@@ -401,8 +401,9 @@ function setup_vim() {
         $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
             python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
     elif [[ $OS_SYSTEM = 'centos' ]]; then
-        $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
-            python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
+      # fixme search python3-ansible-lint python3-demjson
+        $DNF install pylint yamllint shellcheck  gem ruby-devel redhat-rpm-config npm \
+            python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y
     elif [[ $OS_SYSTEM = 'debian' ]]; then
@@ -473,10 +474,10 @@ function setup_zsh() {
     INSTALL="zsh fzf"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
-#    if [[ $OS_SYSTEM = 'fedora' ]]; then
-#        $DNF install $INSTALL
-#        $DNF install lsd bat ripgrep util-linux-user trash-cli
-#        $DNF install scrub
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install $INSTALL
+        $DNF install lsd bat ripgrep util-linux-user trash-cli
+        $DNF install scrub
 #    elif [[ $OS_SYSTEM = 'centos' ]]; then
 #        $DNF install $INSTALL
 #        $DNF install lsd bat ripgrep util-linux-user trash-cli
@@ -497,9 +498,9 @@ function setup_zsh() {
 #        sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
 #        sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat    elif [[ $OS_SYSTEM = 'arch' ]]; then
 #        sudo pacman -Sy $INSTALL lsd bat
-#    else
-#        print_format "Error with $OS_SYSTEM"
-#    fi
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
     #zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
 
 
