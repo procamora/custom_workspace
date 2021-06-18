@@ -473,33 +473,33 @@ function setup_zsh() {
     INSTALL="zsh fzf"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
-    if [[ $OS_SYSTEM = 'fedora' ]]; then
-        $DNF install $INSTALL
-        $DNF install lsd bat ripgrep util-linux-user trash-cli
-        $DNF install scrub
-    elif [[ $OS_SYSTEM = 'centos' ]]; then
-        $DNF install $INSTALL
-        $DNF install lsd bat ripgrep util-linux-user trash-cli
-        $DNF install scrub
-    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
-        sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
-        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
-        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
-    elif [[ $OS_SYSTEM = 'debian' ]]; then
-        sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
-        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
-        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
-    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
-        sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli # maybe not store in repositories
-        sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
-        sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat    elif [[ $OS_SYSTEM = 'arch' ]]; then
-        sudo pacman -Sy $INSTALL lsd bat
-    else
-        print_format "Error with $OS_SYSTEM"
-    fi
+#    if [[ $OS_SYSTEM = 'fedora' ]]; then
+#        $DNF install $INSTALL
+#        $DNF install lsd bat ripgrep util-linux-user trash-cli
+#        $DNF install scrub
+#    elif [[ $OS_SYSTEM = 'centos' ]]; then
+#        $DNF install $INSTALL
+#        $DNF install lsd bat ripgrep util-linux-user trash-cli
+#        $DNF install scrub
+#    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+#        sudo apt install -y $INSTALL
+#        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
+#        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+#        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
+#    elif [[ $OS_SYSTEM = 'debian' ]]; then
+#        sudo apt install -y $INSTALL
+#        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
+#        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+#        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
+#    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+#        sudo apt install -y $INSTALL
+#        sudo apt install -y ripgrep trash-cli # maybe not store in repositories
+#        sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
+#        sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat    elif [[ $OS_SYSTEM = 'arch' ]]; then
+#        sudo pacman -Sy $INSTALL lsd bat
+#    else
+#        print_format "Error with $OS_SYSTEM"
+#    fi
     #zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
 
 
