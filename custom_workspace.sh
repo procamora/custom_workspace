@@ -511,9 +511,12 @@ function setup_zsh() {
     #zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
 
 
-    test -d ./bat-extras && sudo rm -rf ./bat-extras
-    git clone -q https://github.com/eth-p/bat-extras ./bat-extras
-    pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && sudo rm -rf ./bat-extras
+#    test -d ./bat-extras && sudo rm -rf ./bat-extras
+#    git clone -q https://github.com/eth-p/bat-extras ./bat-extras
+#    pushd ./bat-extras
+#    sudo ./build.sh --install >/dev/null
+#    popd
+#    sudo rm -rf ./bat-extras
 
     unzip -o resources/bat-extras-20210406.zip -d resources/ >/dev/null
     sudo cp -f resources/bat-extras/bin/batgrep /usr/local/bin/
