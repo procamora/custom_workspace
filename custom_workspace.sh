@@ -485,6 +485,7 @@ function setup_zsh() {
     elif [[ $OS_SYSTEM = 'centos' ]]; then
       # failed lsd bat ripgrep trash-cli
         $DNF install $INSTALL # failed fzf
+        test -d  ~/.fzf && sudo rm -rf  ~/.fzf
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
         $DNF install util-linux-user scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
