@@ -475,7 +475,7 @@ function setup_vim() {
 # https://github.com/romkatv/powerlevel10k#oh-my-zsh
 
 function setup_zsh() {
-    INSTALL="zsh fzf"
+    INSTALL="zsh"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
     if [[ $OS_SYSTEM = 'fedora' ]]; then
@@ -485,22 +485,22 @@ function setup_zsh() {
     elif [[ $OS_SYSTEM = 'centos' ]]; then
       # failed lsd bat ripgrep trash-cli
         $DNF install $INSTALL # failed fzf
-        $DNF install zsh
+        $DNF install fzf
         $DNF install util-linux-user
         $DNF install scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
+        sudo apt install -y ripgrep trash-cli fzf # maybe not store in repositories
         sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
         sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
     elif [[ $OS_SYSTEM = 'debian' ]]; then
         sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
+        sudo apt install -y ripgrep trash-cli fzf  # maybe not store in repositories
         sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
         sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
     elif [[ $OS_SYSTEM = 'raspbian' ]]; then
         sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli # maybe not store in repositories
+        sudo apt install -y ripgrep trash-cli fzf # maybe not store in repositories
         sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
         sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
    elif [[ $OS_SYSTEM = 'arch' ]]; then
