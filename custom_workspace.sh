@@ -421,8 +421,8 @@ function setup_vim() {
     fi
 
     sudo gem update 2>/dev/null
-    sudo gem update --system >/dev/null  # fixme funciona???
-    gem install sqlint >/dev/null  # fixme funciona ??
+    sudo gem update --system 3.2.3 2>/dev/null  # fixme funciona???
+    gem install sqlint rails >/dev/null  # fixme funciona ??
     pip3 install cmakelint --user >/dev/null
     sudo npm install -g dockerfile_lint --silent >/dev/null
     sudo npm install sql-formatter --silent >/dev/null
