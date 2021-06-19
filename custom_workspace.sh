@@ -406,10 +406,13 @@ function setup_vim() {
             python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         # ansible-lint
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
         sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
     elif [[ $OS_SYSTEM = 'debian' ]]; then
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
         sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
     elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
         sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
     elif [[ $OS_SYSTEM = 'arch' ]]; then
         sudo pacman -Sy  2>&1
@@ -516,7 +519,7 @@ function setup_zsh() {
     sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
     sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
     $RM -rf resources/bat-extras
-    sudo mv -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
+    sudo cp -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
 
     cp -f zsh/alias_git.zsh ~/.alias_git.zsh
 
@@ -532,8 +535,8 @@ function setup_zsh() {
     # Download and configuration oh my zsh
     timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2> $LOG
 
-    sudo chsh -s "$(command -v  zsh)" "$MY_USER" 2>&1
-    sudo chsh -s "$(command -v  zsh)" root 2>&1
+    timeout 20 sudo chsh -s "$(command -v  zsh)" "$MY_USER" 2>&1
+    timeout 20 sudo chsh -s "$(command -v  zsh)" root 2>&1
 
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
