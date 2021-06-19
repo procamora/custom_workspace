@@ -485,7 +485,7 @@ function setup_zsh() {
     elif [[ $OS_SYSTEM = 'centos' ]]; then
       # failed lsd bat ripgrep trash-cli
         $DNF install $INSTALL # failed fzf
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
         $DNF install util-linux-user scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
@@ -515,8 +515,8 @@ function setup_zsh() {
     pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && sudo rm -rf ./bat-extras
 
     unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
-    sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
-    sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
+    sudo cp -f resources/bat-extras/bin/batgrep /usr/local/bin/
+    sudo cp -f resources/bat-extras/bin/prettybat /usr/local/bin/
     $RM -rf resources/bat-extras
     sudo cp -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
 
