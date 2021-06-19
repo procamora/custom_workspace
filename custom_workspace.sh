@@ -485,9 +485,8 @@ function setup_zsh() {
     elif [[ $OS_SYSTEM = 'centos' ]]; then
       # failed lsd bat ripgrep trash-cli
         $DNF install $INSTALL # failed fzf
-        $DNF install fzf
-        $DNF install util-linux-user
-        $DNF install scrub
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+        $DNF install util-linux-user scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
         sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
