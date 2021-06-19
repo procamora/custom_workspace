@@ -488,6 +488,7 @@ function setup_zsh() {
         test -d  ~/.fzf && sudo rm -rf  ~/.fzf
         git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
         $DNF install util-linux-user scrub
+        wget -q https://github.com/sharkdp/bat/releases/download/v0.18.1/bat-v0.18.1-x86_64-unknown-linux-gnu.tar.gz -O bat.tar.gz
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
         sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
