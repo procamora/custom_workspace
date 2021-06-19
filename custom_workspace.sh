@@ -486,7 +486,7 @@ function setup_zsh() {
       # failed lsd bat ripgrep trash-cli
         $DNF install $INSTALL # failed fzf
         test -d  ~/.fzf && sudo rm -rf  ~/.fzf
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
+        git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
         $DNF install util-linux-user scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
@@ -515,7 +515,7 @@ function setup_zsh() {
     git clone -q https://github.com/eth-p/bat-extras ./bat-extras
     pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && sudo rm -rf ./bat-extras
 
-    unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
+    unzip -o resources/bat-extras-20210406.zip -d resources/ >/dev/null
     sudo cp -f resources/bat-extras/bin/batgrep /usr/local/bin/
     sudo cp -f resources/bat-extras/bin/prettybat /usr/local/bin/
     $RM -rf resources/bat-extras
