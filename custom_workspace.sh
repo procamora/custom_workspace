@@ -490,17 +490,17 @@ function setup_zsh() {
         $DNF install scrub
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli fzf # maybe not store in repositories
+        sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
         sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
         sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
     elif [[ $OS_SYSTEM = 'debian' ]]; then
         sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli fzf  # maybe not store in repositories
+        sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
         sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
         sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
     elif [[ $OS_SYSTEM = 'raspbian' ]]; then
         sudo apt install -y $INSTALL
-        sudo apt install -y ripgrep trash-cli fzf # maybe not store in repositories
+        sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
         sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
         sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
    elif [[ $OS_SYSTEM = 'arch' ]]; then
@@ -535,8 +535,8 @@ function setup_zsh() {
     # Download and configuration oh my zsh
     timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2> $LOG
 
-    timeout 20 sudo chsh -s "$(command -v  zsh)" "$MY_USER" 2>&1
-    timeout 20 sudo chsh -s "$(command -v  zsh)" root 2>&1
+    timeout 20 sudo chsh -s "$(command -v zsh)" "$MY_USER" 2>&1
+    timeout 20 sudo chsh -s "$(command -v zsh)" root 2>&1
 
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
