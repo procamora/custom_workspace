@@ -33,7 +33,7 @@ LOG="install.log"
 
 MY_PATH=$(pwd)
 MY_USER=$USER
-OS_NAME=$(< /etc/os-release grep -E "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
+#OS_NAME=$(< /etc/os-release grep -E "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
 #OS_ID=$(< /etc/os-release grep VERSION_ID | cut -d= -f2 | tr -d \")
 
 
