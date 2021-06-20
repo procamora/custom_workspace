@@ -521,9 +521,9 @@ function setup_zsh() {
 #    sudo rm -rf ./bat-extras
 
     unzip -o resources/bat-extras-20210406.zip -d resources/ >/dev/null
-    sudo cp -f resources/bat-extras/bin/batgrep /usr/local/bin/
-    sudo cp -f resources/bat-extras/bin/prettybat /usr/local/bin/
-    $RM -rf resources/bat-extras
+    sudo cp -f resources/bin/batgrep /usr/local/bin/
+    sudo cp -f resources/bin/prettybat /usr/local/bin/
+    $RM -rf resources/bin/
     sudo cp -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
 
     cp -f zsh/alias_git.zsh ~/.alias_git.zsh
