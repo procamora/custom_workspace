@@ -483,13 +483,15 @@ function setup_zsh() {
         $DNF install lsd bat ripgrep util-linux-user trash-cli
         $DNF install scrub
     elif [[ $OS_SYSTEM = 'centos' ]]; then
-      # failed lsd bat ripgrep trash-cli
+      # failed ripgrep
         $DNF install $INSTALL # failed fzf
+        sudo pip3 install trash-cli
         test -d  ~/.fzf && sudo rm -rf  ~/.fzf
         git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
         $DNF install util-linux-user scrub
         sudo cp -f resources/bat_v0.18.1 /usr/local/bin/bat && sudo chmod +x /usr/local/bin/bat
         sudo cp -f resources/lsd_0.20.1 /usr/local/bin/lsd && sudo chmod +x /usr/local/bin/lsd
+        sudo cp -f resources/rg_13.0.0 /usr/local/bin/rg && sudo chmod +x /usr/local/bin/rg
     elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
         sudo apt install -y $INSTALL
         sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
