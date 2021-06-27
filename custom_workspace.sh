@@ -10,8 +10,19 @@
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
 set -o pipefail
 
-
 export DEBIAN_FRONTEND=noninteractive
+
+if grep -i 'PRETTY_NAME' /etc/os-release | grep -q 'Fedora'; then
+    OS_SYSTEM='fedora'
+elif grep -i 'PRETTY_NAME' /etc/os-release | grep -q 'CentOS'; then
+    OS_SYSTEM='centos'
+elif grep -i 'PRETTY_NAME' /etc/os-release | grep -q 'Debian'; then
+    OS_SYSTEM='debian'
+elif grep -i 'PRETTY_NAME' /etc/os-release | grep -q 'Ubuntu'; then
+    OS_SYSTEM='ubuntu'
+fi
+
+
 
 DNF="sudo dnf -yq"
 WGET="wget -q"
@@ -22,7 +33,7 @@ LOG="install.log"
 
 MY_PATH=$(pwd)
 MY_USER=$USER
-OS_NAME=$(< /etc/os-release grep -E "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
+#OS_NAME=$(< /etc/os-release grep -E "^NAME=" | tr -d \" | awk -F = '{print $NF}' | awk -F " " '{print $1}')
 #OS_ID=$(< /etc/os-release grep VERSION_ID | cut -d= -f2 | tr -d \")
 
 
@@ -49,12 +60,26 @@ trap ctrl_c INT
 #####################################################
 
 function setup_utils() {
-    INSTALL="unzip wget git gcc make cmake vim"
+    INSTALL="unzip wget git gcc make cmake neovim"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL @development-tools${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL @development-tools
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
-    apt --version > /dev/null 2>&1 && sudo apt update && sudo apt install -y $INSTALL
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install $INSTALL
+        $DNF install @development-tools
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install $INSTALL
+#        $DNF install @development-tools
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL 2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
 }
 
 
@@ -72,10 +97,27 @@ function setup_utils() {
 # rofi -> lanzador de programas en forma de lista interactica
 
 function dunst() {
-    dnf --version > /dev/null 2>&1 && $DNF install dbus-devel libX11-devel libXrandr-devel glib2-devel pango-devel \
-     gtk2-devel libxdg-basedir-devel libXScrnSaver-devel libnotify-devel
-    apt --version > /dev/null 2>&1 && sudo apt install -y libdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libxss-dev \
-     libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
+
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install dbus-devel libX11-devel libXrandr-devel glib2-devel pango-devel \
+            gtk2-devel libxdg-basedir-devel libXScrnSaver-devel libnotify-devel
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install dbus-devel libX11-devel libXrandr-devel glib2-devel pango-devel \
+            gtk2-devel libxdg-basedir-devel libXScrnSaver-devel libnotify-devel
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y libdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libxss-dev \
+            libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y libdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libxss-dev \
+            libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -ylibdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libxss-dev \
+            libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL 2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
 
     # clone the repository
     test -d dunst_comp/ && $RM -rf dunst_comp/
@@ -95,15 +137,30 @@ function setup_bspwm() {
     INSTALL="bspwm sxhkd compton feh rofi ksysguard dolphin dolphin-plugins numlockx plasma-integration"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL ${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
-     xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
-     xcb-util-wm xcb-util-keysyms
-    dnf --version > /dev/null 2>&1 && $DNF install konsole 2>&1  # puede fallar si lo teng excluido
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms \
-     konsole
-    apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
-     libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
-
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
+           xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
+           xcb-util-wm xcb-util-keysyms
+        $DNF install konsole 2>&1
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install $INSTALL libXinerama libXinerama-devel libxcb xcb-util \
+           xcb-util-devel xcb-util-keysyms-devel xcb-util-wm-devel alsa-lib-devel dmenu rxvt-unicode terminus-fonts \
+           xcb-util-wm xcb-util-keysyms
+        $DNF install konsole 2>&1
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
+            libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
+            libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y $INSTALL libxcb-xinerama0-dev libxcb-icccm4-dev \
+            libxcb-randr0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-shape0-dev konsole
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL libxcb xcb-util xcb-util-wm xcb-util-keysyms konsole 2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
 
     mkdir -p ~/.config/{bspwm/{scripts,},sxhkd,compton,rofi,icons,dunst}
     cp -rf "$MY_PATH/bspwm/" ~/.config/
@@ -127,7 +184,6 @@ exec bspwm" > ~/.xinitrc
     cp -f "$MY_PATH/resources/lock.png" ~/.config/lock.png
 
     dunst
-
 }
 
 
@@ -157,12 +213,11 @@ LC_TIME="en_GB.UTF-8"
 LC_PAPER="en_GB.UTF-8"
 LC_MEASUREMENT="en_GB.UTF-8"' | sudo tee /etc/locale.conf > /dev/null
 
-
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}papirus theme${RESET_COLOUR}"
     $WGET -qO- https://git.io/papirus-icon-theme-install | sh >/dev/null 2> $LOG
 
      # if exists command execute
-    if hash kwriteconfig5 > /dev/null ; then
+    if command -v kwriteconfig5 > /dev/null ; then
         kwriteconfig5 --file kdeglobals --group MainToolbarIcons --key Size "22"
         kwriteconfig5 --file kdeglobals --group ToolbarIcons --key Size "22"
 
@@ -217,18 +272,39 @@ function polybar_debian(){
 function setup_polybar() {
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}polybar and dependencies${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install gcc-c++ clang git cmake @development-tools python3-sphinx \
-     cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install gcc-c++ clang git cmake @development-tools python3-sphinx \
+          cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install gcc-c++ clang git cmake @development-tools python3-sphinx \
+          cairo-devel xcb-util-devel libxcb-devel xcb-proto xcb-util-image-devel xcb-util-wm-devel polybar
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
+           libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python3-xcbgen \
+           xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
+           build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb \
+           && polybar_debian
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
+           libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config \
+           xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
+           build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb \
+           && polybar_debian
+        sudo apt install -y python-xcbgen  # revisar si aparece python3-xcbgen
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
+           libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python3-xcbgen \
+           xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
+           build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb \
+           && polybar_debian
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL 2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
 
     # FIXME FALTA POR PONER LAS LIBRERIAS PARA PACMAN
     #pacman --version > /dev/null 2>&1 && sudo
-
-    apt --version > /dev/null 2>&1 && sudo apt install -y cmake cmake-data libcairo2-dev libxcb1-dev libxcb-ewmh-dev \
-     libxcb-icccm4-dev libxcb-image0-dev libxcb-randr0-dev libxcb-util0-dev libxcb-xkb-dev pkg-config python3-xcbgen \
-     xcb-proto libxcb-xrm-dev i3-wm libasound2-dev libmpdclient-dev libiw-dev libcurl4-openssl-dev libpulse-dev \
-     build-essential libxcb-composite0 libxcb-shape0-dev libxcb-xfixes0-dev libxcb-composite0-dev xcb \
-     && polybar_debian
-
 
     mkdir -p ~/.config/polybar/{bin,scripts}
 
@@ -272,9 +348,22 @@ function setup_polybar() {
 
 function setup_i3lock() {
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}i3lock and ImageMagick ${RESET_COLOUR}"
-    dnf --version > /dev/null 2>&1 && $DNF install ImageMagick i3lock xautolock
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy ImageMagick i3lock xautolock
-    apt --version > /dev/null 2>&1 && sudo apt install -y imagemagick i3lock xautolock
+
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install ImageMagick i3lock xautolock
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install ImageMagick i3lock xautolock
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y imagemagick i3lock xautolock
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y imagemagick i3lock xautolock
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y imagemagick i3lock xautolock
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy ImageMagick i3lock xautolock 2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
 
     # TODO delete i3lock-fancy by use i3lock alone
     #test -d /opt/i3lock-fancy/ && sudo $RM -rf /opt/i3lock-fancy/
@@ -307,11 +396,33 @@ function setup_vim() {
     # - XML         libxml2 (xmllint)
     # - YAML        yamllint
     # Others: python3-ansible-lint tflint
-    hash dnf 2>/dev/null && $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
-     python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete node npm java-1.8.0-openjdk-devel
+
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install pylint yamllint ShellCheck python3-ansible-lint gem ruby-devel redhat-rpm-config npm \
+            python3-demjson python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+      # fixme search python3-ansible-lint python3-demjson shellcheck
+        $DNF install pylint yamllint  gem ruby-devel redhat-rpm-config npm \
+            python3-pycodestyle cmake gcc-c++ make python3-devel mono-complete nodejs java-1.8.0-openjdk-devel python3-pip
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        # ansible-lint
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+        sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+        sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+        sudo apt install -y python3-pip rubygems build-essential yamllint pylint gem shellcheck ruby-dev python3-dev nodejs openjdk-8-jdk python3-pip
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy  2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
+
     sudo gem update 2>/dev/null
-    sudo gem update --system >/dev/null
-    gem install sqlint >/dev/null
+    sudo gem update --system 3.2.3 2>/dev/null  # fixme funciona???
+    gem install sqlint rails >/dev/null  # fixme funciona ??
     pip3 install cmakelint --user >/dev/null
     sudo npm install -g dockerfile_lint --silent >/dev/null
     sudo npm install sql-formatter --silent >/dev/null
@@ -326,7 +437,7 @@ function setup_vim() {
     cp -f vim/coc-settings.json ~/.vim/coc-settings.json
 
     curl -sfLo ~/.vim/autoload/plug.vim --create-dirs \
-     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
     #(timeout 120 xterm -e /bin/bash -l -c "vim +PlugInstall +qall") &
     #timeout 120 vim +PlugInstall +qall
@@ -363,69 +474,59 @@ function setup_vim() {
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/install.sh
 # https://github.com/romkatv/powerlevel10k#oh-my-zsh
 
-function zsh_fedora() {
-    INSTALL=$1
-    #LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
-    #repositories=( $LIST_REPOS )
-
-    #for r in "${repositories[@]}"; do
-    #    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:zsh-users:$r/Fedora_$OS_ID/shells:zsh-users:$r.repo
-    #done
-    $DNF install $INSTALL
-    $DNF install lsd bat ripgrep util-linux-user trash-cli
-    $DNF install scrub
-}
-
-
-function zsh_debian() {
-    INSTALL=$1
-    #LIST_REPOS="zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting antigen"
-    #repositories=( $LIST_REPOS )
-
-    #for r in "${repositories[@]}"; do
-    #    REPO="deb http://download.opensuse.org/repositories/shells:/zsh-users:/$r/Debian_$OS_ID/ /"
-    #    sudo sh -c "echo \"$REPO\" > /etc/apt/sources.list.d/shells:zsh-users:$r.list"
-    #    $WGET -nv https://download.opensuse.org/repositories/shells:zsh-users:$r/Debian_$OS_ID/Release.key -O Release.key
-    #    sudo apt-key add - < Release.key
-    #    $RM Release.key
-    #done
-    sudo apt install -y $INSTALL
-    sudo apt install -y ripgrep trash-cli  # maybe not store in repositories
-    sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
-    sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
-}
-
-
-function zsh_raspbian() {
-    INSTALL=$1
-    sudo apt install -y $INSTALL
-    sudo apt install -y ripgrep trash-cli # maybe not store in repositories
-    sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
-    sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
-}
-
-
 function setup_zsh() {
-    INSTALL="zsh fzf"
+    INSTALL="zsh"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}zsh $INSTALL lsd bat ripgrep${RESET_COLOUR}"
 
-    apt --version > /dev/null 2>&1 && test "$OS_NAME" != "Raspbian" && zsh_debian $INSTALL
-    test "$OS_NAME" = "Raspbian" && zsh_raspbian $INSTALL
-    dnf --version > /dev/null 2>&1 && zsh_fedora $INSTALL
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install $INSTALL
+        $DNF install lsd bat ripgrep util-linux-user trash-cli
+        $DNF install scrub
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+      # failed ripgrep
+        $DNF install $INSTALL # failed fzf
+        sudo pip3 install trash-cli
+        test -d  ~/.fzf && sudo rm -rf  ~/.fzf
+        git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all >/dev/null
+        $DNF install util-linux-user scrub
+        sudo cp -f resources/bat_v0.18.1 /usr/local/bin/bat && sudo chmod +x /usr/local/bin/bat
+        sudo cp -f resources/lsd_0.20.1 /usr/local/bin/lsd && sudo chmod +x /usr/local/bin/lsd
+        sudo cp -f resources/rg_13.0.0 /usr/local/bin/rg && sudo chmod +x /usr/local/bin/rg
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y $INSTALL
+        sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
+        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y $INSTALL
+        sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
+        sudo dpkg -i "$MY_PATH/resources/lsd_0.16.0_amd64.deb"
+        sudo dpkg -i "$MY_PATH/resources/bat_0.13.0_amd64.deb"
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y $INSTALL
+        sudo apt install -y ripgrep trash-cli fzf build-essential # maybe not store in repositories
+        sudo cp -f "$MY_PATH/resources/lsd-0.17.0-arm" /usr/local/bin/lsd
+        sudo cp -f "$MY_PATH/resources/bat-0.13.0-arm" /usr/local/bin/bat
+   elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL lsd bat
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
+    #zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
 
-    zypper --version > /dev/null 2>&1 && sudo zypper install -y $INSTALL lsd bat
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL lsd bat
 
+#    test -d ./bat-extras && sudo rm -rf ./bat-extras
+#    git clone -q https://github.com/eth-p/bat-extras ./bat-extras
+#    pushd ./bat-extras
+#    sudo ./build.sh --install >/dev/null
+#    popd
+#    sudo rm -rf ./bat-extras
 
-    test -d ./bat-extras && sudo rm -rf ./bat-extras
-    git clone -q https://github.com/eth-p/bat-extras ./bat-extras
-    pushd ./bat-extras && sudo ./build.sh --install >/dev/null && popd && sudo rm -rf ./bat-extras
-
-    unzip -o resources/bat-extras-20200401.zip -d resources/ > /dev/null
-    sudo mv resources/bat-extras/bin/batgrep /usr/local/bin/
-    sudo mv resources/bat-extras/bin/prettybat /usr/local/bin/
-    $RM -rf resources/bat-extras
-    sudo mv -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
+    unzip -o resources/bat-extras-20210406.zip -d resources/ >/dev/null
+    sudo cp -f resources/bin/batgrep /usr/local/bin/
+    sudo cp -f resources/bin/prettybat /usr/local/bin/
+    $RM -rf resources/bin/
+    sudo cp -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
 
     cp -f zsh/alias_git.zsh ~/.alias_git.zsh
 
@@ -437,8 +538,8 @@ function setup_zsh() {
     # Download and configuration oh my zsh
     timeout 20 sh -c "$(wget -q -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" > /dev/null 2> $LOG
 
-    sudo chsh -s "$(command -v  zsh)" "$MY_USER" 2>&1
-    sudo chsh -s "$(command -v  zsh)" root 2>&1
+    timeout 20 sudo chsh -s "$(command -v zsh)" "$MY_USER" 2>&1
+    timeout 20 sudo chsh -s "$(command -v zsh)" root 2>&1
 
     # Download theme oh my zsh
     ZSH_CUSTOM=$HOME/.oh-my-zsh/custom/themes
@@ -474,9 +575,21 @@ function setup_tmux() {
     INSTALL="tmux"
     print_format "${GREEN_COLOUR}Installing ${ORANGE_COLOUR}$INSTALL ${RESET_COLOUR}"
 
-    dnf --version > /dev/null 2>&1 && $DNF install $INSTALL
-    pacman --version > /dev/null 2>&1 && sudo pacman -Sy $INSTALL 2>&1
-    apt --version > /dev/null 2>&1 && sudo apt install -y $INSTALL
+    if [[ $OS_SYSTEM = 'fedora' ]]; then
+        $DNF install $INSTALL
+    elif [[ $OS_SYSTEM = 'centos' ]]; then
+        $DNF install $INSTALL
+    elif [[ $OS_SYSTEM = 'ubuntu' ]]; then
+        sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'debian' ]]; then
+        sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'raspbian' ]]; then
+        sudo apt install -y $INSTALL
+    elif [[ $OS_SYSTEM = 'arch' ]]; then
+        sudo pacman -Sy $INSTALL 2>&1
+    else
+        print_format "Error with $OS_SYSTEM"
+    fi
 
     test -d ~/.tmux && $RM -rf ~/.tmux
     test -f ~/.tmux.conf && $RM -f ~/.tmux.conf
@@ -592,16 +705,13 @@ function main() {
 
 
 #Colours
-# shellcheck disable=SC2034
 declare -r BLACK_COLOUR='\e[0;30m'
 declare -r RED_COLOUR='\e[0;31m'
 declare -r GREEN_COLOUR='\e[0;32m'
 declare -r ORANGE_COLOUR='\e[0;33m'
 declare -r BLUE_COLOUR='\e[0;34m'
 declare -r PURPLE_COLOUR='\e[0;35m'
-# shellcheck disable=SC2034
 declare -r CYAN_COLOUR='\e[0;36m'
-# shellcheck disable=SC2034
 declare -r WHITE_COLOUR='\e[0;37m'
 declare -r RESET_COLOUR='\e[0m'
 
