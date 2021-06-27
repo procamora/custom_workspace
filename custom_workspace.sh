@@ -521,10 +521,10 @@ function setup_zsh() {
 #    sudo ./build.sh --install >/dev/null
 #    popd
 #    sudo rm -rf ./bat-extras
-
+    pwd
     unzip -o resources/bat-extras-20210406.zip -d resources/ >/dev/null
-    sudo cp -f resources/bin/batgrep /usr/local/bin/
-    sudo cp -f resources/bin/prettybat /usr/local/bin/
+    sudo cp -f resources/bin/batgrep /usr/local/bin/ && sudo chmod +x /usr/local/bin/batgrep
+    sudo cp -f resources/bin/prettybat /usr/local/bin/ && sudo chmod +x /usr/local/bin/prettybat
     $RM -rf resources/bin/
 
     sudo cp -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
