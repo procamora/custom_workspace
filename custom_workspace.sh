@@ -312,11 +312,11 @@ function setup_vim() {
     sudo gem update 2>/dev/null
     sudo gem update --system >/dev/null
     gem install sqlint >/dev/null
-    pip install cmakelint --user >/dev/null
+    pip3 install cmakelint --user >/dev/null
     sudo npm install -g dockerfile_lint --silent >/dev/null
     sudo npm install sql-formatter --silent >/dev/null
     sudo npm install node-sql-parser --save --silent >/dev/null
-    sudo pip install jedi >/dev/null
+    sudo pip3 install jedi >/dev/null
     sudo npm install -g bash-language-server --silent >/dev/null
     sudo npm install -g dockerfile-language-server-nodejs --silent >/dev/null
 
@@ -428,10 +428,6 @@ function setup_zsh() {
     sudo mv -f resources/shfmt_v3.2.1_linux_amd64 /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
 
     cp -f zsh/alias_git.zsh ~/.alias_git.zsh
-
-    #[ -f ~/.fzf.sh ] && source ~/.fzf.sh
-    # shellcheck disable=SC1090
-    test -f ~/.fzf.sh && source ~/.fzf.sh
 
     # If exsits remove back files and dir
     test -f ~/.zshrc && $RM -r ~/.zshrc
