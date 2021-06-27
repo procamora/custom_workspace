@@ -531,10 +531,6 @@ function setup_zsh() {
 
     cp -f zsh/alias_git.zsh ~/.alias_git.zsh
 
-    #[ -f ~/.fzf.sh ] && source ~/.fzf.sh
-    # shellcheck disable=SC1090
-    test -f ~/.fzf.sh && source ~/.fzf.sh
-
     # If exsits remove back files and dir
     test -f ~/.zshrc && $RM -r ~/.zshrc
     test -f ~/.p10k.zsh && $RM -f ~/.p10k.zsh
